@@ -269,6 +269,10 @@ async function load(root) {
   const ledger = validateLedger(await read('publication-ledger.json'));
   return { state, portfolio, bundles, ledger };
 }
+export async function refreshRendered(root = process.cwd()) {
+  const data = await load(root);
+  await writeRendered(root, render(data.state, data.bundles, data.portfolio, data.ledger));
+}
 async function tree(root, path) {
   const output = []; let entries; try { entries = await readdir(join(root, path), { withFileTypes: true }); } catch (e) { if (e.code === 'ENOENT') return output; throw e; }
   for (const entry of entries) { need(!entry.isSymbolicLink(), 'Symlink is not admitted'); const p = `${path}/${entry.name}`; if (entry.isDirectory()) output.push(...await tree(root, p)); else { need(entry.isFile(), 'Non-file package entry'); output.push(p); } } return output;

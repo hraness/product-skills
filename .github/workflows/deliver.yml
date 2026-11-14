@@ -10,15 +10,12 @@ concurrency:
   cancel-in-progress: false
 jobs:
   deliver:
-    if: github.event.workflow_run.conclusion == 'success' && startsWith(github.event.workflow_run.head_branch, 'automation/')
+    if: github.repository == 'hraness/product-skills' && github.ref == 'refs/heads/main' && github.event.workflow_run.head_repository.full_name == github.repository && github.event.workflow_run.conclusion == 'success' && (startsWith(github.event.workflow_run.head_branch, 'automation/') || startsWith(github.event.workflow_run.head_branch, 'dependabot/github_actions/'))
     runs-on: ubuntu-latest
     timeout-minutes: 5
     permissions:
-      contents: write
-      pull-requests: write
-      actions: write
-    env:
-      GH_TOKEN: ${{ github.token }}
+      contents: read
+      checks: read
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -27,4 +24,20 @@ jobs:
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: 24
+      - name: Mint the dedicated repository installation token
+        id: app
+        uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
+        with:
+          app-id: ${{ vars.DISTRIBUTION_APP_ID }}
+          private-key: ${{ secrets.DISTRIBUTION_APP_PRIVATE_KEY }}
+          owner: hraness
+          repositories: product-skills
+          permission-contents: write
+          permission-pull-requests: write
+          permission-actions: write
       - run: node scripts/automation.mjs deliver
+        env:
+          GH_TOKEN: ${{ steps.app.outputs.token }}
+          REPORT_GH_TOKEN: ${{ github.token }}
+          DISTRIBUTION_APP_ID: ${{ vars.DISTRIBUTION_APP_ID }}
+          DISTRIBUTION_APP_SLUG: ${{ steps.app.outputs.app-slug }}
