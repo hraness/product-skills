@@ -4,6 +4,7 @@ import { dirname, join, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
+import { raycastFileMode, raycastPath, renderRaycast } from './raycast.mjs';
 
 export const PRODUCTS = Object.freeze({ dawn: { name: 'Dawn', url: 'https://dawnav.com' }, yaptake: { name: 'Yaptake', url: 'https://yaptake.com' }, textmock: { name: 'Textmock', url: 'https://textmock.com' }, sponge: { name: 'Sponge', url: 'https://sponge.computer' } });
 export const MCP_REGISTRY = Object.freeze({ origin: 'https://registry.modelcontextprotocol.io', name: 'io.github.hraness/sponge', product: 'sponge' });
@@ -208,6 +209,10 @@ export function render(state, bundles, portfolio, ledger = { schemaVersion: 1, p
     for (const [path, value] of Object.entries(bundle.files)) output[`${base}/${path}`] = value;
     for (const [path, value] of Object.entries(bundle.files)) if (path.startsWith(`skills/${id}/`)) output[path] = value;
     if (id === 'textmock') for (const prefix of ['', `${base}/`]) output[`${prefix}skills/textmock/scripts/textmock-link.mjs`] = bundle.files[TEXTMOCK_HELPER];
+    if (id === 'sponge') {
+      for (const [path, value] of Object.entries(renderRaycast(m, '../../README.md'))) output[base + '/adapters/raycast/' + path] = value;
+      for (const [path, value] of Object.entries(renderRaycast(m, '../../plugins/sponge/README.md'))) output['adapters/raycast/' + path] = value;
+    }
     const common = { name: id, version, description: m.product.description, author: { name: 'Hraness', url: 'https://hraness.com' }, homepage: m.product.agentGuideUrl, repository: REPOSITORY, license: 'MIT' };
     const oa = { requires_local_executor: true, interface: { displayName: m.product.name, shortDescription: portfolio.projects.find((p) => p.id === id).short, developerName: 'Hraness', category: 'Productivity', websiteURL: m.product.url } };
     output[`${base}/plugin.json`] = json({ $schema: PLUGIN_SCHEMA, ...common, extensions: { 'com.openai': oa } });
@@ -232,7 +237,7 @@ export function render(state, bundles, portfolio, ledger = { schemaVersion: 1, p
     const published = (channel) => ledger.publications.some((p) => p.product === id && p.channel === channel && p.version === version && p.contentHash === artifactHash);
     return [id, { version, contentHash: state.products[id].contentHash, artifactHash, github: published('github') ? 'published' : 'release_required', skillsSh: published('skills-sh') ? 'published' : 'public_install_required', chatgpt: published('chatgpt') ? 'published' : bundles[id].manifest.mcp ? 'eligibility_and_review_required' : 'review_required', claude: published('claude') ? 'published' : 'review_required', cursor: published('cursor') ? 'published' : 'review_required' }];
   })) });
-  output['README.md'] = `# Hraness product skills\n\nSkills for working with [Hraness](https://hraness.com) products from a coding agent. Each package explains its workflow, setup and first task.\n\n${ids.length ? '## Product packages\n\n' + ids.map((id) => `- [${PRODUCTS[id].name}](plugins/${id}/README.md): ${portfolio.projects.find((p) => p.id === id).short}`).join('\n') + '\n\nRead the product package for its app, command and access requirements.\n\n```sh\nnpx skills add hraness/product-skills\n```\n\nChoose the product skill during installation, then follow its setup and first task. ' : 'Product packages are being prepared. ' }A package available here may still be awaiting directory review or host testing. See [package status](catalog/store-status.json) and [verified publications](publication-ledger.json).\n\n## Product pages\n\n${portfolio.projects.map((p) => `- [${p.name}](${p.url}): ${p.short}`).join('\n')}\n\n## Check a package\n\nUse Node.js 24. Run \`npm run check\` to validate sources, generated copies and package metadata. \`npm run package\` writes deterministic plugin ZIPs and \`SHA256SUMS\` under \`dist/\`. The package license covers these skills and integration files; product applications have their own terms.\n\n[Maintain packages](docs/MAINTAINING.md) · [MIT license](LICENSE)\n`;
+  output['README.md'] = `# Hraness product skills\n\nSkills for working with [Hraness](https://hraness.com) products from a coding agent. Each package explains its workflow, setup and first task.\n\n${ids.length ? '## Product packages\n\n' + ids.map((id) => `- [${PRODUCTS[id].name}](plugins/${id}/README.md): ${portfolio.projects.find((p) => p.id === id).short}`).join('\n') + '\n\nRead the product package for its app, command and access requirements.\n\n```sh\nnpx skills add hraness/product-skills\n```\n\nChoose the product skill during installation, then follow its setup and first task. ' : 'Product packages are being prepared. ' }${ids.includes('sponge') ? "Use Sponge's [Raycast commands](adapters/raycast/README.md) to queue URLs and search saved text.\n\n" : ''}A package available here may still be awaiting directory review or host testing. See [package status](catalog/store-status.json) and [verified publications](publication-ledger.json).\n\n## Product pages\n\n${portfolio.projects.map((p) => `- [${p.name}](${p.url}): ${p.short}`).join('\n')}\n\n## Check a package\n\nUse Node.js 24. Run \`npm run check\` to validate sources, generated copies and package metadata. \`npm run package\` writes deterministic plugin ZIPs and \`SHA256SUMS\` under \`dist/\`. The package license covers these skills and integration files; product applications have their own terms.\n\n[Maintain packages](docs/MAINTAINING.md) · [MIT license](LICENSE)\n`;
   return output;
 }
 export function renderedPackageFingerprint(id, entry, bundle, portfolio, { renderer = render, archive = zip } = {}) {
@@ -251,6 +256,10 @@ export function checkPackageFingerprints(state, bundles, portfolio, options = {}
   stateCheck(state); validatePortfolio(portfolio);
   for (const [id, entry] of Object.entries(state.products)) need(entry.packageFingerprint === renderedPackageFingerprint(id, entry, bundles[id], portfolio, options), 'Reconcile changed rendered packages before checking or packaging');
 }
+export async function checkRendered(root, output) {
+  for (const [path, expected] of Object.entries(output)) { const target = join(root, path); const info = await lstat(target); need(info.isFile() && !info.isSymbolicLink() && Boolean(info.mode & 0o111) === (raycastFileMode(path) === '100755'), 'Generated file type or executable mode differs'); need(await readFile(target, 'utf8') === expected, `Generated file is stale: ${path}`); }
+  for (const path of [...await tree(root, 'plugins'), ...await tree(root, 'skills'), ...await tree(root, 'adapters')]) need(Object.hasOwn(output, path), `Unexpected package file: ${path}`);
+}
 async function safeTarget(root, path) {
   need(!path.startsWith('/') && path.split('/').every((p) => p && p !== '.' && p !== '..' && /^[A-Za-z0-9_.-]+$/.test(p)), 'Unsafe output path');
   const parts = path.split('/'); let target = root;
@@ -258,8 +267,8 @@ async function safeTarget(root, path) {
   return target;
 }
 export async function writeRendered(root, output, previous = {}) {
-  for (const path of Object.keys(previous)) if (!Object.hasOwn(output, path)) { need(path.startsWith('plugins/') || path.startsWith('skills/'), 'Refusing to remove a non-package file'); await rm(await safeTarget(root, path)); }
-  for (const [path, value] of Object.entries(output)) { const target = await safeTarget(root, path); const temp = `${target}.new-${process.pid}`; await writeFile(temp, value, { flag: 'wx' }); await rename(temp, target); }
+  for (const path of Object.keys(previous)) if (!Object.hasOwn(output, path)) { need(path.startsWith('plugins/') || path.startsWith('skills/') || raycastPath(path), 'Refusing to remove a non-package file'); await rm(await safeTarget(root, path)); }
+  for (const [path, value] of Object.entries(output)) { const target = await safeTarget(root, path); const temp = `${target}.new-${process.pid}`; await writeFile(temp, value, { flag: 'wx', mode: raycastFileMode(path) === '100755' ? 0o755 : 0o644 }); await rename(temp, target); }
 }
 function crc32(buffer) { let crc = 0xffffffff; for (const value of buffer) { crc ^= value; for (let i = 0; i < 8; i++) crc = (crc >>> 1) ^ (0xedb88320 & -(crc & 1)); } return (crc ^ 0xffffffff) >>> 0; }
 export function zip(files) {
@@ -269,7 +278,7 @@ export function zip(files) {
     const name = Buffer.from(path); const bytes = Buffer.from(files[path]); const crc = crc32(bytes);
     const h = Buffer.alloc(30); h.writeUInt32LE(0x04034b50); h.writeUInt16LE(20, 4); h.writeUInt16LE(0x800, 6); h.writeUInt16LE(33, 12); h.writeUInt32LE(crc, 14); h.writeUInt32LE(bytes.length, 18); h.writeUInt32LE(bytes.length, 22); h.writeUInt16LE(name.length, 26);
     local.push(h, name, bytes);
-    const c = Buffer.alloc(46); c.writeUInt32LE(0x02014b50); c.writeUInt16LE(20, 4); c.writeUInt16LE(20, 6); c.writeUInt16LE(0x800, 8); c.writeUInt16LE(33, 14); c.writeUInt32LE(crc, 16); c.writeUInt32LE(bytes.length, 20); c.writeUInt32LE(bytes.length, 24); c.writeUInt16LE(name.length, 28); c.writeUInt32LE(offset, 42); central.push(c, name); offset += h.length + name.length + bytes.length;
+    const c = Buffer.alloc(46); c.writeUInt32LE(0x02014b50); c.writeUInt16LE(raycastFileMode(path) === '100755' ? 0x0314 : 20, 4); c.writeUInt16LE(20, 6); c.writeUInt16LE(0x800, 8); c.writeUInt16LE(33, 14); c.writeUInt32LE(crc, 16); c.writeUInt32LE(bytes.length, 20); c.writeUInt32LE(bytes.length, 24); c.writeUInt16LE(name.length, 28); if (raycastFileMode(path) === '100755') c.writeUInt32LE((0o100755 * 65536) >>> 0, 38); c.writeUInt32LE(offset, 42); central.push(c, name); offset += h.length + name.length + bytes.length;
   }
   const directory = Buffer.concat(central); const end = Buffer.alloc(22); end.writeUInt32LE(0x06054b50); end.writeUInt16LE(central.length / 2, 8); end.writeUInt16LE(central.length / 2, 10); end.writeUInt32LE(directory.length, 12); end.writeUInt32LE(offset, 16);
   return Buffer.concat([...local, directory, end]);
@@ -299,7 +308,7 @@ export async function refreshRendered(root = process.cwd()) {
   await writeRendered(root, render(data.state, data.bundles, data.portfolio, data.ledger));
 }
 async function tree(root, path) {
-  const output = []; let entries; try { entries = await readdir(join(root, path), { withFileTypes: true }); } catch (e) { if (e.code === 'ENOENT') return output; throw e; }
+  const output = []; let entries; try { const info = await lstat(join(root, path)); need(info.isDirectory() && !info.isSymbolicLink(), 'Package roots must be regular directories'); entries = await readdir(join(root, path), { withFileTypes: true }); } catch (e) { if (e.code === 'ENOENT') return output; throw e; }
   for (const entry of entries) { need(!entry.isSymbolicLink(), 'Symlink is not admitted'); const p = `${path}/${entry.name}`; if (entry.isDirectory()) output.push(...await tree(root, p)); else { need(entry.isFile(), 'Non-file package entry'); output.push(p); } } return output;
 }
 async function toolSourceHash(root) {
@@ -358,8 +367,7 @@ export async function main(argv = process.argv.slice(2), root = process.cwd()) {
   let data = await load(root); const before = render(data.state, data.bundles, data.portfolio, data.ledger);
   if (command === 'check') {
     checkPackageFingerprints(data.state, data.bundles, data.portfolio);
-    for (const [path, expected] of Object.entries(before)) need(await readFile(join(root, path), 'utf8') === expected, `Generated file is stale: ${path}`);
-    for (const path of [...await tree(root, 'plugins'), ...await tree(root, 'skills')]) need(Object.hasOwn(before, path), `Unexpected package file: ${path}`);
+    await checkRendered(root, before);
     const ledger = validateLedger(JSON.parse(await readFile(join(root, 'publication-ledger.json'), 'utf8')));
     const { readHomebrewCursor } = await import('./homebrew-observer.mjs'); await readHomebrewCursor(root);
     if (process.env.LEDGER_BASE_SHA) {

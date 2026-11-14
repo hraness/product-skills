@@ -10,14 +10,14 @@ import { captureGenerated, mergePendingPublications, refreshGeneratedPull } from
 const main = 'a'.repeat(40); const head = 'b'.repeat(40); const tree = 'c'.repeat(40); const mainTree = 'd'.repeat(40); const nextTree = 'e'.repeat(40); const nextHead = 'f'.repeat(40);
 const blob = (bytes) => createHash('sha1').update(`blob ${bytes.length}\0`).update(bytes).digest('hex');
 const selected = 'plugins/sponge/README.md'; const before = Buffer.from('Earlier generated instructions.\n'); const after = Buffer.from('Current generated instructions.\n');
-function server({ current = head, conflict = false, matchesMain = false } = {}) {
+function server({ current = head, conflict = false, matchesMain = false, selectedPath = selected, oldMode = '100644', oldBytes = before } = {}) {
   let actual = current; const writes = [];
   const read = async (path) => {
     if (path.endsWith('/git/ref/heads/main')) return { object: { sha: main } };
     if (path.includes('/git/ref/heads/automation/')) return { object: { sha: actual } };
     if (path.endsWith(`/git/commits/${head}`)) return { tree: { sha: tree } };
     if (path.endsWith(`/git/commits/${main}`)) return { tree: { sha: mainTree } };
-    if (path.includes('/git/trees/')) return { truncated: false, tree: [{ path: selected, mode: '100644', type: 'blob', sha: blob(before) }, { path: 'unrelated.txt', mode: '100644', type: 'blob', sha: '1'.repeat(40) }] };
+    if (path.includes('/git/trees/')) return { truncated: false, tree: [{ path: selectedPath, mode: oldMode, type: 'blob', sha: blob(oldBytes) }, { path: 'unrelated.txt', mode: '100644', type: 'blob', sha: '1'.repeat(40) }] };
     throw new Error(`Unexpected generated-update read ${path}`);
   };
   const write = async (method, path, body) => {
@@ -28,8 +28,19 @@ function server({ current = head, conflict = false, matchesMain = false } = {}) 
     if (path.includes('/git/refs/heads/')) { if (conflict) throw new Error('Non-forced concurrent ref update refused'); actual = body.sha; return { object: { sha: actual } }; }
     throw new Error('Unexpected generated-update mutation');
   };
-  return { kind: 'products', branch: 'automation/products-1-1', sourceBase: main, head, desired: { [selected]: after }, bot: { login: APP_BOT, id: 12345 }, read, write, writes };
+  return { kind: 'products', branch: 'automation/products-1-1', sourceBase: main, head, desired: { [selectedPath]: after }, bot: { login: APP_BOT, id: 12345 }, read, write, writes };
 }
+test('conditional generated refresh preserves executable Raycast files and repairs a stale mode only on its closed paths', async () => {
+  for (const selectedPath of ['adapters/raycast/save-url.sh', 'plugins/sponge/adapters/raycast/search-library.sh']) {
+    const current = server({ selectedPath, oldMode: '100755' }); await refreshGeneratedPull(current);
+    assert.equal(current.writes.find(entry => entry.path.endsWith('/git/trees')).body.tree[0].mode, '100755');
+    const modeOnly = server({ selectedPath, oldBytes: after }); await refreshGeneratedPull(modeOnly);
+    assert.equal(modeOnly.writes.find(entry => entry.path.endsWith('/git/trees')).body.tree[0].mode, '100755');
+    const unchanged = server({ selectedPath, oldMode: '100755', oldBytes: after });
+    assert.equal((await refreshGeneratedPull(unchanged)).changed, false); assert.equal(unchanged.writes.length, 0);
+  }
+  const unrelated = server({ oldMode: '100755' }); await assert.rejects(refreshGeneratedPull(unrelated), /unexpected tree/); assert.equal(unrelated.writes.length, 0);
+});
 test('an open proposal with an older failed generated head receives only the latest desired files', async () => {
   const current = server(); const result = await refreshGeneratedPull(current);
   assert.equal(result.changed, true); assert.equal(result.head, nextHead);

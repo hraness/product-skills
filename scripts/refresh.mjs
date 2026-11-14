@@ -4,6 +4,7 @@ import { join } from 'node:path';
 import { APP_BOT } from './authority.mjs';
 import { appendPublications, checkLedgerAppendOnly, validateLedger } from './distribution.mjs';
 import { validateUpdateFiles } from './github.mjs';
+import { raycastFileMode } from './raycast.mjs';
 
 const REPOSITORY = 'hraness/product-skills';
 const need = (condition, message) => { if (!condition) throw new Error(message); };
@@ -56,10 +57,11 @@ export async function refreshGeneratedPull({ kind, branch, head, sourceBase, des
   need(tree.truncated === false && Array.isArray(tree.tree) && tree.tree.length <= 5000, 'Cannot inspect the complete generated-update tree');
   const entries = new Map(tree.tree.map((entry) => [entry.path, entry])); const updates = [];
   for (const [path, bytes] of Object.entries(desired)) {
-    const old = entries.get(path); need(!old || old.type === 'blob' && old.mode === '100644', 'Generated update includes an unexpected tree entry');
-    if (bytes === null) { if (old) updates.push({ path, mode: '100644', type: 'blob', sha: null }); continue; }
-    const hash = blobHash(bytes); if (old?.sha === hash) continue;
-    updates.push({ path, mode: '100644', type: 'blob', sha: hash, bytes });
+    const mode = raycastFileMode(path);
+    const old = entries.get(path); need(!old || old.type === 'blob' && (old.mode === '100644' || mode === '100755' && old.mode === mode), 'Generated update includes an unexpected tree entry');
+    if (bytes === null) { if (old) updates.push({ path, mode, type: 'blob', sha: null }); continue; }
+    const hash = blobHash(bytes); if (old?.sha === hash && old.mode === mode) continue;
+    updates.push({ path, mode, type: 'blob', sha: hash, bytes });
   }
   if (!updates.length) return { changed: false, head, matchesMain: baseTree === mainTree };
   for (const update of updates) if (update.bytes) {
