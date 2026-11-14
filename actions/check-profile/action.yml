@@ -1,0 +1,12 @@
+name: Check Hraness product links
+description: Validate the four marked product links in the checked-out organization or personal README.
+runs:
+  using: composite
+  steps:
+    - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+      with:
+        node-version: 24
+        package-manager-cache: false
+    - name: Check the marked current-product list
+      shell: bash
+      run: node "$GITHUB_ACTION_PATH/../../scripts/profile.mjs" check

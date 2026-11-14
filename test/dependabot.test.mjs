@@ -9,8 +9,9 @@ const file = () => ({ filename: '.github/workflows/check.yml', status: 'modified
 test('Dependabot may change existing SHA pins while preserving action identities and other YAML', () => {
   assert.doesNotThrow(() => validateDependabotPins([file()]));
   assert.doesNotThrow(() => validateDependabotPins([{ ...file(), filename: 'actions/sync-profile/action.yml' }]));
+  assert.doesNotThrow(() => validateDependabotPins([{ ...file(), filename: 'actions/check-profile/action.yml' }]));
   for (const change of [
-    { status: 'added' }, { filename: 'scripts/private.mjs' }, { additions: 2 }, { patch: undefined },
+    { status: 'added' }, { filename: 'scripts/private.mjs' }, { filename: 'actions/another-action/action.yml' }, { additions: 2 }, { patch: undefined },
     { patch: file().patch.replace(`actions/checkout@${head}`, `other-owner/checkout@${head}`) },
     { patch: file().patch.replace(`@${head}`, '@v7') },
     { patch: `${file().patch}\n+permissions: write-all`, additions: 2 },

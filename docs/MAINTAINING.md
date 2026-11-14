@@ -151,6 +151,14 @@ workflow or host works.
 
 ## Keep GitHub profile links current
 
+`actions/check-profile` validates the checked-out profile README against the
+current public portfolio. It needs no App credentials, mints no App token and
+changes no file. Use it after the caller's checkout in a read-only check workflow,
+with the same verified tooling source pin as the synchronization action. It
+checks the generated section and leaves introductions, personal links and other
+text outside the markers alone. The action runs the shared `check` command
+against the caller's checkout and `GITHUB_REPOSITORY` identity.
+
 `actions/sync-profile` is a composite action loaded from its own pinned source.
 It supports exactly `hraness/.github` → `profile/README.md` and
 `0thernet/0thernet` → `README.md`. Each target needs one ordered, own-line pair
@@ -168,7 +176,8 @@ Pass `app-id` from `vars.DISTRIBUTION_APP_ID` and `app-private-key` from
 `secrets.DISTRIBUTION_APP_PRIVATE_KEY`. The caller's built-in token needs
 `contents: read` and `checks: read`; the action mints its separate installation
 token for the one authorized profile repository. Run `refresh` only on trusted
-main through a schedule or manual dispatch. The `check-workflow` input defaults
+main while it remains the repository's default branch, through a schedule or
+manual dispatch. The `check-workflow` input defaults
 to `check.yml`; the organization profile uses its existing `ci.yml`.
 
 Wire the caller's successful check `workflow_run` event to the same pinned

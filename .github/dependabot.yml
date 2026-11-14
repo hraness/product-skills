@@ -1,7 +1,10 @@
 version: 2
 updates:
   - package-ecosystem: github-actions
-    directory: /
+    directories:
+      - /
+      - /actions/sync-profile
+      - /actions/check-profile
     schedule:
       interval: weekly
     open-pull-requests-limit: 1

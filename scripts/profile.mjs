@@ -1,7 +1,7 @@
-import { readFile, writeFile } from 'node:fs/promises';
+import { lstat, readFile, writeFile } from 'node:fs/promises';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
-import { resolve } from 'node:path';
+import { dirname, join, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { download, validatePortfolio } from './distribution.mjs';
 import { refreshBehindPull, repairMissingCheck, successfulRequired } from './github.mjs';
@@ -9,6 +9,7 @@ import { deliverDependabot } from './dependabot.mjs';
 import { distributionAuthority, ownedByDistributionApp } from './authority.mjs';
 const execute = promisify(execFile);
 export const TARGETS = Object.freeze({ 'hraness/.github': 'profile/README.md', '0thernet/0thernet': 'README.md' });
+const IDENTITIES = Object.freeze({ 'hraness/.github': { repository: 1342874802, owner: 307125679 }, '0thernet/0thernet': { repository: 1342874174, owner: 894119 } });
 export const START = '<!-- hraness-products:start -->';
 export const END = '<!-- hraness-products:end -->';
 const need = (v, message) => { if (!v) throw new Error(message); };
@@ -37,6 +38,18 @@ export async function refreshProfile(readme, portfolio, { fetchImpl = fetch } = 
   }
   return { changed: true, readme: rendered };
 }
+export async function checkProfile({ repository = process.env.GITHUB_REPOSITORY, root = process.cwd(), fetchImpl = fetch } = {}) {
+  need(Object.hasOwn(TARGETS, repository), 'Only the two authorized profile repositories are supported');
+  const path = TARGETS[repository]; const file = join(root, path);
+  for (const parent of new Set([root, dirname(file)])) { const info = await lstat(parent); need(info.isDirectory() && !info.isSymbolicLink(), 'The profile directory must be regular'); }
+  const info = await lstat(file); need(info.isFile() && !info.isSymbolicLink() && info.size <= 262144, 'The profile README must be a bounded regular file');
+  const readme = new TextDecoder('utf-8', { fatal: true }).decode(await readFile(file));
+  // Public facts are read without credentials. This check does not mint an App
+  // token, change the checkout, or include personal README text in its result.
+  const portfolio = validatePortfolio(JSON.parse((await download('https://hraness.com/portfolio.json', { fetchImpl })).body));
+  need(renderProfile(readme, portfolio) === readme, 'The marked product list differs from the current public portfolio');
+  return { repository, path, products: portfolio.projects.map((product) => product.id) };
+}
 async function gh(args) { return (await execute('gh', args, { maxBuffer: 1048576, timeout: 60000 })).stdout.trim(); }
 async function api(path) {
   if (/^repos\/(?:hraness\/\.github|0thernet\/0thernet)\/commits\/[a-f0-9]{40}\/check-runs\?per_page=100$/.test(path)) {
@@ -46,7 +59,11 @@ async function api(path) {
   return JSON.parse(await gh(['api', path]));
 }
 async function git(args) { return (await execute('git', ['-c', 'credential.helper=', '-c', 'credential.helper=!gh auth git-credential', ...args], { maxBuffer: 1048576, timeout: 60000 })).stdout.trim(); }
-async function identity() { const repo = process.env.GITHUB_REPOSITORY; need(Object.hasOwn(TARGETS, repo) && process.env.GH_TOKEN, 'Only the two authorized profile repositories are supported'); const live = await api(`repos/${repo}`); need(live.full_name === repo, 'Profile repository identity mismatch'); return repo; }
+export async function profileIdentity({ env = process.env, read = api } = {}) {
+  const repo = env.GITHUB_REPOSITORY; need(Object.hasOwn(TARGETS, repo) && env.GH_TOKEN, 'Only the two authorized profile repositories are supported');
+  const live = await read(`repos/${repo}`); const expected = IDENTITIES[repo];
+  need(live.full_name === repo && live.id === expected.repository && live.owner?.id === expected.owner && live.private === false && live.default_branch === 'main', 'Profile repository or default branch identity mismatch'); return repo;
+}
 function checkWorkflow() { const workflow = process.env.PROFILE_CHECK_WORKFLOW || 'check.yml'; need(/^[a-zA-Z0-9_-]+\.ya?ml$/.test(workflow), 'Invalid check workflow filename'); return workflow; }
 async function validateProfilePullRequest(repo, pr, portfolio) {
   const comparison = await api(`repos/${repo}/compare/${pr.base.sha}...${pr.head.sha}`);
@@ -56,7 +73,7 @@ async function validateProfilePullRequest(repo, pr, portfolio) {
   return comparison;
 }
 async function refresh() {
-  const repo = await identity(); const bot = await distributionAuthority(repo, { read: api }); const path = TARGETS[repo]; const before = await readFile(path, 'utf8');
+  const repo = await profileIdentity(); const bot = await distributionAuthority(repo, { read: api }); const path = TARGETS[repo]; const before = await readFile(path, 'utf8');
   const portfolio = validatePortfolio(JSON.parse((await download('https://hraness.com/portfolio.json')).body));
   const prs = await api(`repos/${repo}/pulls?state=open&base=main&per_page=100`);
   const existing = prs.find((p) => ownedByDistributionApp(p, bot) && p.head.repo?.full_name === repo && /^automation\/profile-\d+-\d+$/.test(p.head.ref));
@@ -86,7 +103,7 @@ async function repairCheck(repo, ref, sha) {
   return repairMissingCheck({ repository: repo, workflow: checkWorkflow(), ref, sha, read: api, request: gh });
 }
 async function deliver() {
-  const repo = await identity(); const bot = await distributionAuthority(repo, { read: api }); const event = JSON.parse(await readFile(process.env.GITHUB_EVENT_PATH, 'utf8')); const run = event.workflow_run;
+  const repo = await profileIdentity(); const bot = await distributionAuthority(repo, { read: api }); const event = JSON.parse(await readFile(process.env.GITHUB_EVENT_PATH, 'utf8')); const run = event.workflow_run;
   if (run?.head_branch?.startsWith('dependabot/')) { process.stdout.write(`${await deliverDependabot({ repository: repo, run, read: api, request: gh, checkWorkflow: checkWorkflow() })}\n`); return; }
   need(run?.conclusion === 'success' && run.head_repository?.full_name === repo && /^automation\/profile-\d+-\d+$/.test(run.head_branch), 'Only a checked owned profile update can merge');
   const workflow = await api(`repos/${repo}/actions/workflows/${checkWorkflow()}`);
@@ -110,7 +127,7 @@ async function deliver() {
   process.stdout.write('The checked App profile update merged; ordinary main checks follow.\n');
 }
 if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1])).href) {
-  const mode = process.argv[2]; const action = mode === 'refresh' ? refresh : mode === 'deliver' ? deliver : null;
-  if (!action) { process.stderr.write('Use refresh or deliver.\n'); process.exitCode = 1; }
-  else action().catch(() => { process.stderr.write('Profile synchronization stopped; preserve the README and inspect the source, marker or protected-check failure before retrying.\n'); process.exitCode = 1; });
+  const mode = process.argv[2]; const action = mode === 'check' ? async () => { await checkProfile(); process.stdout.write('Checked the four current product links.\n'); } : mode === 'refresh' ? refresh : mode === 'deliver' ? deliver : null;
+  if (!action) { process.stderr.write('Use check, refresh or deliver.\n'); process.exitCode = 1; }
+  else action().catch(() => { process.stderr.write(mode === 'check' ? 'Profile validation stopped. Inspect the README, product markers and current public portfolio.\n' : 'Profile synchronization stopped; preserve the README and inspect the source, marker or protected-check failure before retrying.\n'); process.exitCode = 1; });
 }
