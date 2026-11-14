@@ -36,6 +36,24 @@
       "url": "https://github.com/hraness/product-skills/releases/tag/integrations-8ba4ff744cbafb63",
       "version": "0.1.0",
       "contentHash": "b299bc6268600d8b1b372d9f8cc8de42c9d89cff91bd5fd1028f46fe0bc77542"
+    },
+    {
+      "id": "sponge-mcp-registry-0-41-1",
+      "product": "sponge",
+      "channel": "mcp-registry",
+      "publishedAt": "2026-11-14T23:26:02.742Z",
+      "url": "https://registry.modelcontextprotocol.io/v0.1/servers/io.github.hraness%2Fsponge/versions/0.41.1",
+      "version": "0.41.1",
+      "contentHash": "27bab35c44dbfdd14780bceb8a82b1dd69a59b005a508708c7668c3580a4fb65"
+    },
+    {
+      "id": "yaptake-homebrew-0-1-0-231",
+      "product": "yaptake",
+      "channel": "homebrew",
+      "version": "0.1.0",
+      "contentHash": "5deddd1d8b02d8757fbe507da151e0e97ddaf308316217ee6e23145a504b8a82",
+      "publishedAt": "2026-11-14T22:21:51.000Z",
+      "url": "https://github.com/hraness/homebrew-tap/blob/c3415d95c69fb9db0f6a977eb62d0149cfda0898/Casks/yaptake.rb"
     }
   ]
 }
