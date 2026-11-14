@@ -48,6 +48,13 @@ jobs:
           GH_TOKEN: ''
           REPORT_GH_TOKEN: ''
         run: node scripts/distribution.mjs record-registry
+      - name: Observe actual checked Homebrew cask publications
+        id: homebrew
+        continue-on-error: true
+        env:
+          GH_TOKEN: ''
+          REPORT_GH_TOKEN: ''
+        run: node scripts/distribution.mjs record-homebrew
       - name: Mint the dedicated token for the ledger pull request
         id: app
         uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
@@ -73,12 +80,13 @@ jobs:
           path: dist/
           if-no-files-found: warn
           retention-days: 90
-      - name: Require a completed public registry observation
+      - name: Require completed public publication observations
         if: always()
         env:
           REGISTRY_OUTCOME: ${{ steps.registry.outcome }}
+          HOMEBREW_OUTCOME: ${{ steps.homebrew.outcome }}
         run: |
-          if [ "$REGISTRY_OUTCOME" != success ]; then
-            echo 'Public registry observation is pending. Earlier publication records are preserved.' >&2
+          if [ "$REGISTRY_OUTCOME" != success ] || [ "$HOMEBREW_OUTCOME" != success ]; then
+            echo 'Public publication observation is pending. Earlier publication records are preserved.' >&2
             exit 1
           fi

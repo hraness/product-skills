@@ -7,6 +7,7 @@ import { promisify } from 'node:util';
 
 export const PRODUCTS = Object.freeze({ dawn: { name: 'Dawn', url: 'https://dawnav.com' }, yaptake: { name: 'Yaptake', url: 'https://yaptake.com' }, textmock: { name: 'Textmock', url: 'https://textmock.com' }, sponge: { name: 'Sponge', url: 'https://sponge.computer' } });
 export const MCP_REGISTRY = Object.freeze({ origin: 'https://registry.modelcontextprotocol.io', name: 'io.github.hraness/sponge', product: 'sponge' });
+export const HOMEBREW_TAP = Object.freeze({ repository: 'hraness/homebrew-tap', repositoryId: 1382935233, ownerId: 307125679, product: 'yaptake', cask: 'Casks/yaptake.rb', catalog: 'catalog/yaptake.json', cursor: 'catalog/homebrew-observation.json' });
 export const REPOSITORY = 'https://github.com/hraness/product-skills';
 export const MAX_BUNDLE = 65536;
 const TEXTMOCK_HELPER = 'scripts/textmock-link.mjs';
@@ -38,6 +39,8 @@ export function version(v) { need(typeof v === 'string' && /^(0|[1-9]\d{0,8})\.(
 export function compareVersion(a, b) { const av = version(a); const bv = version(b); for (let i = 0; i < 3; i++) if (av[i] !== bv[i]) return av[i] > bv[i] ? 1 : -1; return 0; }
 export function mcpRegistryPublicationId(value) { version(value); return `sponge-mcp-registry-${value.replaceAll('.', '-')}`; }
 export function mcpRegistryPublicationUrl(value) { version(value); return `${MCP_REGISTRY.origin}/v0.1/servers/${encodeURIComponent(MCP_REGISTRY.name)}/versions/${value}`; }
+export function homebrewPublicationId(value, build) { version(value); need(typeof build === 'string' && /^[1-9]\d{0,8}$/.test(build), 'An exact Homebrew build is required'); return `yaptake-homebrew-${value.replaceAll('.', '-')}-${build}`; }
+export function homebrewPublicationUrl(commit) { need(/^[a-f0-9]{40}$/.test(commit), 'An exact Homebrew publication commit is required'); return `https://github.com/${HOMEBREW_TAP.repository}/blob/${commit}/${HOMEBREW_TAP.cask}`; }
 function publicUrl(value, allowedOrigins) {
   need(typeof value === 'string' && value.length <= 500, 'Invalid URL');
   const u = new URL(value);
@@ -312,6 +315,11 @@ export function validateLedger(ledger) {
     need(/^[a-z0-9][a-z0-9-]{0,63}$/.test(p.id) && !seen.has(p.id) && Object.hasOwn(PRODUCTS, p.product) && ['github', 'skills-sh', 'chatgpt', 'claude', 'cursor', 'homebrew', 'raycast', 'mcp-registry'].includes(p.channel) && /^[a-f0-9]{64}$/.test(p.contentHash), 'Invalid publication identity');
     need(typeof p.publishedAt === 'string' && new Date(p.publishedAt).toISOString() === p.publishedAt, 'An actual ISO publication timestamp is required'); version(p.version);
     if (p.channel === 'mcp-registry') need(p.product === MCP_REGISTRY.product && p.id === mcpRegistryPublicationId(p.version) && p.url === mcpRegistryPublicationUrl(p.version), 'MCP Registry publication identity or address differs');
+    if (p.channel === 'homebrew') {
+      const build = /^yaptake-homebrew-\d+-\d+-\d+-([1-9]\d{0,8})$/.exec(p.id)?.[1];
+      const commit = /^https:\/\/github\.com\/hraness\/homebrew-tap\/blob\/([a-f0-9]{40})\/Casks\/yaptake\.rb$/.exec(p.url)?.[1];
+      need(p.product === HOMEBREW_TAP.product && build && p.id === homebrewPublicationId(p.version, build) && commit && p.url === homebrewPublicationUrl(commit) && Date.parse(p.publishedAt) <= Date.now(), 'Homebrew publication identity, time or address differs');
+    }
     publicUrl(p.url, p.channel === 'mcp-registry' ? [MCP_REGISTRY.origin] : ['https://github.com', 'https://skills.sh', 'https://www.skills.sh', 'https://chatgpt.com', 'https://claude.ai', 'https://cursor.com', 'https://formulae.brew.sh', 'https://www.raycast.com']); seen.add(p.id);
   }
   return ledger;
@@ -346,13 +354,14 @@ export async function recordGithub(ledger, releasePlan, { fetchImpl = fetch, tok
   return appendPublications(ledger, entries);
 }
 export async function main(argv = process.argv.slice(2), root = process.cwd()) {
-  const [command, ...rest] = argv; need(rest.length === 0 && ['check', 'reconcile', 'package', 'record-github', 'record-registry'].includes(command), 'Use check, reconcile, package, record-github or record-registry');
+  const [command, ...rest] = argv; need(rest.length === 0 && ['check', 'reconcile', 'package', 'record-github', 'record-registry', 'record-homebrew'].includes(command), 'Use check, reconcile, package, record-github, record-registry or record-homebrew');
   let data = await load(root); const before = render(data.state, data.bundles, data.portfolio, data.ledger);
   if (command === 'check') {
     checkPackageFingerprints(data.state, data.bundles, data.portfolio);
     for (const [path, expected] of Object.entries(before)) need(await readFile(join(root, path), 'utf8') === expected, `Generated file is stale: ${path}`);
     for (const path of [...await tree(root, 'plugins'), ...await tree(root, 'skills')]) need(Object.hasOwn(before, path), `Unexpected package file: ${path}`);
     const ledger = validateLedger(JSON.parse(await readFile(join(root, 'publication-ledger.json'), 'utf8')));
+    const { readHomebrewCursor } = await import('./homebrew-observer.mjs'); await readHomebrewCursor(root);
     if (process.env.LEDGER_BASE_SHA) {
       checkLedgerAppendOnly(await readGovernedLedger(root, process.env.LEDGER_BASE_SHA), ledger);
     }
@@ -381,6 +390,19 @@ export async function main(argv = process.argv.slice(2), root = process.cwd()) {
     } catch (error) {
       await writeFile(join(root, 'dist/registry-observation.json'), json({ schemaVersion: 1, source: 'official-mcp-registry', status: 'pending', reason: 'Registry data or its exact public npm metadata did not verify; prior publication records were preserved.' }));
       throw error;
+    }
+    return;
+  }
+  if (command === 'record-homebrew') {
+    await mkdir(join(root, 'dist'), { recursive: true });
+    try {
+      const { observeHomebrew, readHomebrewCursor } = await import('./homebrew-observer.mjs');
+      const result = await observeHomebrew(data.ledger, await readHomebrewCursor(root));
+      const output = render(data.state, data.bundles, data.portfolio, result.ledger);
+      await writeFile(join(root, 'publication-ledger.json'), json(result.ledger)); await writeFile(join(root, HOMEBREW_TAP.cursor), json(result.cursor)); await writeRendered(root, output, before);
+      await writeFile(join(root, 'dist/homebrew-observation.json'), json(result.report)); process.stdout.write(json(result.report));
+    } catch (error) {
+      await writeFile(join(root, 'dist/homebrew-observation.json'), json({ schemaVersion: 1, source: 'homebrew-tap', status: 'pending', reason: 'The actual tap publication or its canonical cask checks did not verify; earlier records and the observation cursor were preserved.' })); throw error;
     }
     return;
   }

@@ -1,0 +1,31 @@
+# Synthetic release values in the public generated cask layout.
+cask "yaptake" do
+  version "__VERSION__,__BUILD__"
+  sha256 "__SHA__"
+
+  url "https://yaptake.com/downloads/__SHA__/Yaptake-#{version.csv.first}-private.zip"
+  name "Yaptake"
+  desc "Video editor with transcript cuts, captions and a timeline"
+  homepage "https://yaptake.com/"
+
+  livecheck do
+    url "https://yaptake.com/appcast.xml"
+    strategy :xml do |xml|
+      xml.get_elements("rss/channel/item").each_with_object([]) do |item, versions|
+        short_version = item.elements["sparkle:shortVersionString"]&.text&.strip
+        build = item.elements["sparkle:version"]&.text&.strip
+        next unless short_version&.match?(/\A\d+\.\d+\.\d+\z/)
+        next unless build&.match?(/\A[1-9]\d*\z/)
+
+        versions << "#{short_version},#{build}"
+      end
+    end
+  end
+
+  auto_updates true
+  depends_on arch: :arm64
+  depends_on macos: :tahoe
+
+  app "Yaptake.app"
+  binary "#{appdir}/Yaptake.app/Contents/Helpers/yaptake"
+end
