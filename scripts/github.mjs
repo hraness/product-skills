@@ -1,5 +1,8 @@
+import { GUIDE_FILES, GUIDE_RECORD } from './guides.mjs';
+
 export function validateUpdateFiles(kind, files) {
-  if (!['products', 'publications'].includes(kind) || !Array.isArray(files) || files.length === 0 || files.length >= 100) throw new Error('Invalid owned update files');
+  if (!['products', 'publications', 'guides'].includes(kind) || !Array.isArray(files) || files.length === 0 || files.length >= 100) throw new Error('Invalid owned update files');
+  if (kind === 'guides') { if (new Set(files).size !== files.length || files.some((file) => ![...GUIDE_FILES, GUIDE_RECORD].includes(file))) throw new Error('A shared-guide update contains an unrelated file'); return; }
   const product = '(?:dawn|yaptake|textmock|sponge)';
   const fixed = kind === 'publications' ? ['publication-ledger.json', 'catalog/store-status.json'] : ['README.md', 'catalog/admitted.json', 'catalog/portfolio.json', 'catalog/store-status.json', '.agents/plugins/marketplace.json', '.claude-plugin/marketplace.json', '.cursor-plugin/marketplace.json'];
   const generated = [new RegExp(`^bundles/${product}\\.json$`), new RegExp(`^skills/${product}/SKILL\\.md$`), new RegExp(`^plugins/(${product})/(?:LICENSE|README\\.md|plugin\\.json|runtime\\.json|mcp\\.json|\\.mcp\\.json|\\.(?:codex|claude|cursor)-plugin/plugin\\.json|skills/\\1/SKILL\\.md)$`), /^(?:plugins\/textmock\/)?skills\/textmock\/scripts\/textmock-link\.mjs$/, /^plugins\/textmock\/scripts\/textmock-link\.mjs$/, /^(?:plugins\/dawn\/)?skills\/dawn\/examples\/morning-study\.ts$/];
@@ -32,15 +35,27 @@ export function validateDependabotPins(files) {
   const seen = new Set();
   const pin = /^(\s*(?:-\s*)?uses:\s+)([A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+(?:\/[A-Za-z0-9_.-]+)*)@([a-f0-9]{40})(\s+#.*)?$/;
   for (const file of files) {
-    const allowed = typeof file?.filename === 'string' && (/^\.github\/workflows\/[A-Za-z0-9_-]+\.ya?ml$/.test(file.filename) || ['actions/sync-profile/action.yml', 'actions/check-profile/action.yml'].includes(file.filename));
+    const allowed = typeof file?.filename === 'string' && (/^\.github\/workflows\/[A-Za-z0-9_-]+\.ya?ml$/.test(file.filename) || ['actions/sync-profile/action.yml', 'actions/check-profile/action.yml', 'actions/deliver-dependabot/action.yml'].includes(file.filename));
     if (!allowed || seen.has(file.filename) || file.status !== 'modified' || file.previous_filename !== undefined || typeof file.patch !== 'string' || file.patch.length > 65536) throw new Error('Dependency update contains an unrelated file');
-    seen.add(file.filename); const before = []; const after = [];
+    seen.add(file.filename); const before = []; const after = []; let hunk = null;
+    const completeHunk = () => { if (hunk && (hunk.old !== hunk.oldEnd || hunk.next !== hunk.nextEnd)) throw new Error('Dependency patch hunk is incomplete'); };
     for (const line of file.patch.split('\n')) {
-      if (line.startsWith('-') || line.startsWith('+')) { const parsed = pin.exec(line.slice(1)); if (!parsed) throw new Error('Dependency update changes more than an existing action pin'); (line[0] === '-' ? before : after).push(parsed); }
-      else if (line && !line.startsWith(' ') && !line.startsWith('@@') && line !== '\\ No newline at end of file') throw new Error('Unsupported dependency patch');
+      if (line.startsWith('@@')) {
+        completeHunk(); const header = /^@@ -(\d+)(?:,(\d+))? \+(\d+)(?:,(\d+))? @@(?: .*)?$/.exec(line);
+        if (!header || Number(header[1]) !== Number(header[3]) || Number(header[2] ?? 1) !== Number(header[4] ?? 1)) throw new Error('Dependency update moves workflow lines');
+        const old = Number(header[1]); const next = Number(header[3]);
+        if (hunk && old < hunk.oldEnd) throw new Error('Dependency patch hunks overlap');
+        hunk = { old, next, oldEnd: old + Number(header[2] ?? 1), nextEnd: next + Number(header[4] ?? 1) }; continue;
+      }
+      if (line.startsWith('-') || line.startsWith('+')) {
+        const parsed = pin.exec(line.slice(1)); if (!parsed || !hunk) throw new Error('Dependency update changes more than an existing action pin');
+        if (line[0] === '-') before.push({ pin: parsed, line: hunk.old++ }); else after.push({ pin: parsed, line: hunk.next++ });
+      } else if (line.startsWith(' ') && hunk) { hunk.old++; hunk.next++; }
+      else if (line && line !== '\\ No newline at end of file') throw new Error('Unsupported dependency patch');
     }
+    completeHunk();
     if (!before.length || before.length !== after.length || file.additions !== after.length || file.deletions !== before.length) throw new Error('Dependency patch is incomplete');
-    for (let index = 0; index < before.length; index++) if (before[index][1] !== after[index][1] || before[index][2] !== after[index][2] || before[index][3] === after[index][3]) throw new Error('Dependency update changes the action identity or no pin');
+    for (let index = 0; index < before.length; index++) if (before[index].line !== after[index].line || before[index].pin[1] !== after[index].pin[1] || before[index].pin[2] !== after[index].pin[2] || before[index].pin[3] === after[index].pin[3]) throw new Error('Dependency update changes the action identity, location or no pin');
   }
 }
 

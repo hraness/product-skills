@@ -10,12 +10,16 @@ test('Dependabot may change existing SHA pins while preserving action identities
   assert.doesNotThrow(() => validateDependabotPins([file()]));
   assert.doesNotThrow(() => validateDependabotPins([{ ...file(), filename: 'actions/sync-profile/action.yml' }]));
   assert.doesNotThrow(() => validateDependabotPins([{ ...file(), filename: 'actions/check-profile/action.yml' }]));
+  assert.doesNotThrow(() => validateDependabotPins([{ ...file(), filename: 'actions/deliver-dependabot/action.yml' }]));
   for (const change of [
     { status: 'added' }, { filename: 'scripts/private.mjs' }, { filename: 'actions/another-action/action.yml' }, { additions: 2 }, { patch: undefined },
     { patch: file().patch.replace(`actions/checkout@${head}`, `other-owner/checkout@${head}`) },
     { patch: file().patch.replace(`@${head}`, '@v7') },
     { patch: `${file().patch}\n+permissions: write-all`, additions: 2 },
     { patch: file().patch.replace(head, base) },
+    { patch: `@@ -1,2 +1,2 @@\n-      - uses: actions/checkout@${base}\n unchanged: true\n+      - uses: actions/checkout@${head}` },
+    { patch: file().patch.replace('@@ -1,1 +1,1 @@', '@@ -1,1 +8,1 @@') },
+    { patch: file().patch.replace('@@ -1,1 +1,1 @@', '@@ -1,2 +1,2 @@') },
   ]) assert.throws(() => validateDependabotPins([{ ...file(), ...change }]));
   assert.throws(() => validateDependabotPins([file(), file()]));
 });

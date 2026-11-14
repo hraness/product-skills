@@ -5,6 +5,7 @@ updates:
       - /
       - /actions/sync-profile
       - /actions/check-profile
+      - /actions/deliver-dependabot
     schedule:
       interval: weekly
     open-pull-requests-limit: 1

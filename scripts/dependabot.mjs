@@ -4,8 +4,15 @@ const TARGETS = new Set(['hraness/product-skills', 'hraness/.github', '0thernet/
 const BRANCH = /^dependabot\/github_actions\/[A-Za-z0-9_.\/-]+$/;
 const need = (condition, message) => { if (!condition) throw new Error(message); };
 
-export async function deliverDependabot({ repository, run, read, request, checkWorkflow = 'check.yml' }) {
-  need(TARGETS.has(repository) && /^[A-Za-z0-9_-]+\.ya?ml$/.test(checkWorkflow) && run?.conclusion === 'success' && run.head_repository?.full_name === repository && BRANCH.test(run.head_branch) && /^[a-f0-9]{40}$/.test(run.head_sha), 'Only an authorized checked dependency update can merge');
+export async function deliverDependabot(options) {
+  need(TARGETS.has(options.repository), 'Only an authorized public dependency target can merge');
+  return deliverCheckedDependabot(options);
+}
+
+// The reusable action establishes one-repository App authority before entering
+// this kernel. Existing public callers retain their fixed repository allowlist.
+export async function deliverCheckedDependabot({ repository, run, read, request, checkWorkflow = 'check.yml', expectedActor, expectedRepositoryId }) {
+  need(/^[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+$/.test(repository) && /^[A-Za-z0-9_-]+\.ya?ml$/.test(checkWorkflow) && run?.conclusion === 'success' && run.head_repository?.full_name === repository && BRANCH.test(run.head_branch) && /^[a-f0-9]{40}$/.test(run.head_sha), 'Only an authorized checked dependency update can merge');
   const workflow = await read(`repos/${repository}/actions/workflows/${checkWorkflow}`);
   need(workflow.path === `.github/workflows/${checkWorkflow}` && workflow.id === run.workflow_id && workflow.name === run.name, 'Dependency validation workflow mismatch');
   const pulls = await read(`repos/${repository}/pulls?state=open&head=${repository.split('/')[0]}:${encodeURIComponent(run.head_branch)}&base=main&per_page=2`);
@@ -13,6 +20,8 @@ export async function deliverDependabot({ repository, run, read, request, checkW
   if (!pulls.length) return 'No open checked dependency update remains.';
   const pull = await read(`repos/${repository}/pulls/${pulls[0].number}`);
   need(pull.user?.login === 'dependabot[bot]' && pull.head?.repo?.full_name === repository && pull.base?.repo?.full_name === repository && pull.base.ref === 'main' && pull.head.ref === run.head_branch && pull.head.sha === run.head_sha, 'Dependency update identity changed');
+  if (expectedActor) need(pull.user.id === expectedActor.id && pull.user.type === 'Bot', 'Dependency author identity differs');
+  if (expectedRepositoryId) need(pull.head.repo.id === expectedRepositoryId && pull.base.repo.id === expectedRepositoryId, 'Dependency repository identity differs');
   const files = await read(`repos/${repository}/pulls/${pull.number}/files?per_page=100`);
   need(Array.isArray(files) && files.length === pull.changed_files, 'Dependency file list is incomplete'); validateDependabotPins(files);
   const checks = await read(`repos/${repository}/commits/${run.head_sha}/check-runs?per_page=100`);

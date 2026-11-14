@@ -1,4 +1,4 @@
-const COMMANDS = new Set(['propose-products', 'propose-publications', 'deliver', 'publish', 'refresh']);
+const COMMANDS = new Set(['propose-products', 'propose-publications', 'propose-guides', 'deliver', 'publish', 'refresh']);
 const GUARDS = new Map([
   ['Created release did not reconcile', 'created-release-not-visible'],
   ['Release source or version differs', 'release-source-or-version'],
