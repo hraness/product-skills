@@ -194,7 +194,7 @@ test('the Textmock encoder URL template is allowed only in its exact selected sc
 });
 test('Dawn publishes only selected skill and original example with private access stated', async () => {
   const b = bundle('dawn'); const calls = [];
-  const fetchImpl = async (url) => { calls.push(url); if (url.endsWith('/integrations/dawn.json')) return json(b); if (url.endsWith('/docs/agents') || url.endsWith('/install')) return new Response('Dawn private preview requires access.'); throw new Error('Private runtime access is not part of selected-file validation'); };
+  const fetchImpl = async (url) => { calls.push(url); if (url.endsWith('/integrations/dawn.json')) return json(b); if (url.endsWith('/docs/agents')) return new Response('Dawn agent guide.'); if (url.endsWith('/install')) return new Response('<title>install dawn</title><p>Private preview access is required.</p>'); throw new Error('Private runtime access is not part of selected-file validation'); };
   const result = await reconcile({ portfolio, state: empty(), bundles: {}, selected: ['dawn'], fetchImpl });
   assert.equal(result.outcomes[0].status, 'updated');
   assert.equal(result.state.products.dawn.qualification.scope, 'selected-files-only');
@@ -203,6 +203,8 @@ test('Dawn publishes only selected skill and original example with private acces
   assert.equal(output['skills/dawn/examples/morning-study.ts'], b.files['skills/dawn/examples/morning-study.ts']);
   assert.equal(output['plugins/dawn/skills/dawn/examples/morning-study.ts'], b.files['skills/dawn/examples/morning-study.ts']);
   assert.deepEqual(calls, ['https://dawnav.com/integrations/dawn.json', 'https://dawnav.com/docs/agents', 'https://dawnav.com/install']);
+  const unrelated = await reconcile({ portfolio, state: empty(), bundles: {}, selected: ['dawn'], fetchImpl: async (url) => url.endsWith('/install') ? new Response('Unrelated setup page.') : fetchImpl(url) });
+  assert.equal(unrelated.outcomes[0].status, 'pending'); assert.deepEqual(unrelated.state, empty());
   for (const mutate of [
     (copy) => { copy.manifest.runtime.install.requiresAccess = false; },
     (copy) => { copy.manifest.runtime.install.url = 'https://github.com/hraness/dawn/releases/latest'; },

@@ -143,7 +143,7 @@ export async function qualify(bundle, { fetchImpl = fetch } = {}) {
     return { type: 'web', version: runtime.version, helperHash: digest(helper.body), node: runtime.helper.node };
   }
   if (runtime.install.type === 'private-release') {
-    const install = await download(runtime.install.url, { fetchImpl, limit: 512000 }); need(install.body.includes(product.name), 'Private preview setup guide is unavailable');
+    const install = await download(runtime.install.url, { fetchImpl, limit: 512000 }); need(install.body.toLowerCase().includes(product.name.toLowerCase()), 'Private preview setup guide is unavailable');
     return { type: 'private-release', version: runtime.version, bun: runtime.bun, requiresAccess: true, scope: 'selected-files-only', guideHash: digest(guide.body), installPageHash: digest(install.body) };
   }
   const [release, feed] = await Promise.all([download(`${product.url}/release.json`, { fetchImpl, limit: 262144 }), download(`${product.url}/appcast.xml`, { fetchImpl, limit: 262144 })]);
