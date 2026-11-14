@@ -28,3 +28,16 @@ test('all repository workflows avoid status functions in environment expressions
     assert.deepEqual(invalid, [], `${name} has forbidden status functions in env at lines ${invalid.join(', ')}`);
   }
 });
+
+test('publication admits trusted scheduled and manual recovery plus canonical successful main checks', async () => {
+  const source = await readFile(new URL('../.github/workflows/publish.yml', import.meta.url), 'utf8');
+  const folded = /^    if: >-\n((?:      .*\n)+)/m.exec(source); assert(folded, 'The publication guard must remain explicitly reviewable');
+  const admit = new Function('github', `return (${folded[1].trim().replaceAll('\n', ' ')});`);
+  const context = (event_name) => ({ repository: 'hraness/product-skills', repository_id: '1458031600', ref: 'refs/heads/main', event_name, event: { workflow_run: { conclusion: 'success', head_repository: { id: 1458031600, full_name: 'hraness/product-skills' }, head_branch: 'main' } } });
+  for (const event of ['schedule', 'workflow_dispatch', 'workflow_run']) assert.equal(admit(context(event)), true, event);
+  assert.equal(admit(context('pull_request')), false);
+  for (const change of [{ repository_id: '1' }, { repository: 'someone/else' }, { ref: 'refs/heads/proposal' }]) assert.equal(admit({ ...context('schedule'), ...change }), false);
+  const failed = context('workflow_run'); failed.event.workflow_run.conclusion = 'failure'; assert.equal(admit(failed), false);
+  const fork = context('workflow_run'); fork.event.workflow_run.head_repository.id = 1; assert.equal(admit(fork), false);
+  const branch = context('workflow_run'); branch.event.workflow_run.head_branch = 'proposal'; assert.equal(admit(branch), false);
+});

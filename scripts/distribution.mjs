@@ -6,12 +6,11 @@ import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 
 export const PRODUCTS = Object.freeze({ dawn: { name: 'Dawn', url: 'https://dawnav.com' }, yaptake: { name: 'Yaptake', url: 'https://yaptake.com' }, textmock: { name: 'Textmock', url: 'https://textmock.com' }, sponge: { name: 'Sponge', url: 'https://sponge.computer' } });
+export const MCP_REGISTRY = Object.freeze({ origin: 'https://registry.modelcontextprotocol.io', name: 'io.github.hraness/sponge', product: 'sponge' });
 export const REPOSITORY = 'https://github.com/hraness/product-skills';
 export const MAX_BUNDLE = 65536;
 const TEXTMOCK_HELPER = 'scripts/textmock-link.mjs';
 const DAWN_EXAMPLE = 'skills/dawn/examples/morning-study.ts';
-// Bump when generated product files change independently of their source bundle.
-export const INTEGRATION_FORMAT = 1;
 const PLUGIN_SCHEMA = 'https://agent-plugins.org/schemas/1.0.0/plugin.schema.json';
 const MCP_SCHEMA = 'https://agent-plugins.org/schemas/1.0.0/mcp.schema.json';
 const object = (v) => v !== null && typeof v === 'object' && !Array.isArray(v);
@@ -37,6 +36,8 @@ export function parseUnique(raw) {
 }
 export function version(v) { need(typeof v === 'string' && /^(0|[1-9]\d{0,8})\.(0|[1-9]\d{0,8})\.(0|[1-9]\d{0,8})$/.test(v), 'An exact release version is required'); return v.split('.').map(Number); }
 export function compareVersion(a, b) { const av = version(a); const bv = version(b); for (let i = 0; i < 3; i++) if (av[i] !== bv[i]) return av[i] > bv[i] ? 1 : -1; return 0; }
+export function mcpRegistryPublicationId(value) { version(value); return `sponge-mcp-registry-${value.replaceAll('.', '-')}`; }
+export function mcpRegistryPublicationUrl(value) { version(value); return `${MCP_REGISTRY.origin}/v0.1/servers/${encodeURIComponent(MCP_REGISTRY.name)}/versions/${value}`; }
 function publicUrl(value, allowedOrigins) {
   need(typeof value === 'string' && value.length <= 500, 'Invalid URL');
   const u = new URL(value);
@@ -99,7 +100,6 @@ export function validatePortfolio(portfolio) {
   for (const p of portfolio.projects) { keys(p, ['id', 'name', 'url', 'short', 'icon']); need(Object.hasOwn(PRODUCTS, p.id) && !seen.has(p.id) && p.name === PRODUCTS[p.id].name && p.url === PRODUCTS[p.id].url && p.icon === `/products/${p.id}/icon.png`, 'Portfolio identity mismatch'); text(p.short, 100); need(!/[\r\n]/.test(p.short), 'Product summary must be one line'); inspectText(p.short, p.id); seen.add(p.id); }
   return portfolio;
 }
-function presentationHash(portfolio, id) { return digest(canonical({ short: portfolio.projects.find((p) => p.id === id).short })); }
 export async function download(url, { fetchImpl = fetch, etag, limit = MAX_BUNDLE, token } = {}) {
   const response = await fetchImpl(url, { redirect: 'error', signal: AbortSignal.timeout(20000), headers: { accept: 'application/json', ...(etag ? { 'if-none-match': etag } : {}), ...(token ? { authorization: `Bearer ${token}` } : {}) } });
   if (response.status === 304) return { unchanged: true };
@@ -153,9 +153,11 @@ function stateCheck(state) {
   keys(state, ['schemaVersion', 'products']); need(state.schemaVersion === 1 && object(state.products), 'Invalid admitted catalog');
   for (const [id, entry] of Object.entries(state.products)) {
     need(Object.hasOwn(PRODUCTS, id), 'Unknown admitted product');
-    keys(entry, ['contentHash', 'sourceHash', 'revision', 'runtimeVersion', 'runtimeBuild', 'etag', 'qualification'], ['integrationFormat', 'presentationHash']);
+    keys(entry, ['contentHash', 'sourceHash', 'revision', 'runtimeVersion', 'runtimeBuild', 'etag', 'qualification'], ['packageFingerprint', 'integrationFormat', 'presentationHash']);
     need(/^[a-f0-9]{64}$/.test(entry.contentHash) && /^[a-f0-9]{64}$/.test(entry.sourceHash) && Number.isSafeInteger(entry.revision) && entry.revision >= 1 && entry.revision <= 1000000 && (entry.etag === null || (typeof entry.etag === 'string' && entry.etag.length <= 256 && !/[\r\n]/.test(entry.etag))) && (entry.runtimeBuild === null || (typeof entry.runtimeBuild === 'string' && /^[1-9]\d{0,8}$/.test(entry.runtimeBuild))), 'Invalid admitted identity');
-    need(entry.integrationFormat === undefined || (Number.isSafeInteger(entry.integrationFormat) && entry.integrationFormat >= 1 && entry.integrationFormat <= INTEGRATION_FORMAT), 'Unsupported integration format');
+    need(entry.packageFingerprint === undefined || /^[a-f0-9]{64}$/.test(entry.packageFingerprint), 'Invalid rendered package identity');
+    // Legacy fields remain readable until the next successful reconciliation.
+    need(entry.integrationFormat === undefined || (Number.isSafeInteger(entry.integrationFormat) && entry.integrationFormat >= 1 && entry.integrationFormat <= 1000000), 'Unsupported legacy integration format');
     need(entry.presentationHash === undefined || /^[a-f0-9]{64}$/.test(entry.presentationHash), 'Invalid product presentation identity');
     version(entry.runtimeVersion); const q = entry.qualification;
     if (q?.type === 'npm') { keys(q, ['type', 'package', 'version', 'integrity']); need(q.package === `@hraness/${id}` && q.version === entry.runtimeVersion && entry.runtimeBuild === null && /^sha512-[A-Za-z0-9+/=]+$/.test(q.integrity), 'Invalid npm qualification'); }
@@ -165,24 +167,28 @@ function stateCheck(state) {
   }
   return state;
 }
-export async function reconcile({ state, bundles, portfolio, selected, fetchImpl = fetch }) {
+export async function reconcile({ state, bundles, portfolio, selected, fetchImpl = fetch, renderer = render, archive = zip }) {
   stateCheck(state); validatePortfolio(portfolio); need(Array.isArray(selected) && new Set(selected).size === selected.length && selected.every((id) => Object.hasOwn(PRODUCTS, id)), 'Invalid selected products');
   const nextState = structuredClone(state); const nextBundles = structuredClone(bundles); const outcomes = [];
   for (const id of selected) {
     try {
-      const previous = state.products[id]; const source = `${PRODUCTS[id].url}/integrations/${id}.json`; const metadataHash = presentationHash(portfolio, id);
+      const previous = state.products[id]; const source = `${PRODUCTS[id].url}/integrations/${id}.json`;
       const response = await download(source, { fetchImpl, etag: previous?.etag });
+      let bundle, candidate;
       if (response.unchanged) {
         need(previous && bundles[id], '304 without an admitted source');
-        if (previous.integrationFormat !== INTEGRATION_FORMAT || previous.presentationHash !== metadataHash) { nextState.products[id] = { ...previous, revision: previous.revision + 1, integrationFormat: INTEGRATION_FORMAT, presentationHash: metadataHash }; outcomes.push({ id, status: 'updated' }); }
-        else outcomes.push({ id, status: 'unchanged' });
-        continue;
+        bundle = validateBundle(bundles[id], id); candidate = { ...previous };
+      } else {
+        bundle = validateBundle(response.body, id); const contentHash = digest(canonical(bundle)); const runtime = bundle.manifest.runtime;
+        if (previous && (compareVersion(runtime.version, previous.runtimeVersion) < 0 || (runtime.build && BigInt(runtime.build) < BigInt(previous.runtimeBuild ?? '0')))) throw new Error('Runtime rollback refused');
+        const qualification = previous?.contentHash === contentHash ? previous.qualification : await qualify(bundle, { fetchImpl });
+        candidate = { contentHash, sourceHash: digest(response.body), revision: previous?.revision ?? 1, runtimeVersion: runtime.version, runtimeBuild: runtime.build ?? null, etag: response.etag, qualification };
       }
-      const bundle = validateBundle(response.body, id); const contentHash = digest(canonical(bundle)); const runtime = bundle.manifest.runtime;
-      if (previous && (compareVersion(runtime.version, previous.runtimeVersion) < 0 || (runtime.build && BigInt(runtime.build) < BigInt(previous.runtimeBuild ?? '0')))) throw new Error('Runtime rollback refused');
-      if (previous?.contentHash === contentHash && previous.integrationFormat === INTEGRATION_FORMAT && previous.presentationHash === metadataHash) { outcomes.push({ id, status: 'unchanged' }); continue; }
-      const qualification = previous?.contentHash === contentHash ? previous.qualification : await qualify(bundle, { fetchImpl });
-      nextState.products[id] = { contentHash, sourceHash: digest(response.body), revision: (previous?.revision ?? 0) + 1, integrationFormat: INTEGRATION_FORMAT, presentationHash: metadataHash, runtimeVersion: runtime.version, runtimeBuild: runtime.build ?? null, etag: response.etag, qualification };
+      delete candidate.integrationFormat; delete candidate.presentationHash;
+      const fingerprint = renderedPackageFingerprint(id, candidate, bundle, portfolio, { renderer, archive });
+      if (previous?.packageFingerprint === fingerprint) { outcomes.push({ id, status: 'unchanged' }); continue; }
+      need(!previous || previous.revision < 1000000, 'Integration revision limit reached');
+      nextState.products[id] = { ...candidate, revision: (previous?.revision ?? 0) + 1, packageFingerprint: fingerprint };
       nextBundles[id] = bundle; outcomes.push({ id, status: 'updated' });
     } catch { outcomes.push({ id, status: 'pending', reason: 'Source, documentation or released runtime did not qualify; the admitted package was preserved.' }); }
   }
@@ -226,6 +232,22 @@ export function render(state, bundles, portfolio, ledger = { schemaVersion: 1, p
   output['README.md'] = `# Hraness product skills\n\nSkills for working with [Hraness](https://hraness.com) products from a coding agent. Each package explains its workflow, setup and first task.\n\n${ids.length ? '## Product packages\n\n' + ids.map((id) => `- [${PRODUCTS[id].name}](plugins/${id}/README.md): ${portfolio.projects.find((p) => p.id === id).short}`).join('\n') + '\n\nRead the product package for its app, command and access requirements.\n\n```sh\nnpx skills add hraness/product-skills\n```\n\nChoose the product skill during installation, then follow its setup and first task. ' : 'Product packages are being prepared. ' }A package available here may still be awaiting directory review or host testing. See [package status](catalog/store-status.json) and [verified publications](publication-ledger.json).\n\n## Product pages\n\n${portfolio.projects.map((p) => `- [${p.name}](${p.url}): ${p.short}`).join('\n')}\n\n## Check a package\n\nUse Node.js 24. Run \`npm run check\` to validate sources, generated copies and package metadata. \`npm run package\` writes deterministic plugin ZIPs and \`SHA256SUMS\` under \`dist/\`. The package license covers these skills and integration files; product applications have their own terms.\n\n[Maintain packages](docs/MAINTAINING.md) · [MIT license](LICENSE)\n`;
   return output;
 }
+export function renderedPackageFingerprint(id, entry, bundle, portfolio, { renderer = render, archive = zip } = {}) {
+  need(Object.hasOwn(PRODUCTS, id) && typeof renderer === 'function' && typeof archive === 'function', 'Invalid rendered package request');
+  // A fixed integration version and fingerprint remove their own derived values
+  // from the hash. Product runtime versions and selected source bytes stay real.
+  const normalized = { ...entry, revision: 1, packageFingerprint: '0'.repeat(64) };
+  delete normalized.integrationFormat; delete normalized.presentationHash;
+  const output = renderer({ schemaVersion: 1, products: { [id]: normalized } }, { [id]: bundle }, portfolio);
+  const prefix = `plugins/${id}/`;
+  const files = Object.fromEntries(Object.entries(output).filter(([path]) => path.startsWith(prefix)).map(([path, value]) => [path.slice(prefix.length), value]));
+  need(Object.keys(files).length > 0, 'Rendered package has no files');
+  return digest(canonical({ source: digest(canonical(bundle)), archive: digest(archive(files)) }));
+}
+export function checkPackageFingerprints(state, bundles, portfolio, options = {}) {
+  stateCheck(state); validatePortfolio(portfolio);
+  for (const [id, entry] of Object.entries(state.products)) need(entry.packageFingerprint === renderedPackageFingerprint(id, entry, bundles[id], portfolio, options), 'Reconcile changed rendered packages before checking or packaging');
+}
 async function safeTarget(root, path) {
   need(!path.startsWith('/') && path.split('/').every((p) => p && p !== '.' && p !== '..' && /^[A-Za-z0-9_.-]+$/.test(p)), 'Unsafe output path');
   const parts = path.split('/'); let target = root;
@@ -250,7 +272,7 @@ export function zip(files) {
   return Buffer.concat([...local, directory, end]);
 }
 export function packages(state, output, { toolkitHash = null } = {}) {
-  stateCheck(state); need(Object.values(state.products).every((entry) => entry.integrationFormat === INTEGRATION_FORMAT), 'Reconcile the current integration format before packaging');
+  stateCheck(state); need(Object.values(state.products).every((entry) => /^[a-f0-9]{64}$/.test(entry.packageFingerprint ?? '')), 'Reconcile rendered package identities before packaging');
   need(toolkitHash === null || /^[a-f0-9]{64}$/.test(toolkitHash), 'Invalid toolkit source hash');
   const artifacts = {}; const products = [];
   for (const [id, entry] of Object.entries(state.products).sort()) {
@@ -285,7 +307,14 @@ async function toolSourceHash(root) {
 }
 export function validateLedger(ledger) {
   keys(ledger, ['schemaVersion', 'publications']); need(ledger.schemaVersion === 1 && Array.isArray(ledger.publications), 'Invalid publication ledger'); const seen = new Set();
-  for (const p of ledger.publications) { keys(p, ['id', 'product', 'channel', 'publishedAt', 'url', 'version', 'contentHash']); need(/^[a-z0-9][a-z0-9-]{0,63}$/.test(p.id) && !seen.has(p.id) && Object.hasOwn(PRODUCTS, p.product) && ['github', 'skills-sh', 'chatgpt', 'claude', 'cursor', 'homebrew', 'raycast'].includes(p.channel) && /^[a-f0-9]{64}$/.test(p.contentHash), 'Invalid publication identity'); need(typeof p.publishedAt === 'string' && new Date(p.publishedAt).toISOString() === p.publishedAt, 'An actual ISO publication timestamp is required'); version(p.version); publicUrl(p.url, ['https://github.com', 'https://skills.sh', 'https://www.skills.sh', 'https://chatgpt.com', 'https://claude.ai', 'https://cursor.com', 'https://formulae.brew.sh', 'https://www.raycast.com']); seen.add(p.id); } return ledger;
+  for (const p of ledger.publications) {
+    keys(p, ['id', 'product', 'channel', 'publishedAt', 'url', 'version', 'contentHash']);
+    need(/^[a-z0-9][a-z0-9-]{0,63}$/.test(p.id) && !seen.has(p.id) && Object.hasOwn(PRODUCTS, p.product) && ['github', 'skills-sh', 'chatgpt', 'claude', 'cursor', 'homebrew', 'raycast', 'mcp-registry'].includes(p.channel) && /^[a-f0-9]{64}$/.test(p.contentHash), 'Invalid publication identity');
+    need(typeof p.publishedAt === 'string' && new Date(p.publishedAt).toISOString() === p.publishedAt, 'An actual ISO publication timestamp is required'); version(p.version);
+    if (p.channel === 'mcp-registry') need(p.product === MCP_REGISTRY.product && p.id === mcpRegistryPublicationId(p.version) && p.url === mcpRegistryPublicationUrl(p.version), 'MCP Registry publication identity or address differs');
+    publicUrl(p.url, p.channel === 'mcp-registry' ? [MCP_REGISTRY.origin] : ['https://github.com', 'https://skills.sh', 'https://www.skills.sh', 'https://chatgpt.com', 'https://claude.ai', 'https://cursor.com', 'https://formulae.brew.sh', 'https://www.raycast.com']); seen.add(p.id);
+  }
+  return ledger;
 }
 export function appendPublications(ledger, entries) {
   validateLedger(ledger); const next = structuredClone(ledger);
@@ -317,11 +346,10 @@ export async function recordGithub(ledger, releasePlan, { fetchImpl = fetch, tok
   return appendPublications(ledger, entries);
 }
 export async function main(argv = process.argv.slice(2), root = process.cwd()) {
-  const [command, ...rest] = argv; need(rest.length === 0 && ['check', 'reconcile', 'package', 'record-github'].includes(command), 'Use check, reconcile, package or record-github');
+  const [command, ...rest] = argv; need(rest.length === 0 && ['check', 'reconcile', 'package', 'record-github', 'record-registry'].includes(command), 'Use check, reconcile, package, record-github or record-registry');
   let data = await load(root); const before = render(data.state, data.bundles, data.portfolio, data.ledger);
   if (command === 'check') {
-    need(Object.values(data.state.products).every((entry) => entry.integrationFormat === INTEGRATION_FORMAT), 'Reconcile the current integration format before checking');
-    need(Object.entries(data.state.products).every(([id, entry]) => entry.presentationHash === presentationHash(data.portfolio, id)), 'Reconcile changed product descriptions before checking');
+    checkPackageFingerprints(data.state, data.bundles, data.portfolio);
     for (const [path, expected] of Object.entries(before)) need(await readFile(join(root, path), 'utf8') === expected, `Generated file is stale: ${path}`);
     for (const path of [...await tree(root, 'plugins'), ...await tree(root, 'skills')]) need(Object.hasOwn(before, path), `Unexpected package file: ${path}`);
     const ledger = validateLedger(JSON.parse(await readFile(join(root, 'publication-ledger.json'), 'utf8')));
@@ -342,6 +370,21 @@ export async function main(argv = process.argv.slice(2), root = process.cwd()) {
     await writeFile(join(root, 'catalog/admitted.json'), json(data.state)); await writeFile(join(root, 'catalog/portfolio.json'), json(portfolio));
     await writeRendered(root, output, before); await writeFile(join(root, 'reconcile-report.json'), json({ schemaVersion: 1, outcomes: result.outcomes })); process.stdout.write(json(result.outcomes)); return;
   }
+  if (command === 'record-registry') {
+    await mkdir(join(root, 'dist'), { recursive: true });
+    try {
+      const { observeMcpRegistry } = await import('./mcp-registry.mjs');
+      const result = await observeMcpRegistry(data.ledger);
+      const output = render(data.state, data.bundles, data.portfolio, result.ledger);
+      await writeFile(join(root, 'publication-ledger.json'), json(result.ledger)); await writeRendered(root, output, before);
+      await writeFile(join(root, 'dist/registry-observation.json'), json(result.report)); process.stdout.write(json(result.report));
+    } catch (error) {
+      await writeFile(join(root, 'dist/registry-observation.json'), json({ schemaVersion: 1, source: 'official-mcp-registry', status: 'pending', reason: 'Registry data or its exact public npm metadata did not verify; prior publication records were preserved.' }));
+      throw error;
+    }
+    return;
+  }
+  checkPackageFingerprints(data.state, data.bundles, data.portfolio);
   const plan = packages(data.state, before, { toolkitHash: await toolSourceHash(root) }); await mkdir(join(root, 'dist'), { recursive: true });
   for (const [name, bytes] of Object.entries(plan.artifacts)) await writeFile(join(root, 'dist', name), bytes);
   if (command === 'record-github') {

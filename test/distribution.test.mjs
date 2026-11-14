@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
-import { appendPublications, checkLedgerAppendOnly, digest, download, packages, parseUnique, reconcile, recordGithub, render, validateBundle, validateLedger, validatePortfolio, verifyApp, zip } from '../scripts/distribution.mjs';
+import { appendPublications, checkLedgerAppendOnly, checkPackageFingerprints, digest, download, packages, parseUnique, reconcile, recordGithub, render, renderedPackageFingerprint, validateBundle, validateLedger, validatePortfolio, verifyApp, zip } from '../scripts/distribution.mjs';
 
 const license = await readFile(new URL('../LICENSE', import.meta.url), 'utf8');
 const portfolio = JSON.parse(await readFile(new URL('../catalog/portfolio.json', import.meta.url), 'utf8'));
@@ -58,6 +58,11 @@ test('portfolio facts require each exact product identity once', () => {
   assert.doesNotThrow(() => validatePortfolio(portfolio));
   const p = structuredClone(portfolio); p.projects[0].url = 'https://wrong.test'; assert.throws(() => validatePortfolio(p));
 });
+test('an empty admitted catalog needs no fingerprint migration or product version', () => {
+  assert.doesNotThrow(() => checkPackageFingerprints(empty(), {}, portfolio));
+  const plan = packages(empty(), render(empty(), {}, portfolio));
+  assert.deepEqual(plan.products, []); assert.equal(plan.artifacts.SHA256SUMS.length, 0);
+});
 test('an unpublished or mismatched exact npm version preserves the working package', async () => {
   const first = await reconcile({ portfolio, state: empty(), bundles: {}, selected: ['sponge'], ...server() });
   assert.equal(first.outcomes[0].status, 'updated');
@@ -78,17 +83,52 @@ test('unchanged source bytes and conditional 304 responses do not bump a package
   await assert.rejects(download('https://sponge.computer/integrations/sponge.json', { fetchImpl: async () => new Response('x'.repeat(65537)) }));
   await assert.rejects(reconcile({ portfolio, state: empty(), bundles: {}, selected: ['sponge', 'sponge'], ...server() }));
 });
-test('an integration format migration advances the plugin once without changing its runtime', async () => {
+test('a legacy catalog acquires its rendered fingerprint once without changing its runtime', async () => {
   const first = await reconcile({ portfolio, state: empty(), bundles: {}, selected: ['sponge'], ...server() });
-  const older = structuredClone(first.state); delete older.products.sponge.integrationFormat;
+  const older = structuredClone(first.state); delete older.products.sponge.packageFingerprint;
+  older.products.sponge.integrationFormat = 1; older.products.sponge.presentationHash = 'a'.repeat(64);
   const current = await reconcile({ portfolio, state: older, bundles: first.bundles, selected: ['sponge'], fetchImpl: async () => new Response(null, { status: 304 }) });
   assert.equal(current.outcomes[0].status, 'updated');
   assert.equal(current.state.products.sponge.revision, 2);
   assert.equal(current.state.products.sponge.runtimeVersion, first.state.products.sponge.runtimeVersion);
   assert.equal(current.state.products.sponge.contentHash, first.state.products.sponge.contentHash);
+  assert.equal(current.state.products.sponge.packageFingerprint, first.state.products.sponge.packageFingerprint);
+  assert.equal(Object.hasOwn(current.state.products.sponge, 'integrationFormat'), false);
+  assert.equal(Object.hasOwn(current.state.products.sponge, 'presentationHash'), false);
   assert.throws(() => packages(older, render(older, first.bundles, portfolio)));
   const again = await reconcile({ portfolio, state: current.state, bundles: current.bundles, selected: ['sponge'], fetchImpl: async () => new Response(null, { status: 304 }) });
   assert.deepEqual(again.state, current.state);
+});
+test('renderer and metadata changes advance a cached package once without version or hash self-reference', async () => {
+  const first = await reconcile({ portfolio, state: empty(), bundles: {}, selected: ['sponge'], ...server() });
+  const renderer = (state, bundles, facts, ledger) => {
+    const output = render(state, bundles, facts, ledger); const path = 'plugins/sponge/plugin.json';
+    const metadata = JSON.parse(output[path]);
+    metadata.extensions['test.fingerprint'] = { renderedMetadata: true, integrationFingerprint: state.products.sponge.packageFingerprint };
+    output[path] = `${JSON.stringify(metadata, null, 2)}\n`; return output;
+  };
+  const options = { portfolio, state: first.state, bundles: first.bundles, selected: ['sponge'], renderer, fetchImpl: async () => new Response(null, { status: 304 }) };
+  assert.throws(() => checkPackageFingerprints(first.state, first.bundles, portfolio, { renderer }), /Reconcile/);
+  const updated = await reconcile(options); assert.equal(updated.state.products.sponge.revision, 2);
+  assert.equal(updated.state.products.sponge.runtimeVersion, first.state.products.sponge.runtimeVersion);
+  assert.notEqual(updated.state.products.sponge.packageFingerprint, first.state.products.sponge.packageFingerprint);
+  assert.equal(JSON.parse(renderer(updated.state, updated.bundles, portfolio)['plugins/sponge/plugin.json']).version, '0.1.1');
+  assert.doesNotThrow(() => checkPackageFingerprints(updated.state, updated.bundles, portfolio, { renderer }));
+  const repeated = await reconcile({ ...options, state: updated.state, bundles: updated.bundles }); assert.deepEqual(repeated.state, updated.state);
+  const differentDerivedValues = { ...updated.state.products.sponge, revision: 99, packageFingerprint: 'f'.repeat(64) };
+  assert.equal(renderedPackageFingerprint('sponge', differentDerivedValues, updated.bundles.sponge, portfolio, { renderer }), updated.state.products.sponge.packageFingerprint);
+});
+test('ZIP encoding changes advance a cached package while tooling-only release changes preserve it', async () => {
+  const first = await reconcile({ portfolio, state: empty(), bundles: {}, selected: ['sponge'], ...server() });
+  const archive = (files) => Buffer.concat([zip(files), Buffer.from('synthetic archive encoding change')]);
+  const options = { portfolio, state: first.state, bundles: first.bundles, selected: ['sponge'], archive, fetchImpl: async () => new Response(null, { status: 304 }) };
+  const changed = await reconcile(options); assert.equal(changed.state.products.sponge.revision, 2);
+  assert.notEqual(changed.state.products.sponge.packageFingerprint, first.state.products.sponge.packageFingerprint);
+  assert.deepEqual((await reconcile({ ...options, state: changed.state, bundles: changed.bundles })).state, changed.state);
+  const output = render(first.state, first.bundles, portfolio);
+  const oldTools = packages(first.state, output, { toolkitHash: 'a'.repeat(64) });
+  const newTools = packages(first.state, output, { toolkitHash: 'b'.repeat(64) });
+  assert.notEqual(oldTools.tag, newTools.tag); assert.deepEqual(oldTools.products, newTools.products);
 });
 test('changed product presentation advances its plugin even when the source returns 304', async () => {
   const first = await reconcile({ portfolio, state: empty(), bundles: {}, selected: ['sponge'], ...server() });
@@ -103,6 +143,16 @@ test('changed product presentation advances its plugin even when the source retu
   assert.equal(after.products[0].version, '0.1.1');
   const repeated = await reconcile({ ...options, state: updated.state, bundles: updated.bundles });
   assert.deepEqual(repeated.state, updated.state);
+});
+test('one product description changes only that product fingerprint and integration version', async () => {
+  const first = await reconcile({ portfolio, state: empty(), bundles: {}, selected: ['sponge'], ...server() });
+  const dawn = bundle('dawn');
+  const both = await reconcile({ portfolio, state: first.state, bundles: first.bundles, selected: ['dawn'], fetchImpl: async (url) => url.endsWith('/integrations/dawn.json') ? json(dawn) : new Response('Dawn private preview setup guide.') });
+  const changed = structuredClone(portfolio); changed.projects.find((product) => product.id === 'sponge').short = 'Read saved sources and notes.';
+  const updated = await reconcile({ portfolio: changed, state: both.state, bundles: both.bundles, selected: ['dawn', 'sponge'], fetchImpl: async () => new Response(null, { status: 304 }) });
+  assert.deepEqual(updated.state.products.dawn, both.state.products.dawn);
+  assert.equal(updated.state.products.sponge.revision, both.state.products.sponge.revision + 1);
+  assert.notEqual(updated.state.products.sponge.packageFingerprint, both.state.products.sponge.packageFingerprint);
 });
 test('Textmock accepts only its bounded helper and preserves it in standalone skill installs', async () => {
   const b = bundle('textmock'); const helper = b.files['scripts/textmock-link.mjs'];

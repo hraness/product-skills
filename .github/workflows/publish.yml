@@ -1,5 +1,7 @@
 name: Publish checked packages
 on:
+  schedule:
+    - cron: '57 14 * * *'
   workflow_run:
     workflows: [Check]
     branches: [main]
@@ -12,7 +14,16 @@ concurrency:
   cancel-in-progress: false
 jobs:
   publish:
-    if: github.repository == 'hraness/product-skills' && github.ref == 'refs/heads/main' && (github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success')
+    if: >-
+      github.repository == 'hraness/product-skills' &&
+      github.repository_id == '1458031600' &&
+      github.ref == 'refs/heads/main' &&
+      (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' ||
+       (github.event_name == 'workflow_run' &&
+        github.event.workflow_run.conclusion == 'success' &&
+        github.event.workflow_run.head_repository.id == 1458031600 &&
+        github.event.workflow_run.head_repository.full_name == github.repository &&
+        github.event.workflow_run.head_branch == 'main'))
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:
@@ -30,6 +41,13 @@ jobs:
         with:
           node-version: 24
       - run: node scripts/automation.mjs publish
+      - name: Observe actual official MCP Registry publications
+        id: registry
+        continue-on-error: true
+        env:
+          GH_TOKEN: ''
+          REPORT_GH_TOKEN: ''
+        run: node scripts/distribution.mjs record-registry
       - name: Mint the dedicated token for the ledger pull request
         id: app
         uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
@@ -55,3 +73,12 @@ jobs:
           path: dist/
           if-no-files-found: warn
           retention-days: 90
+      - name: Require a completed public registry observation
+        if: always()
+        env:
+          REGISTRY_OUTCOME: ${{ steps.registry.outcome }}
+        run: |
+          if [ "$REGISTRY_OUTCOME" != success ]; then
+            echo 'Public registry observation is pending. Earlier publication records are preserved.' >&2
+            exit 1
+          fi
