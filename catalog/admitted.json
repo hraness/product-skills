@@ -1,4 +1,21 @@
 {
   "schemaVersion": 1,
-  "products": {}
+  "products": {
+    "sponge": {
+      "contentHash": "dcae8e25fbf0f46b65f6008b67eb34ddb700db16e9eb6cf0f9d5578196415f74",
+      "sourceHash": "d8fab08e81ae7d94dbf997acd22ff0f1fd141163ff5e500feae059217d62058e",
+      "revision": 1,
+      "integrationFormat": 1,
+      "presentationHash": "24404d3ba0a8721cc3c1896591b5e2b182b5a9cb57752001e538713ee39b8148",
+      "runtimeVersion": "0.40.1",
+      "runtimeBuild": null,
+      "etag": "W/\"7c5d387f826d12a188418adbfa904a1d\"",
+      "qualification": {
+        "type": "npm",
+        "package": "@hraness/sponge",
+        "version": "0.40.1",
+        "integrity": "sha512-zm8XPyxRZTahEaMvx4mv41+Lvxfwqz+IJu3o23RPItj+tgm8HOAol+u937bS0Ism5WhDFrc/DzOGuBYjnGeEpA=="
+      }
+    }
+  }
 }

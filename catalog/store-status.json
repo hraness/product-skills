@@ -1,4 +1,15 @@
 {
   "schemaVersion": 1,
-  "products": {}
+  "products": {
+    "sponge": {
+      "version": "0.1.0",
+      "contentHash": "dcae8e25fbf0f46b65f6008b67eb34ddb700db16e9eb6cf0f9d5578196415f74",
+      "artifactHash": "21c52c8be162d04e65a228f05d7d022d852f4b68e1331dc4c352c9d16301e84e",
+      "github": "release_required",
+      "skillsSh": "public_install_required",
+      "chatgpt": "eligibility_and_review_required",
+      "claude": "review_required",
+      "cursor": "review_required"
+    }
+  }
 }

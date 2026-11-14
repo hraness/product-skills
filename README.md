@@ -2,7 +2,17 @@
 
 Skills for working with [Hraness](https://hraness.com) products from a coding agent. Each package explains its workflow, setup and first task.
 
-Product packages are being prepared. A package available here may still be awaiting directory review or host testing. See [package status](catalog/store-status.json) and [verified publications](publication-ledger.json).
+## Product packages
+
+- [Sponge](plugins/sponge/README.md): Reading and notes.
+
+Read the product package for its app, command and access requirements.
+
+```sh
+npx skills add hraness/product-skills
+```
+
+Choose the product skill during installation, then follow its setup and first task. A package available here may still be awaiting directory review or host testing. See [package status](catalog/store-status.json) and [verified publications](publication-ledger.json).
 
 ## Product pages
 

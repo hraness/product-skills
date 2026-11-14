@@ -3,5 +3,12 @@
   "owner": {
     "name": "Hraness"
   },
-  "plugins": []
+  "plugins": [
+    {
+      "name": "sponge",
+      "source": "./plugins/sponge",
+      "description": "Save articles and PDFs to a reading library captured by a computer you control. Highlight passages, keep notes, and find ideas through search or your coding agent.",
+      "version": "0.1.0"
+    }
+  ]
 }

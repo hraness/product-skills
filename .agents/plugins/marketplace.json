@@ -3,5 +3,18 @@
   "interface": {
     "displayName": "Hraness products"
   },
-  "plugins": []
+  "plugins": [
+    {
+      "name": "sponge",
+      "source": {
+        "source": "local",
+        "path": "./plugins/sponge"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
 }
