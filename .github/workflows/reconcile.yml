@@ -10,15 +10,16 @@ concurrency:
   cancel-in-progress: false
 jobs:
   reconcile:
+    if: github.repository == 'hraness/product-skills' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     timeout-minutes: 5
     permissions:
-      contents: write
-      pull-requests: write
-      actions: write
+      contents: read
+      checks: read
       issues: write
     env:
       GH_TOKEN: ${{ github.token }}
+      REPORT_GH_TOKEN: ${{ github.token }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -29,7 +30,22 @@ jobs:
           node-version: 24
       - run: npm run reconcile
       - run: npm run check
+      - name: Mint the dedicated repository installation token
+        id: app
+        uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
+        with:
+          app-id: ${{ vars.DISTRIBUTION_APP_ID }}
+          private-key: ${{ secrets.DISTRIBUTION_APP_PRIVATE_KEY }}
+          owner: hraness
+          repositories: product-skills
+          permission-contents: write
+          permission-pull-requests: write
+          permission-actions: write
       - run: node scripts/automation.mjs propose-products
+        env:
+          GH_TOKEN: ${{ steps.app.outputs.token }}
+          DISTRIBUTION_APP_ID: ${{ vars.DISTRIBUTION_APP_ID }}
+          DISTRIBUTION_APP_SLUG: ${{ steps.app.outputs.app-slug }}
       - name: Preserve the refresh report
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
@@ -40,13 +56,17 @@ jobs:
           retention-days: 30
       - name: Surface pending sources
         if: always()
+        env:
+          REPORT_GH_TOKEN: ${{ github.token }}
+          REFRESH_FAILED: ${{ failure() }}
         run: |
           node --input-type=module <<'NODE'
           import { readFile, writeFile } from 'node:fs/promises';
           let pending = true;
-          try { pending = JSON.parse(await readFile('reconcile-report.json', 'utf8')).outcomes.some((r) => r.status === 'pending'); } catch {}
+          try { pending = process.env.REFRESH_FAILED === 'true' || JSON.parse(await readFile('reconcile-report.json', 'utf8')).outcomes.some((r) => r.status === 'pending'); } catch {}
           if (pending) await writeFile('/tmp/product-refresh-issue.md', 'A public product bundle, guide or exact runtime release did not qualify. The last admitted package was preserved. Inspect the reconcile report and source publication before retrying.\n');
           NODE
+          export GH_TOKEN="$REPORT_GH_TOKEN"
           if [ -f /tmp/product-refresh-issue.md ]; then
             PRODUCT_REFRESH_ISSUE=$(gh issue list --repo hraness/product-skills --state open --search 'in:title "Product package refresh needs attention"' --json number --jq '.[0].number // empty')
             if [ -z "$PRODUCT_REFRESH_ISSUE" ]; then

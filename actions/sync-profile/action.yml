@@ -7,9 +7,20 @@ inputs:
   check-workflow:
     description: Caller workflow filename that reports the required check.
     default: check.yml
+  app-id:
+    description: ID of the dedicated hraness-distribution GitHub App.
+    required: true
+  app-private-key:
+    description: Dedicated App private key, supplied from the caller repository secret.
+    required: true
 runs:
   using: composite
   steps:
+    - name: Require the authorized repository and trusted main
+      shell: bash
+      run: |
+        test "$GITHUB_REF" = refs/heads/main
+        case "$GITHUB_REPOSITORY" in hraness/.github|0thernet/0thernet) ;; *) exit 1 ;; esac
     - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       with:
         ref: main
@@ -17,10 +28,24 @@ runs:
     - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
       with:
         node-version: 24
+    - name: Mint a token for this one profile repository
+      id: app
+      uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
+      with:
+        app-id: ${{ inputs.app-id }}
+        private-key: ${{ inputs.app-private-key }}
+        owner: ${{ github.repository_owner }}
+        repositories: ${{ github.event.repository.name }}
+        permission-contents: write
+        permission-pull-requests: write
+        permission-actions: write
     - name: Synchronize the authorized profile
       shell: bash
       env:
-        GH_TOKEN: ${{ github.token }}
+        GH_TOKEN: ${{ steps.app.outputs.token }}
+        REPORT_GH_TOKEN: ${{ github.token }}
+        DISTRIBUTION_APP_ID: ${{ inputs.app-id }}
+        DISTRIBUTION_APP_SLUG: ${{ steps.app.outputs.app-slug }}
         PROFILE_MODE: ${{ inputs.mode }}
         PROFILE_CHECK_WORKFLOW: ${{ inputs.check-workflow }}
       run: node "$GITHUB_ACTION_PATH/../../scripts/profile.mjs" "$PROFILE_MODE"

@@ -4,7 +4,9 @@ import { promisify } from 'node:util';
 import { resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { download, validatePortfolio } from './distribution.mjs';
-import { updateOwnedBranch } from './github.mjs';
+import { refreshBehindPull, repairMissingCheck, successfulRequired } from './github.mjs';
+import { deliverDependabot } from './dependabot.mjs';
+import { distributionAuthority, ownedByDistributionApp } from './authority.mjs';
 const execute = promisify(execFile);
 export const TARGETS = Object.freeze({ 'hraness/.github': 'profile/README.md', '0thernet/0thernet': 'README.md' });
 export const START = '<!-- hraness-products:start -->';
@@ -36,7 +38,13 @@ export async function refreshProfile(readme, portfolio, { fetchImpl = fetch } = 
   return { changed: true, readme: rendered };
 }
 async function gh(args) { return (await execute('gh', args, { maxBuffer: 1048576, timeout: 60000 })).stdout.trim(); }
-async function api(path) { return JSON.parse(await gh(['api', path])); }
+async function api(path) {
+  if (/^repos\/(?:hraness\/\.github|0thernet\/0thernet)\/commits\/[a-f0-9]{40}\/check-runs\?per_page=100$/.test(path)) {
+    need(process.env.REPORT_GH_TOKEN, 'The read-only check token is required');
+    return JSON.parse((await execute('gh', ['api', path], { env: { ...process.env, GH_TOKEN: process.env.REPORT_GH_TOKEN }, maxBuffer: 1048576, timeout: 60000 })).stdout);
+  }
+  return JSON.parse(await gh(['api', path]));
+}
 async function git(args) { return (await execute('git', ['-c', 'credential.helper=', '-c', 'credential.helper=!gh auth git-credential', ...args], { maxBuffer: 1048576, timeout: 60000 })).stdout.trim(); }
 async function identity() { const repo = process.env.GITHUB_REPOSITORY; need(Object.hasOwn(TARGETS, repo) && process.env.GH_TOKEN, 'Only the two authorized profile repositories are supported'); const live = await api(`repos/${repo}`); need(live.full_name === repo, 'Profile repository identity mismatch'); return repo; }
 function checkWorkflow() { const workflow = process.env.PROFILE_CHECK_WORKFLOW || 'check.yml'; need(/^[a-zA-Z0-9_-]+\.ya?ml$/.test(workflow), 'Invalid check workflow filename'); return workflow; }
@@ -48,54 +56,58 @@ async function validateProfilePullRequest(repo, pr, portfolio) {
   return comparison;
 }
 async function refresh() {
-  const repo = await identity(); const path = TARGETS[repo]; const before = await readFile(path, 'utf8');
+  const repo = await identity(); const bot = await distributionAuthority(repo, { read: api }); const path = TARGETS[repo]; const before = await readFile(path, 'utf8');
   const portfolio = validatePortfolio(JSON.parse((await download('https://hraness.com/portfolio.json')).body));
   const prs = await api(`repos/${repo}/pulls?state=open&base=main&per_page=100`);
-  const existing = prs.find((p) => p.user.login === 'github-actions[bot]' && p.head.repo?.full_name === repo && /^automation\/profile-\d+-\d+$/.test(p.head.ref));
+  const existing = prs.find((p) => ownedByDistributionApp(p, bot) && p.head.repo?.full_name === repo && /^automation\/profile-\d+-\d+$/.test(p.head.ref));
   if (existing) {
     const files = await api(`repos/${repo}/pulls/${existing.number}/files?per_page=100`);
     need(files.length === 1 && files[0].filename === path && files[0].status === 'modified', 'An owned profile PR contains unrelated files');
-    const comparison = await validateProfilePullRequest(repo, existing, portfolio);
-    if (comparison.behind_by > 0) await updateOwnedBranch({ repository: repo, number: existing.number, expected: existing.head.sha, request: gh, read: api });
+    await validateProfilePullRequest(repo, existing, portfolio);
+    const refreshed = await refreshBehindPull({ repository: repo, number: existing.number, head: existing.head.sha, read: api, request: gh });
     await git(['fetch', '--no-tags', 'origin', `refs/heads/${existing.head.ref}`]); await git(['checkout', '-B', existing.head.ref, 'FETCH_HEAD']);
     const result = await refreshProfile(await readFile(path, 'utf8'), portfolio);
-    if (result.changed) { await writeFile(path, result.readme); await git(['add', '--', path]); await git(['-c', 'user.name=github-actions[bot]', '-c', 'user.email=41898282+github-actions[bot]@users.noreply.github.com', 'commit', '-m', 'Refresh the marked product list']); await git(['push', 'origin', `HEAD:refs/heads/${existing.head.ref}`]); }
-    await gh(['workflow', 'run', checkWorkflow(), '--repo', repo, '--ref', existing.head.ref]);
-    process.stdout.write('Refreshed the owned product-link PR and requested its check.\n'); return;
+    if (result.changed) { await writeFile(path, result.readme); await git(['add', '--', path]); await git(['-c', `user.name=${bot.login}`, '-c', `user.email=${bot.id}+${bot.login}@users.noreply.github.com`, 'commit', '-m', 'Refresh the marked product list']); await git(['push', 'origin', `HEAD:refs/heads/${existing.head.ref}`]); }
+    else if (!refreshed.updated) await repairCheck(repo, existing.head.ref, existing.head.sha);
+    process.stdout.write('Refreshed the App-owned product-link PR; ordinary checks follow changed commits.\n'); return;
   }
   const result = await refreshProfile(before, portfolio); if (!result.changed) { process.stdout.write('Product links are current.\n'); return; }
   need(!(await git(['status', '--porcelain'])), 'The profile checkout contains unrelated work');
   await writeFile(path, result.readme); const branch = `automation/profile-${process.env.GITHUB_RUN_ID}-${process.env.GITHUB_RUN_ATTEMPT}`;
   need(/^automation\/profile-\d+-\d+$/.test(branch), 'Invalid profile update branch');
   await git(['checkout', '-b', branch]); await git(['add', '--', path]);
-  await git(['-c', 'user.name=github-actions[bot]', '-c', 'user.email=41898282+github-actions[bot]@users.noreply.github.com', 'commit', '-m', 'Update current product links']);
+  await git(['-c', `user.name=${bot.login}`, '-c', `user.email=${bot.id}+${bot.login}@users.noreply.github.com`, 'commit', '-m', 'Update current product links']);
   await git(['push', 'origin', `HEAD:refs/heads/${branch}`]);
   await writeFile('/tmp/hraness-profile-pr.md', 'Update the marked product links from the public Hraness product directory. Preserve the introduction and all text outside the product markers. Changed destinations answered successfully.\n');
   await gh(['pr', 'create', '--repo', repo, '--base', 'main', '--head', branch, '--title', 'Update current product links', '--body-file', '/tmp/hraness-profile-pr.md']);
-  // Explicit dispatch is required for a PR created by this repository's token.
-  await gh(['workflow', 'run', checkWorkflow(), '--repo', repo, '--ref', branch]);
+  process.stdout.write('Opened the App-owned profile update; ordinary pull-request checks follow.\n');
+}
+async function repairCheck(repo, ref, sha) {
+  return repairMissingCheck({ repository: repo, workflow: checkWorkflow(), ref, sha, read: api, request: gh });
 }
 async function deliver() {
-  const repo = await identity(); const event = JSON.parse(await readFile(process.env.GITHUB_EVENT_PATH, 'utf8')); const run = event.workflow_run;
+  const repo = await identity(); const bot = await distributionAuthority(repo, { read: api }); const event = JSON.parse(await readFile(process.env.GITHUB_EVENT_PATH, 'utf8')); const run = event.workflow_run;
+  if (run?.head_branch?.startsWith('dependabot/')) { process.stdout.write(`${await deliverDependabot({ repository: repo, run, read: api, request: gh, checkWorkflow: checkWorkflow() })}\n`); return; }
   need(run?.conclusion === 'success' && run.head_repository?.full_name === repo && /^automation\/profile-\d+-\d+$/.test(run.head_branch), 'Only a checked owned profile update can merge');
+  const workflow = await api(`repos/${repo}/actions/workflows/${checkWorkflow()}`);
+  need(run.workflow_id === workflow.id && workflow.path === `.github/workflows/${checkWorkflow()}` && workflow.name === run.name, 'Profile validation workflow mismatch');
   const prs = await api(`repos/${repo}/pulls?state=open&head=${repo.split('/')[0]}:${run.head_branch}&base=main`);
   if (prs.length === 0) {
     const closed = await api(`repos/${repo}/pulls?state=closed&head=${repo.split('/')[0]}:${run.head_branch}&base=main`);
-    if (closed.some((p) => p.merged_at && p.user.login === 'github-actions[bot]' && p.head.sha === run.head_sha && p.head.repo?.full_name === repo)) await gh(['workflow', 'run', checkWorkflow(), '--repo', repo, '--ref', 'main']);
-    process.stdout.write('No open profile update remains; any completed merge has a main recheck request.\n'); return;
+    if (closed.some((p) => p.merged_at && ownedByDistributionApp(p, bot) && p.head.sha === run.head_sha && p.head.repo?.full_name === repo)) { const main = await api(`repos/${repo}/git/ref/heads/main`); await repairCheck(repo, 'main', main.object.sha); }
+    process.stdout.write('No open profile update remains; any completed merge had its main check inspected.\n'); return;
   }
-  need(prs.length === 1 && prs[0].user.login === 'github-actions[bot]' && prs[0].head.sha === run.head_sha && prs[0].head.repo.full_name === repo, 'Profile update identity changed');
+  need(prs.length === 1 && ownedByDistributionApp(prs[0], bot) && prs[0].head.sha === run.head_sha && prs[0].head.repo.full_name === repo, 'Profile update identity changed');
   const files = await api(`repos/${repo}/pulls/${prs[0].number}/files?per_page=100`);
   need(files.length === 1 && files[0].filename === TARGETS[repo] && files[0].status === 'modified', 'A profile update must change only its authorized README');
   await validateProfilePullRequest(repo, prs[0], validatePortfolio(JSON.parse((await download('https://hraness.com/portfolio.json')).body)));
   const checks = await api(`repos/${repo}/commits/${run.head_sha}/check-runs?per_page=100`);
-  const required = checks.check_runs.filter((c) => c.name === 'Required' && c.app.slug === 'github-actions').sort((a, b) => b.id - a.id)[0]; need(required?.conclusion === 'success', 'The current-head Required check must pass');
-  const detail = await api(`repos/${repo}/pulls/${prs[0].number}`);
-  if (detail.mergeable_state === 'behind') { await updateOwnedBranch({ repository: repo, number: prs[0].number, expected: run.head_sha, request: gh, read: api }); await gh(['workflow', 'run', checkWorkflow(), '--repo', repo, '--ref', run.head_branch]); process.stdout.write('Updated the owned branch and requested its new check.\n'); return; }
+  need(successfulRequired(checks, run.head_sha), 'The current-head Required check must pass');
+  const refreshed = await refreshBehindPull({ repository: repo, number: prs[0].number, head: run.head_sha, read: api, request: gh });
+  if (refreshed.updated) { process.stdout.write('Updated the App-owned branch; its ordinary checks follow.\n'); return; }
   await gh(['pr', 'merge', String(prs[0].number), '--repo', repo, '--squash', '--match-head-commit', run.head_sha]);
   const merged = await api(`repos/${repo}/pulls/${prs[0].number}`); need(merged.merged === true, 'The protected profile merge did not complete');
-  await gh(['workflow', 'run', checkWorkflow(), '--repo', repo, '--ref', 'main']);
-  process.stdout.write('The checked profile update merged; main validation was requested.\n');
+  process.stdout.write('The checked App profile update merged; ordinary main checks follow.\n');
 }
 if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1])).href) {
   const mode = process.argv[2]; const action = mode === 'refresh' ? refresh : mode === 'deliver' ? deliver : null;

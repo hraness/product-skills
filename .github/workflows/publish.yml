@@ -12,15 +12,15 @@ concurrency:
   cancel-in-progress: false
 jobs:
   publish:
-    if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
+    if: github.repository == 'hraness/product-skills' && github.ref == 'refs/heads/main' && (github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success')
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:
       contents: write
-      pull-requests: write
-      actions: write
+      checks: read
     env:
       GH_TOKEN: ${{ github.token }}
+      REPORT_GH_TOKEN: ${{ github.token }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -30,6 +30,23 @@ jobs:
         with:
           node-version: 24
       - run: node scripts/automation.mjs publish
+      - name: Mint the dedicated token for the ledger pull request
+        id: app
+        uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
+        with:
+          app-id: ${{ vars.DISTRIBUTION_APP_ID }}
+          private-key: ${{ secrets.DISTRIBUTION_APP_PRIVATE_KEY }}
+          owner: hraness
+          repositories: product-skills
+          permission-contents: write
+          permission-pull-requests: write
+          permission-actions: write
+      - name: Propose verified publication records
+        run: node scripts/automation.mjs propose-publications
+        env:
+          GH_TOKEN: ${{ steps.app.outputs.token }}
+          DISTRIBUTION_APP_ID: ${{ vars.DISTRIBUTION_APP_ID }}
+          DISTRIBUTION_APP_SLUG: ${{ steps.app.outputs.app-slug }}
       - name: Retain prepared archives
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
