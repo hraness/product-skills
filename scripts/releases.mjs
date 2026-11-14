@@ -44,7 +44,7 @@ function inspectRelease(release, { tag, target, assets, allowPublishedTargetReus
   }
 }
 
-export async function publishReleaseAssets({ tag, target, assets, paths, title, notesPath, read, request, beforePublish, allowPublishedTargetReuse = false }) {
+export async function publishReleaseAssets({ tag, target, assets, paths, title, notesPath, read, request, beforePublish, allowPublishedTargetReuse = false, wait = (ms) => new Promise((done) => setTimeout(done, ms)) }) {
   return stage('release.prepare', async () => {
     need(TAG.test(tag) && SHA.test(target) && typeof beforePublish === 'function' && typeof allowPublishedTargetReuse === 'boolean', 'Invalid release publication plan');
     const names = Object.keys(assets); let total = 0;
@@ -59,7 +59,13 @@ export async function publishReleaseAssets({ tag, target, assets, paths, title, 
       let failure;
       try { await stage('release.create', () => request(['release', 'create', tag, '--repo', REPOSITORY, '--target', target, '--title', title, '--notes-file', notesPath, '--draft'])); }
       catch (error) { failure = error; }
-      release = await findRelease({ tag, read });
+      // A successful create can precede the authenticated list's visibility.
+      // Reconcile only reads; never send another create for an uncertain result.
+      for (let attempt = 0; attempt < 6; attempt++) {
+        release = await findRelease({ tag, read });
+        if (release) break;
+        if (attempt < 5) await wait(Math.min(500 * (attempt + 1), 2000));
+      }
       if (!release) { if (failure) throw failure; throw new Error('Created release did not reconcile'); }
     }
     inspectRelease(release, expected);

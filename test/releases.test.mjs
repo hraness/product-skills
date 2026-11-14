@@ -35,7 +35,7 @@ function server({ uncertain = null } = {}) {
     }
     if (uncertain === command) throw Object.assign(new Error('private provider response with secret'), { code: 1, stderr: 'gh: request interrupted (HTTP 502)' });
   };
-  return { tag, target, assets, paths, title: 'Hraness product skills', notesPath: '/synthetic/notes.md', beforePublish: async () => {}, read, request, releases, requests, reads, refs, seed };
+  return { tag, target, assets, paths, title: 'Hraness product skills', notesPath: '/synthetic/notes.md', beforePublish: async () => {}, wait: async () => {}, read, request, releases, requests, reads, refs, seed };
 }
 
 test('product release resumes an API-visible draft even though published-by-tag returns 404', async () => {
@@ -56,6 +56,27 @@ test('uncertain create, upload and publication reconcile the same object without
     assert.equal(current.requests.filter((args) => args[1] === 'edit').length, 1);
     for (const name of Object.keys(current.assets)) assert.equal(current.requests.filter((args) => args[1] === 'upload' && args[3] === current.paths[name]).length, 1);
   }
+});
+
+test('a newly created draft can become visible late without a second create', async () => {
+  for (const uncertain of [null, 'create']) {
+    const current = server({ uncertain }); const read = current.read; let hidden = 0, waits = 0;
+    const result = await publishReleaseAssets({ ...current,
+      read: async (path) => path.includes('/releases?') && current.releases.length && hidden++ < 3 ? [] : read(path),
+      wait: async (duration) => { assert(duration > 0 && duration <= 2000); waits++; },
+    });
+    assert.equal(result.immutable, true);
+    assert.equal(current.requests.filter((args) => args[1] === 'create').length, 1);
+    assert.equal(waits, 3);
+  }
+  const invisible = server(); const read = invisible.read; let waits = 0;
+  await assert.rejects(publishReleaseAssets({ ...invisible,
+    read: async (path) => path.includes('/releases?') ? [] : read(path),
+    wait: async () => { waits++; },
+  }), /Created release did not reconcile/);
+  assert.equal(waits, 5);
+  assert.equal(invisible.requests.filter((args) => args[1] === 'create').length, 1);
+  assert.equal(invisible.requests.some((args) => args[1] === 'upload' || args[1] === 'edit'), false);
 });
 
 test('duplicate versions, different draft source, wrong assets and changed release IDs fail without overwrite', async () => {
@@ -104,4 +125,6 @@ test('automation diagnostics preserve operation, step, error type and status wit
   assert.equal(automationFailure({ automationStage: secret, name: secret, code: secret }, secret).includes(secret), false);
   assert.equal(automationFailure({ automationStage: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa' }, 'publish').includes('aaaaaaaa'), false);
   assert.equal(JSON.parse(automationFailure(Object.assign(new Error(secret), { code: 'ETIMEDOUT' }), 'deliver')).errorType, 'TimeoutError');
+  assert.equal(JSON.parse(automationFailure(new Error('Created release did not reconcile'), 'publish')).guard, 'created-release-not-visible');
+  assert.equal(JSON.parse(automationFailure(new Error(`Created release did not reconcile ${secret}`), 'publish')).guard, undefined);
 });
