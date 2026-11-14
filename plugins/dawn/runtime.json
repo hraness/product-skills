@@ -1,0 +1,10 @@
+{
+  "command": "dawn",
+  "version": "0.55.0",
+  "bun": ">=1.3.14",
+  "install": {
+    "type": "private-release",
+    "url": "https://dawnav.com/install",
+    "requiresAccess": true
+  }
+}

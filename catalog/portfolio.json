@@ -1,9 +1,33 @@
 {
   "schemaVersion": 1,
   "projects": [
-    { "id": "dawn", "name": "Dawn", "url": "https://dawnav.com", "short": "Music in code.", "icon": "/products/dawn/icon.png" },
-    { "id": "yaptake", "name": "Yaptake", "url": "https://yaptake.com", "short": "Video editor for Mac.", "icon": "/products/yaptake/icon.png" },
-    { "id": "textmock", "name": "Textmock", "url": "https://textmock.com", "short": "iMessage mockups.", "icon": "/products/textmock/icon.png" },
-    { "id": "sponge", "name": "Sponge", "url": "https://sponge.computer", "short": "Reading and notes.", "icon": "/products/sponge/icon.png" }
+    {
+      "id": "dawn",
+      "name": "Dawn",
+      "url": "https://dawnav.com",
+      "short": "Music in code.",
+      "icon": "/products/dawn/icon.png"
+    },
+    {
+      "id": "yaptake",
+      "name": "Yaptake",
+      "url": "https://yaptake.com",
+      "short": "Video editor for Mac.",
+      "icon": "/products/yaptake/icon.png"
+    },
+    {
+      "id": "textmock",
+      "name": "Textmock",
+      "url": "https://textmock.com",
+      "short": "iMessage mockups.",
+      "icon": "/products/textmock/icon.png"
+    },
+    {
+      "id": "sponge",
+      "name": "Sponge",
+      "url": "https://sponge.computer",
+      "short": "Reading and notes.",
+      "icon": "/products/sponge/icon.png"
+    }
   ]
 }

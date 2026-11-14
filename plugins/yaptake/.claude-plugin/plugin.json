@@ -1,0 +1,14 @@
+{
+  "name": "yaptake",
+  "version": "0.1.0",
+  "description": "Edit video for every feed (9:16, 4:5, 1:1 or 16:9) in a native Mac app with a transcript, captions and timeline. Local tools let coding agents work on the same project.",
+  "author": {
+    "name": "Hraness",
+    "url": "https://hraness.com"
+  },
+  "homepage": "https://yaptake.com/docs/agents",
+  "repository": "https://github.com/hraness/product-skills",
+  "license": "MIT",
+  "displayName": "Yaptake",
+  "skills": "./skills/"
+}

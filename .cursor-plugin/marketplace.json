@@ -3,5 +3,22 @@
   "owner": {
     "name": "Hraness"
   },
-  "plugins": []
+  "plugins": [
+    {
+      "name": "dawn",
+      "source": "./plugins/dawn"
+    },
+    {
+      "name": "sponge",
+      "source": "./plugins/sponge"
+    },
+    {
+      "name": "textmock",
+      "source": "./plugins/textmock"
+    },
+    {
+      "name": "yaptake",
+      "source": "./plugins/yaptake"
+    }
+  ]
 }

@@ -1,4 +1,68 @@
 {
   "schemaVersion": 1,
-  "products": {}
+  "products": {
+    "dawn": {
+      "contentHash": "10557d00f33e5464d8bdef77be4d7ab5f4f4977673607e86f3329549dd7650ff",
+      "sourceHash": "5cd4f9be1a2183571e1218fc4b9823209832a149850139ff2c814397bea8a42d",
+      "revision": 1,
+      "runtimeVersion": "0.55.0",
+      "runtimeBuild": null,
+      "etag": "W/\"69538a9dae377b7887502366712c6f72\"",
+      "qualification": {
+        "type": "private-release",
+        "version": "0.55.0",
+        "bun": ">=1.3.14",
+        "requiresAccess": true,
+        "scope": "selected-files-only",
+        "guideHash": "5e0891143216bf291892ae4b8eb6b1363fbab2af3c313d7319589086d54213e6",
+        "installPageHash": "73026909b98fc0496081e8926fb45b42696f3946b1e01f8ae8657333eb01ce7d"
+      },
+      "packageFingerprint": "c739e2ebd08ec4e71f399b8286c6bcf3bb3bbb4f99f1dbb9b60f2ecfdbd18729"
+    },
+    "yaptake": {
+      "contentHash": "201aa144b451f1eda4c406d473c7f3df568d81f09779f41f06a8f78b86fae162",
+      "sourceHash": "38e8d877f5e7f69395ed133e99ad076296ab9954969e0470e4741b3a5d5312f4",
+      "revision": 1,
+      "runtimeVersion": "0.1.0",
+      "runtimeBuild": "231",
+      "etag": "W/\"9246cc1537e7595c9580f17189beb1db\"",
+      "qualification": {
+        "type": "app",
+        "sha256": "1f4c00dc124f4574fab2efc67e1b649d7035b73a21ba76744a86e71ef8016288",
+        "metadataHash": "8c140ed1cf32f86693308881726e80907ec405740a6a0f02b930d3d80c16ece2",
+        "feedHash": "076e05bd7f875eb2b929abaafd637db5429e951ea9a6af5571e23dfd6fe21148"
+      },
+      "packageFingerprint": "b0b89f795d1c98f42e96e29c5218eea6ec1ab16d71ded064533eab3d0f42e803"
+    },
+    "textmock": {
+      "contentHash": "7870a0feced28a14eb7567f1079473f5bc1514896ba73a944c0b5d8e633ae2ca",
+      "sourceHash": "7f4023c975ab4a1663510853b3cbb30e0341ad3c3d8634a64d4c69117dad6437",
+      "revision": 1,
+      "runtimeVersion": "1.0.0",
+      "runtimeBuild": null,
+      "etag": "W/\"0b5effb41a584ed7e46e2c28350fabef\"",
+      "qualification": {
+        "type": "web",
+        "version": "1.0.0",
+        "helperHash": "3d7ebc0cee08ac435c6e42f0928b56385b582a8fbeeaa48a6e3e5e4380ce1abd",
+        "node": ">=24.0.0"
+      },
+      "packageFingerprint": "9e74247af3512ac12a112ae488486d4c338b914eef9ae18595edf4b3a129b0a6"
+    },
+    "sponge": {
+      "contentHash": "b1aeb68c6a03b0760df9ce3ab1456ba76cf358132623e01a719ca9e63d859c8f",
+      "sourceHash": "18fb756bc4a95ff14b2c2ff8209eb514d44631f0bb7ea534ea1065557781daf7",
+      "revision": 1,
+      "runtimeVersion": "0.41.1",
+      "runtimeBuild": null,
+      "etag": "W/\"4ab4d46aabdbf43ab73956cf31b8f9b2\"",
+      "qualification": {
+        "type": "npm",
+        "package": "@hraness/sponge",
+        "version": "0.41.1",
+        "integrity": "sha512-PkUJeD7UFV4I/TFZXLpnMyk6jP/j4ntrjhVC55jFNoI+Hv3g04yZF0hQ7BgsN2CcHW2D40rRxB1Qj7JMBAlqeA=="
+      },
+      "packageFingerprint": "f4fadab21244b57533c29827ad73df1dac32a139f9284667ebbeae0ffac67325"
+    }
+  }
 }
