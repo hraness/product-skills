@@ -292,6 +292,18 @@ export function checkLedgerAppendOnly(previous, current) {
   validateLedger(previous); validateLedger(current);
   for (const entry of previous.publications) need(current.publications.some((p) => p.id === entry.id && canonical(p) === canonical(entry)), 'An existing publication was changed or removed');
 }
+export async function readGovernedLedger(root, sha) {
+  need(/^[a-f0-9]{40}$/.test(sha), 'Invalid governed base SHA');
+  const execute = promisify(execFile);
+  await execute('git', ['cat-file', '-e', `${sha}^{commit}`], { cwd: root });
+  const path = 'publication-ledger.json';
+  const listed = (await execute('git', ['ls-tree', '--name-only', sha, '--', path], { cwd: root })).stdout.trim();
+  // An initial repository has no ledger yet. Read the tree explicitly rather
+  // than interpreting Git's platform-dependent missing-path diagnostic.
+  if (listed === '') return { schemaVersion: 1, publications: [] };
+  need(listed === path, 'Unexpected governed publication path');
+  return validateLedger(parseUnique((await execute('git', ['show', `${sha}:${path}`], { cwd: root, maxBuffer: 1048576 })).stdout));
+}
 export async function recordGithub(ledger, releasePlan, { fetchImpl = fetch, token } = {}) {
   const repo = JSON.parse((await download('https://api.github.com/repos/hraness/product-skills', { fetchImpl, token, limit: 262144 })).body); need(repo.full_name === 'hraness/product-skills' && repo.private === false, 'GitHub publication requires the public repository');
   const release = JSON.parse((await download(`https://api.github.com/repos/hraness/product-skills/releases/tags/${releasePlan.tag}`, { fetchImpl, token, limit: 262144 })).body);
@@ -310,12 +322,7 @@ export async function main(argv = process.argv.slice(2), root = process.cwd()) {
     for (const path of [...await tree(root, 'plugins'), ...await tree(root, 'skills')]) need(Object.hasOwn(before, path), `Unexpected package file: ${path}`);
     const ledger = validateLedger(JSON.parse(await readFile(join(root, 'publication-ledger.json'), 'utf8')));
     if (process.env.LEDGER_BASE_SHA) {
-      const sha = process.env.LEDGER_BASE_SHA; need(/^[a-f0-9]{40}$/.test(sha), 'Invalid governed base SHA');
-      const execute = promisify(execFile); await execute('git', ['cat-file', '-e', `${sha}^{commit}`], { cwd: root });
-      let baseline;
-      try { baseline = (await execute('git', ['show', `${sha}:publication-ledger.json`], { cwd: root })).stdout; }
-      catch (e) { need(String(e.stderr).includes('does not exist'), 'Cannot read governed publication baseline'); }
-      checkLedgerAppendOnly(baseline ? JSON.parse(baseline) : { schemaVersion: 1, publications: [] }, ledger);
+      checkLedgerAppendOnly(await readGovernedLedger(root, process.env.LEDGER_BASE_SHA), ledger);
     }
     process.stdout.write(`${Object.keys(data.state.products).length} product packages checked.\n`); return;
   }
