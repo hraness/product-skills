@@ -1,0 +1,51 @@
+name: Check
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      base_sha:
+        description: Governed main snapshot for an automation update.
+        required: false
+        type: string
+permissions:
+  contents: read
+concurrency:
+  group: check-${{ github.event_name == 'pull_request' && github.ref || github.sha }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: 24
+      - name: Read the governed publication baseline
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REQUESTED_BASE: ${{ github.event.pull_request.base.sha || inputs.base_sha || github.event.before }}
+        run: |
+          BASE_SHA="$REQUESTED_BASE"
+          if [ -z "$BASE_SHA" ] || [ "$BASE_SHA" = 0000000000000000000000000000000000000000 ]; then
+            BASE_SHA=$(gh api repos/hraness/product-skills/git/ref/heads/main --jq .object.sha)
+          fi
+          [[ "$BASE_SHA" =~ ^[a-f0-9]{40}$ ]]
+          git -c credential.helper= -c 'credential.helper=!gh auth git-credential' fetch --no-tags --depth=1 origin "$BASE_SHA"
+          printf 'LEDGER_BASE_SHA=%s\n' "$BASE_SHA" >> "$GITHUB_ENV"
+      - run: npm run check
+      - run: npm run package
+  required:
+    name: Required
+    runs-on: ubuntu-slim
+    timeout-minutes: 2
+    if: always()
+    needs: [check]
+    steps:
+      - env:
+          CHECK_RESULT: ${{ needs.check.result }}
+        run: test "$CHECK_RESULT" = success

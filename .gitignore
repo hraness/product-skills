@@ -1,0 +1,4 @@
+dist/
+.work/
+reconcile-report.json
+.DS_Store

@@ -1,0 +1,55 @@
+name: Reconcile products
+on:
+  schedule:
+    - cron: '41 14 * * *'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: product-reconcile
+  cancel-in-progress: false
+jobs:
+  reconcile:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: write
+      pull-requests: write
+      actions: write
+      issues: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: main
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: 24
+      - run: npm run reconcile
+      - run: npm run check
+      - run: node scripts/automation.mjs propose-products
+      - name: Preserve the refresh report
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: product-refresh-${{ github.run_id }}-${{ github.run_attempt }}
+          path: reconcile-report.json
+          if-no-files-found: warn
+          retention-days: 30
+      - name: Surface pending sources
+        if: always()
+        run: |
+          node --input-type=module <<'NODE'
+          import { readFile, writeFile } from 'node:fs/promises';
+          let pending = true;
+          try { pending = JSON.parse(await readFile('reconcile-report.json', 'utf8')).outcomes.some((r) => r.status === 'pending'); } catch {}
+          if (pending) await writeFile('/tmp/product-refresh-issue.md', 'A public product bundle, guide or exact runtime release did not qualify. The last admitted package was preserved. Inspect the reconcile report and source publication before retrying.\n');
+          NODE
+          if [ -f /tmp/product-refresh-issue.md ]; then
+            PRODUCT_REFRESH_ISSUE=$(gh issue list --repo hraness/product-skills --state open --search 'in:title "Product package refresh needs attention"' --json number --jq '.[0].number // empty')
+            if [ -z "$PRODUCT_REFRESH_ISSUE" ]; then
+              gh issue create --repo hraness/product-skills --title 'Product package refresh needs attention' --body-file /tmp/product-refresh-issue.md
+            fi
+          fi
