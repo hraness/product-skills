@@ -59,9 +59,9 @@ export async function propose(kind) {
   const branch = `automation/${kind}-${process.env.GITHUB_RUN_ID}-${process.env.GITHUB_RUN_ATTEMPT}`;
   need(/^automation\/(products|publications)-\d+-\d+$/.test(branch), 'Invalid update branch');
   await git(['checkout', '-b', branch]); await git(['add', '-A']);
-  await git(['-c', `user.name=${bot.login}`, '-c', `user.email=${bot.id}+${bot.login}@users.noreply.github.com`, 'commit', '-m', kind === 'products' ? 'Refresh released product skills' : 'Record verified GitHub publications']);
+  await git(['-c', `user.name=${bot.login}`, '-c', `user.email=${bot.id}+${bot.login}@users.noreply.github.com`, 'commit', '-m', kind === 'products' ? 'Refresh released product skills' : 'Record verified product publications']);
   const sha = await git(['rev-parse', 'HEAD']); await git(['push', 'origin', `HEAD:refs/heads/${branch}`]);
-  await writeFile('/tmp/product-skills-pr.md', kind === 'products' ? 'Refresh product packages from validated public sources. Runtime qualification and generated-copy checks run on this commit before integration.\n' : 'Append publication records from an immutable public GitHub Release after asset digest readback. Preserve prior ledger entries.\n');
+  await writeFile('/tmp/product-skills-pr.md', kind === 'products' ? 'Refresh product packages from validated public sources. Runtime qualification and generated-copy checks run on this commit before integration.\n' : 'Record verified publications from immutable GitHub Releases and active official MCP Registry listings. Preserve earlier ledger entries.\n');
   await gh(['pr', 'create', '--repo', REPO, '--base', 'main', '--head', branch, '--title', kind === 'products' ? 'Refresh released product skills' : 'Record verified product publications', '--body-file', '/tmp/product-skills-pr.md']);
   process.stdout.write(`Opened the App-owned protected update at ${sha}; ordinary pull-request checks follow.\n`);
 }

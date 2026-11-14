@@ -20,6 +20,7 @@ export function mergePendingPublications(pending, desired, baseline) {
     const old = pending.publications.find((candidate) => candidate.id === entry.id);
     if (!old) return true;
     need(['product', 'channel', 'version', 'contentHash'].every((key) => entry[key] === old[key]), 'A pending publication id changed artifact identity');
+    if (entry.channel === 'mcp-registry') checkLedgerAppendOnly({ schemaVersion: 1, publications: [old] }, { schemaVersion: 1, publications: [entry] });
     // The earlier verified record keeps its timestamp and listing address.
     return false;
   });

@@ -43,15 +43,13 @@ monotonically increasing integration version. Its `runtime.json` keeps the
 separate app or CLI release requirement. A workflow change alone does not
 pretend that the product runtime has changed.
 
-Increase `INTEGRATION_FORMAT` in the renderer when its generated product files
-change independently of the product source. Reconcile then advances each selected
-plugin once, including when its source returns HTTP 304. Package and check
-commands reject an older format until that refresh is complete.
-
-A changed product summary also advances that product's integration version,
-including when the skill bundle is unchanged. This keeps repeated package
-metadata synchronized without publishing different archive bytes under one
-plugin version.
+Each product stores a fingerprint of its selected source and rendered ZIP. The
+renderer computes it with fixed integration version and fingerprint values, so
+those derived fields do not change their own hash. Reconciliation advances that
+product's plugin revision once when the source, generated metadata or ZIP bytes
+change, including an HTTP 304 source response. Changes to a public product
+summary affect only that product's package. Package and check commands reject
+stale fingerprints until that refresh is complete.
 
 The release tag also includes the shared tool, action and check-source hash.
 A helper-only correction can therefore receive an immutable release without
@@ -123,6 +121,28 @@ request and ordinary CI. Its entries are append-only and use the actual API
 publication time. Store submissions and planned launches belong in
 `catalog/store-status.json`, not in that ledger. An approval or listing must be
 verified before a store publication can be recorded.
+
+The publisher also checks the [official MCP Registry](https://registry.modelcontextprotocol.io/docs)
+daily and after a successful main check. It reads every page for the fixed
+`io.github.hraness/sponge` server, then verifies a new active listing against
+that version's public npm manifest. The package's generated `mcp` fields supply
+the local command, arguments and guide URL. The observer sends no credentials,
+downloads no app code and cannot publish to the registry.
+
+An observation records the registry's first publication time and the SHA-256 of
+its server JSON with object keys sorted. The listing name and version determine
+one permanent ledger ID. Changed metadata or publication times conflict with that ID. Deleted
+and deprecated versions add no record; earlier publication records stay in the
+ledger. A failed or incomplete read preserves those records and fails the
+workflow visibly. GitHub publications verified in the same run can still be
+proposed while registry observation is pending.
+
+`node scripts/distribution.mjs record-registry` performs the read-only provider
+check and prepares the local ledger update. Its report under `dist/` is a run
+diagnostic; the protected Git commit is the durable publication history. The
+observer uses the registry's [public API schema](https://registry.modelcontextprotocol.io/openapi.json),
+including `include_deleted=true` when checking a version. A successful empty
+result records no publication.
 
 Dependabot action updates use the same trusted-main delivery job. It verifies
 the Dependabot author, repository, exact head, canonical check workflow and
