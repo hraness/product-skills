@@ -1,0 +1,26 @@
+name: Synchronize Hraness product links
+description: Update the marked current-product list in either authorized public GitHub profile.
+inputs:
+  mode:
+    description: Refresh product links or deliver an already checked owned update.
+    default: refresh
+  check-workflow:
+    description: Caller workflow filename that reports the required check.
+    default: check.yml
+runs:
+  using: composite
+  steps:
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      with:
+        ref: main
+        persist-credentials: false
+    - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+      with:
+        node-version: 24
+    - name: Synchronize the authorized profile
+      shell: bash
+      env:
+        GH_TOKEN: ${{ github.token }}
+        PROFILE_MODE: ${{ inputs.mode }}
+        PROFILE_CHECK_WORKFLOW: ${{ inputs.check-workflow }}
+      run: node "$GITHUB_ACTION_PATH/../../scripts/profile.mjs" "$PROFILE_MODE"
