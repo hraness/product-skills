@@ -54,6 +54,15 @@
       "contentHash": "5deddd1d8b02d8757fbe507da151e0e97ddaf308316217ee6e23145a504b8a82",
       "publishedAt": "2026-11-14T22:21:51.000Z",
       "url": "https://github.com/hraness/homebrew-tap/blob/c3415d95c69fb9db0f6a977eb62d0149cfda0898/Casks/yaptake.rb"
+    },
+    {
+      "id": "sponge-github-0-1-1-69513de1",
+      "product": "sponge",
+      "channel": "github",
+      "publishedAt": "2026-11-14T23:49:44.000Z",
+      "url": "https://github.com/hraness/product-skills/releases/tag/integrations-7d13bdbeafde2fd7",
+      "version": "0.1.1",
+      "contentHash": "69513de1d8177ff5fdd3d5d368f55788fb9104aead7365782e0a38132787a773"
     }
   ]
 }
