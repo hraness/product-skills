@@ -32,7 +32,7 @@ export function validateDependabotPins(files) {
   const seen = new Set();
   const pin = /^(\s*(?:-\s*)?uses:\s+)([A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+(?:\/[A-Za-z0-9_.-]+)*)@([a-f0-9]{40})(\s+#.*)?$/;
   for (const file of files) {
-    const allowed = typeof file?.filename === 'string' && (/^\.github\/workflows\/[A-Za-z0-9_-]+\.ya?ml$/.test(file.filename) || file.filename === 'actions/sync-profile/action.yml');
+    const allowed = typeof file?.filename === 'string' && (/^\.github\/workflows\/[A-Za-z0-9_-]+\.ya?ml$/.test(file.filename) || ['actions/sync-profile/action.yml', 'actions/check-profile/action.yml'].includes(file.filename));
     if (!allowed || seen.has(file.filename) || file.status !== 'modified' || file.previous_filename !== undefined || typeof file.patch !== 'string' || file.patch.length > 65536) throw new Error('Dependency update contains an unrelated file');
     seen.add(file.filename); const before = []; const after = [];
     for (const line of file.patch.split('\n')) {

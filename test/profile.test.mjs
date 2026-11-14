@@ -1,9 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { readFile, mkdtemp, symlink, rm } from 'node:fs/promises';
+import { readFile, mkdtemp, mkdir, symlink, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
-import { join } from 'node:path';
-import { END, START, assertProfileChange, renderProfile, refreshProfile } from '../scripts/profile.mjs';
+import { dirname, join } from 'node:path';
+import { END, START, assertProfileChange, checkProfile, profileIdentity, renderProfile, refreshProfile } from '../scripts/profile.mjs';
 import { writeRendered } from '../scripts/distribution.mjs';
 const portfolio = JSON.parse(await readFile(new URL('../catalog/portfolio.json', import.meta.url), 'utf8'));
 test('profile sync preserves every byte outside unique own-line markers', () => {
@@ -32,4 +32,57 @@ test('generated writes reject symlink escapes', async () => {
   const root = await mkdtemp(join(tmpdir(), 'product-write-')); const outside = await mkdtemp(join(tmpdir(), 'product-outside-'));
   try { await symlink(outside, join(root, 'plugins')); await assert.rejects(writeRendered(root, { 'plugins/sponge/README.md': 'Do not write outside the repository.' })); }
   finally { await rm(root, { recursive: true, force: true }); await rm(outside, { recursive: true, force: true }); }
+});
+test('the read-only profile check follows public facts and preserves personal text without a token', async () => {
+  const root = await mkdtemp(join(tmpdir(), 'product-profile-check-'));
+  try {
+    const original = renderProfile(`Personal introduction.\n\n${START}\n${END}\n\n[Personal stats](https://stats.example.test/)\n`, portfolio);
+    await writeFile(join(root, 'README.md'), original); let requests = 0;
+    const fetchImpl = async (url, options) => {
+      assert.equal(url, 'https://hraness.com/portfolio.json'); assert.equal(options.redirect, 'error');
+      assert.equal(options.headers.authorization, undefined); assert.equal(options.headers.Authorization, undefined); requests++;
+      return new Response(JSON.stringify(portfolio));
+    };
+    const result = await checkProfile({ repository: '0thernet/0thernet', root, fetchImpl });
+    assert.deepEqual(result.products, portfolio.projects.map((product) => product.id)); assert.equal(requests, 1);
+    assert.equal(await readFile(join(root, 'README.md'), 'utf8'), original); assert.equal(JSON.stringify(result).includes('Personal'), false);
+    await assert.rejects(checkProfile({ repository: 'someone/else', root, fetchImpl })); assert.equal(requests, 1);
+    const updated = structuredClone(portfolio); updated.projects[0].short = 'An updated factual description.';
+    await assert.rejects(checkProfile({ repository: '0thernet/0thernet', root, fetchImpl: async () => new Response(JSON.stringify(updated)) }), /differs/);
+    assert.equal(await readFile(join(root, 'README.md'), 'utf8'), original);
+  } finally { await rm(root, { recursive: true, force: true }); }
+});
+test('profile checks reject missing markers, invalid public facts and unavailable canonical data', async () => {
+  const root = await mkdtemp(join(tmpdir(), 'product-profile-facts-')); const path = join(root, 'profile/README.md');
+  const fetchImpl = async () => new Response(JSON.stringify(portfolio));
+  try {
+    await mkdir(dirname(path), { recursive: true }); await writeFile(path, 'A README without its product markers.\n');
+    await assert.rejects(checkProfile({ repository: 'hraness/.github', root, fetchImpl }), /markers/);
+    await writeFile(path, renderProfile(`${START}\n${END}\n`, portfolio));
+    const unsafe = structuredClone(portfolio); unsafe.projects[0].url = 'https://example.test/private';
+    await assert.rejects(checkProfile({ repository: 'hraness/.github', root, fetchImpl: async () => new Response(JSON.stringify(unsafe)) }), /identity/);
+    await assert.rejects(checkProfile({ repository: 'hraness/.github', root, fetchImpl: async () => new Response(null, { status: 503 }) }), /503/);
+    await writeFile(path, Buffer.from([255])); await assert.rejects(checkProfile({ repository: 'hraness/.github', root, fetchImpl }), /encoded data/);
+  } finally { await rm(root, { recursive: true, force: true }); }
+});
+test('profile checks refuse a symlinked README or profile directory', async () => {
+  const root = await mkdtemp(join(tmpdir(), 'product-profile-links-')); const outside = await mkdtemp(join(tmpdir(), 'product-profile-external-'));
+  const fetchImpl = async () => { throw new Error('Unsafe local paths must fail before any public read'); };
+  try {
+    await writeFile(join(outside, 'README.md'), renderProfile(`${START}\n${END}\n`, portfolio));
+    await symlink(join(outside, 'README.md'), join(root, 'README.md'));
+    await assert.rejects(checkProfile({ repository: '0thernet/0thernet', root, fetchImpl }), /regular file/);
+    await symlink(outside, join(root, 'profile'));
+    await assert.rejects(checkProfile({ repository: 'hraness/.github', root, fetchImpl }), /directory must be regular/);
+  } finally { await rm(root, { recursive: true, force: true }); await rm(outside, { recursive: true, force: true }); }
+});
+test('profile writes require the exact public repository, owner and current default main', async () => {
+  for (const [repository, id, owner] of [['hraness/.github', 1342874802, 307125679], ['0thernet/0thernet', 1342874174, 894119]]) {
+    const env = { GITHUB_REPOSITORY: repository, GH_TOKEN: 'synthetic-app-token' };
+    const metadata = { id, full_name: repository, owner: { id: owner }, private: false, default_branch: 'main' };
+    const read = async (path) => { assert.equal(path, `repos/${repository}`); return metadata; };
+    assert.equal(await profileIdentity({ env, read }), repository);
+    for (const change of [{ default_branch: 'another-branch' }, { id: 1 }, { owner: { id: 1 } }, { private: true }, { full_name: 'someone/else' }]) await assert.rejects(profileIdentity({ env, read: async () => ({ ...metadata, ...change }) }), /identity mismatch/);
+    await assert.rejects(profileIdentity({ env: { ...env, GH_TOKEN: '', GITHUB_TOKEN: 'no-fallback' }, read }));
+  }
 });
