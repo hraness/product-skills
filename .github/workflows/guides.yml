@@ -1,0 +1,49 @@
+name: Refresh shared writing guides
+on:
+  schedule:
+    - cron: '37 14 * * *'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: shared-guide-refresh
+  cancel-in-progress: false
+jobs:
+  refresh:
+    if: github.repository == 'hraness/product-skills' && github.repository_id == '1458031600' && github.ref == 'refs/heads/main' && github.event.repository.default_branch == 'main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      checks: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: main
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24
+      - name: Read all six guides from one public source commit
+        run: node scripts/guides.mjs refresh
+        env:
+          GH_TOKEN: ''
+          REPORT_GH_TOKEN: ''
+      - name: Mint the dedicated one-repository token
+        id: app
+        uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
+        with:
+          app-id: ${{ vars.DISTRIBUTION_APP_ID }}
+          private-key: ${{ secrets.DISTRIBUTION_APP_PRIVATE_KEY }}
+          owner: hraness
+          repositories: product-skills
+          permission-contents: write
+          permission-pull-requests: write
+          permission-actions: write
+      - name: Propose only the selected shared-guide files
+        run: node scripts/automation.mjs propose-guides
+        env:
+          GH_TOKEN: ${{ steps.app.outputs.token }}
+          REPORT_GH_TOKEN: ${{ github.token }}
+          DISTRIBUTION_APP_ID: ${{ vars.DISTRIBUTION_APP_ID }}
+          DISTRIBUTION_APP_SLUG: ${{ steps.app.outputs.app-slug }}

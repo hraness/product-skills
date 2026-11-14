@@ -33,7 +33,7 @@ async function apiWrite(method, path, body) {
 async function changedPaths() { const paths = new Set([...(await git(['diff', '--name-only', 'HEAD'])).split('\n'), ...(await git(['ls-files', '--others', '--exclude-standard'])).split('\n')]); paths.delete(''); return [...paths]; }
 async function identity() { need(process.env.GITHUB_REPOSITORY === REPO && process.env.GH_TOKEN, 'The repository workflow identity is required'); const repo = await api(`repos/${REPO}`); need(repo.full_name === REPO, 'Repository identity mismatch'); return repo; }
 export async function propose(kind) {
-  await identity(); const bot = await distributionAuthority(REPO, { read: api }); need(['products', 'publications'].includes(kind), 'Unknown update kind');
+  await identity(); const bot = await distributionAuthority(REPO, { read: api }); need(['products', 'publications', 'guides'].includes(kind), 'Unknown update kind');
   const pending = await api(`repos/${REPO}/pulls?state=open&base=main&per_page=100`);
   const existing = pending.find((pr) => ownedByDistributionApp(pr, bot) && pr.head.repo?.full_name === REPO && pr.head.ref.startsWith(`automation/${kind}-`));
   if (existing) {
@@ -57,12 +57,14 @@ export async function propose(kind) {
   const changed = (await git(['status', '--porcelain'])).trim(); if (!changed) { process.stdout.write('No source change.\n'); return; }
   validateUpdateFiles(kind, await changedPaths());
   const branch = `automation/${kind}-${process.env.GITHUB_RUN_ID}-${process.env.GITHUB_RUN_ATTEMPT}`;
-  need(/^automation\/(products|publications)-\d+-\d+$/.test(branch), 'Invalid update branch');
+  need(/^automation\/(products|publications|guides)-\d+-\d+$/.test(branch), 'Invalid update branch');
   await git(['checkout', '-b', branch]); await git(['add', '-A']);
-  await git(['-c', `user.name=${bot.login}`, '-c', `user.email=${bot.id}+${bot.login}@users.noreply.github.com`, 'commit', '-m', kind === 'products' ? 'Refresh released product skills' : 'Record verified product publications']);
+  const title = kind === 'products' ? 'Refresh released product skills' : kind === 'guides' ? 'Refresh shared writing guides' : 'Record verified product publications';
+  const body = kind === 'products' ? 'Refresh product packages from validated public sources. Runtime qualification and generated-copy checks run on this commit before integration.\n' : kind === 'guides' ? 'Refresh the six writing guides from hraness/.github. Preserve each Repository additions section and keep repository-specific contribution and agent instructions.\n' : 'Record verified publications from immutable GitHub Releases and active official MCP Registry listings. Preserve earlier ledger entries.\n';
+  await git(['-c', `user.name=${bot.login}`, '-c', `user.email=${bot.id}+${bot.login}@users.noreply.github.com`, 'commit', '-m', title]);
   const sha = await git(['rev-parse', 'HEAD']); await git(['push', 'origin', `HEAD:refs/heads/${branch}`]);
-  await writeFile('/tmp/product-skills-pr.md', kind === 'products' ? 'Refresh product packages from validated public sources. Runtime qualification and generated-copy checks run on this commit before integration.\n' : 'Record verified publications from immutable GitHub Releases and active official MCP Registry listings. Preserve earlier ledger entries.\n');
-  await gh(['pr', 'create', '--repo', REPO, '--base', 'main', '--head', branch, '--title', kind === 'products' ? 'Refresh released product skills' : 'Record verified product publications', '--body-file', '/tmp/product-skills-pr.md']);
+  await writeFile('/tmp/product-skills-pr.md', body);
+  await gh(['pr', 'create', '--repo', REPO, '--base', 'main', '--head', branch, '--title', title, '--body-file', '/tmp/product-skills-pr.md']);
   process.stdout.write(`Opened the App-owned protected update at ${sha}; ordinary pull-request checks follow.\n`);
 }
 async function repairCheck(ref, sha) {
@@ -72,7 +74,7 @@ async function repairCheck(ref, sha) {
 async function deliver() {
   await identity(); const bot = await distributionAuthority(REPO, { read: api }); const event = JSON.parse(await readFile(process.env.GITHUB_EVENT_PATH, 'utf8')); const run = event.workflow_run;
   if (run?.head_branch?.startsWith('dependabot/')) { process.stdout.write(`${await deliverDependabot({ repository: REPO, run, read: api, request: gh })}\n`); return; }
-  need(run?.conclusion === 'success' && run.head_repository?.full_name === REPO && /^automation\/(products|publications)-\d+-\d+$/.test(run.head_branch), 'Only successful owned update checks can integrate');
+  need(run?.conclusion === 'success' && run.head_repository?.full_name === REPO && /^automation\/(products|publications|guides)-\d+-\d+$/.test(run.head_branch), 'Only successful owned update checks can integrate');
   const workflow = await api(`repos/${REPO}/actions/workflows/check.yml`);
   need(run.workflow_id === workflow.id && workflow.path === '.github/workflows/check.yml' && workflow.name === run.name, 'Owned update validation workflow mismatch');
   const prs = await api(`repos/${REPO}/pulls?state=open&head=hraness:${run.head_branch}&base=main`);
@@ -83,7 +85,7 @@ async function deliver() {
   }
   need(prs.length === 1, 'Expected one open owned update'); const pr = prs[0];
   need(ownedByDistributionApp(pr, bot) && pr.head.sha === run.head_sha && pr.head.repo.full_name === REPO, 'Update identity changed');
-  const kind = /^automation\/(products|publications)-/.exec(run.head_branch)[1];
+  const kind = /^automation\/(products|publications|guides)-/.exec(run.head_branch)[1];
   validateUpdateFiles(kind, (await api(`repos/${REPO}/pulls/${pr.number}/files?per_page=100`)).map((file) => file.filename));
   const checks = await api(`repos/${REPO}/commits/${run.head_sha}/check-runs?per_page=100`);
   need(successfulRequired(checks, run.head_sha), 'The current-head Required check must pass');
@@ -113,7 +115,7 @@ async function publish() {
 }
 const command = process.argv[2];
 if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1])).href) {
-  const action = command === 'propose-products' ? () => propose('products') : command === 'propose-publications' ? () => propose('publications') : command === 'deliver' ? deliver : command === 'publish' ? publish : null;
-  if (!action) { process.stderr.write('Use propose-products, propose-publications, deliver or publish.\n'); process.exitCode = 1; }
+  const action = command === 'propose-products' ? () => propose('products') : command === 'propose-publications' ? () => propose('publications') : command === 'propose-guides' ? () => propose('guides') : command === 'deliver' ? deliver : command === 'publish' ? publish : null;
+  if (!action) { process.stderr.write('Use propose-products, propose-publications, propose-guides, deliver or publish.\n'); process.exitCode = 1; }
   else action().catch((error) => { process.stderr.write(`${automationFailure(error, command)}\nRepository automation stopped. Reconcile remote state before retrying.\n`); process.exitCode = 1; });
 }

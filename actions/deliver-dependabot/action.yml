@@ -1,0 +1,60 @@
+name: Deliver a checked action-pin update
+description: Merge a current, strictly protected Dependabot action-pin update with a dedicated one-repository App token.
+inputs:
+  repository-id:
+    description: Numeric ID of the authorized caller repository.
+    required: true
+  owner-id:
+    description: Numeric ID of the authorized caller owner.
+    required: true
+  visibility:
+    description: Expected caller visibility, public or private.
+    required: true
+  check-workflow:
+    description: Workflow filename that reports the Actions Required check.
+    default: check.yml
+  app-id:
+    description: ID of the dedicated hraness-distribution GitHub App.
+    required: true
+  app-private-key:
+    description: Dedicated App private key supplied from the caller secret.
+    required: true
+runs:
+  using: composite
+  steps:
+    - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+      with:
+        node-version: 24
+        package-manager-cache: false
+    - name: Validate the caller before requesting a write token
+      id: target
+      shell: bash
+      env:
+        DEPENDENCY_REPOSITORY_ID: ${{ inputs.repository-id }}
+        DEPENDENCY_OWNER_ID: ${{ inputs.owner-id }}
+        DEPENDENCY_VISIBILITY: ${{ inputs.visibility }}
+        DEPENDENCY_CHECK_WORKFLOW: ${{ inputs.check-workflow }}
+      run: node "$GITHUB_ACTION_PATH/../../scripts/dependency-action.mjs" prepare
+    - name: Mint the dedicated token for only this repository
+      id: app
+      uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
+      with:
+        app-id: ${{ inputs.app-id }}
+        private-key: ${{ inputs.app-private-key }}
+        owner: ${{ steps.target.outputs.owner }}
+        repositories: ${{ steps.target.outputs.repository }}
+        permission-contents: write
+        permission-pull-requests: write
+        permission-actions: write
+    - name: Deliver the checked pin update through main protection
+      shell: bash
+      env:
+        DEPENDENCY_REPOSITORY_ID: ${{ inputs.repository-id }}
+        DEPENDENCY_OWNER_ID: ${{ inputs.owner-id }}
+        DEPENDENCY_VISIBILITY: ${{ inputs.visibility }}
+        DEPENDENCY_CHECK_WORKFLOW: ${{ inputs.check-workflow }}
+        DISTRIBUTION_APP_ID: ${{ inputs.app-id }}
+        DISTRIBUTION_APP_SLUG: ${{ steps.app.outputs.app-slug }}
+        GH_TOKEN: ${{ steps.app.outputs.token }}
+        REPORT_GH_TOKEN: ${{ github.token }}
+      run: node "$GITHUB_ACTION_PATH/../../scripts/dependency-action.mjs" deliver

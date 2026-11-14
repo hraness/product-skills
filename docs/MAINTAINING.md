@@ -151,6 +151,52 @@ are eligible; changing an action's identity or other workflow code stops the
 automatic merge. A behind branch is updated conditionally and waits for its new
 ordinary checks. No workflow approval or branch protection is bypassed.
 
+## Update shared writing guides
+
+The daily `Refresh shared writing guides` workflow copies six guides from one
+public `hraness/.github` main commit. It verifies each regular Git blob before
+changing the checkout. `catalog/guide-source.json` records that commit and each
+file's byte count and SHA-256. Unrelated upstream commits produce no update.
+
+Put local guide rules under a `## Repository additions` heading at the end of the
+file. Synchronization preserves that section byte for byte, including its
+formatting. A heading inside a fenced example does not start the section.
+`npm run check` verifies the recorded shared prefix while allowing local
+additions to change. Keep repository-specific contribution and agent
+instructions in `CONTRIBUTING.md` and `AGENTS.md`; this workflow updates neither.
+
+`node scripts/guides.mjs refresh` prepares the same local update. Source failures
+stop before any guide is changed. The App proposes only the six selected guides
+and their source record, then uses the ordinary check and protected merge path.
+An open proposal receives current shared text and current main's local additions
+through the same conditional branch refresh as product updates.
+
+## Deliver action updates in another repository
+
+`actions/deliver-dependabot` accepts the caller's numeric `repository-id`,
+`owner-id`, expected `visibility` (`public` or `private`) and `check-workflow`
+filename. It derives the repository name from the running workflow and checks
+those facts against GitHub before writing. The dedicated App installation token
+must select only that repository. Pass its ID and private key using the same
+distribution variable and secret as the profile action.
+
+Call it from trusted default-main `workflow_run` delivery after the caller's
+ordinary pull-request check succeeds. Give the built-in job token `contents:
+read` and `checks: read`; the action mints its separate App write token. Main
+must have an effective pull-request rule and a strict `Required` status rule
+bound to GitHub Actions. The action checks the canonical workflow execution,
+Dependabot's bot identity, the current PR head and the complete pin-only diff.
+A branch behind current main is updated with an expected-head condition and
+waits for ordinary new checks. Waiting or approval-held checks receive no
+replacement dispatch. Protected merging uses the checked head and no
+administrator bypass.
+
+Pin the action to the source SHA of the verified immutable tooling release that
+contains it, with that SemVer tag in the comment. Include the caller's workflow
+directory in weekly grouped GitHub Actions Dependabot updates. This repository
+also tracks the composite action's own pinned dependencies. Verify the caller's
+actual PR, branch-refresh and main-check event flow after setup.
+
 ## Prepare a directory submission
 
 Use the product's standalone ZIP and its README as the starting point. Test a
