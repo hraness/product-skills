@@ -13,6 +13,7 @@ import { publishTooling } from './tooling.mjs';
 import { captureGenerated, mergePendingPublications, refreshGeneratedPull } from './refresh.mjs';
 import { publishReleaseAssets } from './releases.mjs';
 import { automationFailure, stage } from './diagnostics.mjs';
+import { mergePendingHomebrewCursor, readHomebrewCursor, validateHomebrewCursor } from './homebrew-observer.mjs';
 const exec = promisify(execFile);
 const REPO = 'hraness/product-skills';
 const need = (v, message) => { if (!v) throw new Error(message); };
@@ -46,7 +47,13 @@ export async function propose(kind) {
       const pending = await api(`repos/${REPO}/contents/publication-ledger.json?ref=${refreshed.head}`);
       need(pending.type === 'file' && pending.encoding === 'base64' && typeof pending.content === 'string' && pending.size <= 512 * 1024, 'Pending publication ledger is unavailable');
       const previous = JSON.parse(Buffer.from(pending.content, 'base64').toString('utf8')); const desired = JSON.parse(await readFile('publication-ledger.json', 'utf8')); const baseline = JSON.parse(await git(['show', `${sourceBase}:publication-ledger.json`]));
-      await writeFile('publication-ledger.json', `${JSON.stringify(mergePendingPublications(previous, desired, baseline), null, 2)}\n`); await refreshRendered();
+      const cursorFile = await api(`repos/${REPO}/contents/catalog/homebrew-observation.json?ref=${refreshed.head}`);
+      need(cursorFile.type === 'file' && cursorFile.encoding === 'base64' && typeof cursorFile.content === 'string' && cursorFile.size <= 4096, 'Pending Homebrew cursor is unavailable');
+      const pendingCursor = validateHomebrewCursor(JSON.parse(Buffer.from(cursorFile.content, 'base64').toString('utf8')));
+      const baselineCursor = validateHomebrewCursor(JSON.parse(await git(['show', `${sourceBase}:catalog/homebrew-observation.json`])));
+      const cursor = await mergePendingHomebrewCursor(pendingCursor, await readHomebrewCursor(process.cwd()), baselineCursor);
+      const ledger = mergePendingPublications(previous, desired, baseline);
+      await writeFile('publication-ledger.json', `${JSON.stringify(ledger, null, 2)}\n`); await writeFile('catalog/homebrew-observation.json', `${JSON.stringify(cursor, null, 2)}\n`); await refreshRendered();
     }
     const desired = await captureGenerated(process.cwd(), kind, [...new Set([...files, ...await changedPaths()])]);
     const update = await refreshGeneratedPull({ kind, branch: existing.head.ref, head: refreshed.head, sourceBase, desired, bot, read: api, write: apiWrite });
@@ -60,7 +67,7 @@ export async function propose(kind) {
   need(/^automation\/(products|publications|guides)-\d+-\d+$/.test(branch), 'Invalid update branch');
   await git(['checkout', '-b', branch]); await git(['add', '-A']);
   const title = kind === 'products' ? 'Refresh released product skills' : kind === 'guides' ? 'Refresh shared writing guides' : 'Record verified product publications';
-  const body = kind === 'products' ? 'Refresh product packages from validated public sources. Runtime qualification and generated-copy checks run on this commit before integration.\n' : kind === 'guides' ? 'Refresh the six writing guides from hraness/.github. Preserve each Repository additions section and keep repository-specific contribution and agent instructions.\n' : 'Record verified publications from immutable GitHub Releases and active official MCP Registry listings. Preserve earlier ledger entries.\n';
+  const body = kind === 'products' ? 'Refresh product packages from validated public sources. Runtime qualification and generated-copy checks run on this commit before integration.\n' : kind === 'guides' ? 'Refresh the six writing guides from hraness/.github. Preserve each Repository additions section and keep repository-specific contribution and agent instructions.\n' : 'Record verified product publications from public releases, active registry listings and checked Homebrew casks. Preserve earlier entries and the observed tap history.\n';
   await git(['-c', `user.name=${bot.login}`, '-c', `user.email=${bot.id}+${bot.login}@users.noreply.github.com`, 'commit', '-m', title]);
   const sha = await git(['rev-parse', 'HEAD']); await git(['push', 'origin', `HEAD:refs/heads/${branch}`]);
   await writeFile('/tmp/product-skills-pr.md', body);
