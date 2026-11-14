@@ -4,7 +4,7 @@ Queue a URL in {{PRODUCT}} or search saved text from Raycast. These Script Comma
 
 Use {{PRODUCT}} {{VERSION}} or later and Node.js {{NODE}} or later. Follow the [Sponge setup]({{SETUP_LINK}}) and initialize your library before adding the commands.
 
-1. Extract the Sponge release ZIP, or keep this repository checkout. Keep this folder and its files together.
+1. Extract the Sponge integration ZIP, or keep this repository checkout. Keep this folder and its files together.
 2. In Raycast Settings, open **Extensions**, choose **+**, then **Add Script Directory**.
 3. Select the `adapters/raycast` folder.
 4. Run **Save URL to Sponge** with `https://example.com/`. The command reports that the URL was queued. Processing follows your Sponge capture setup.

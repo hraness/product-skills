@@ -12,10 +12,10 @@
       "cursor": "review_required"
     },
     "sponge": {
-      "version": "0.1.0",
+      "version": "0.1.1",
       "contentHash": "b1aeb68c6a03b0760df9ce3ab1456ba76cf358132623e01a719ca9e63d859c8f",
-      "artifactHash": "3f98f56946bb227a7d48eb555f398d5fb670734957abadb3f4819a1325d6f36f",
-      "github": "published",
+      "artifactHash": "69513de1d8177ff5fdd3d5d368f55788fb9104aead7365782e0a38132787a773",
+      "github": "release_required",
       "skillsSh": "public_install_required",
       "chatgpt": "eligibility_and_review_required",
       "claude": "review_required",
