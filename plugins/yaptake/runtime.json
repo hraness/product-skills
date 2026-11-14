@@ -1,0 +1,14 @@
+{
+  "build": "231",
+  "command": "yaptake",
+  "install": {
+    "type": "app",
+    "url": "https://yaptake.com"
+  },
+  "platform": {
+    "architecture": "arm64",
+    "minimumVersion": "26.0",
+    "os": "macos"
+  },
+  "version": "0.1.0"
+}

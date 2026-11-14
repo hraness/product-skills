@@ -1,0 +1,13 @@
+{
+  "command": "textmock-link",
+  "version": "1.0.0",
+  "versionScope": "helper",
+  "install": {
+    "type": "web",
+    "url": "https://textmock.com"
+  },
+  "helper": {
+    "path": "scripts/textmock-link.mjs",
+    "node": ">=24.0.0"
+  }
+}

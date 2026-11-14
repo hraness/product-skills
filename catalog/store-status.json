@@ -1,4 +1,45 @@
 {
   "schemaVersion": 1,
-  "products": {}
+  "products": {
+    "dawn": {
+      "version": "0.1.0",
+      "contentHash": "10557d00f33e5464d8bdef77be4d7ab5f4f4977673607e86f3329549dd7650ff",
+      "artifactHash": "2b2856e4b0b7e110e90484695e456ce87a2b034d4b3a91dc95e8038f4009f847",
+      "github": "release_required",
+      "skillsSh": "public_install_required",
+      "chatgpt": "review_required",
+      "claude": "review_required",
+      "cursor": "review_required"
+    },
+    "sponge": {
+      "version": "0.1.0",
+      "contentHash": "b1aeb68c6a03b0760df9ce3ab1456ba76cf358132623e01a719ca9e63d859c8f",
+      "artifactHash": "3f98f56946bb227a7d48eb555f398d5fb670734957abadb3f4819a1325d6f36f",
+      "github": "release_required",
+      "skillsSh": "public_install_required",
+      "chatgpt": "eligibility_and_review_required",
+      "claude": "review_required",
+      "cursor": "review_required"
+    },
+    "textmock": {
+      "version": "0.1.0",
+      "contentHash": "7870a0feced28a14eb7567f1079473f5bc1514896ba73a944c0b5d8e633ae2ca",
+      "artifactHash": "20a59df8d8ab0c8567d831d0be6be0b5310b84b9fa9d7ecd2b5416d537fd9001",
+      "github": "release_required",
+      "skillsSh": "public_install_required",
+      "chatgpt": "review_required",
+      "claude": "review_required",
+      "cursor": "review_required"
+    },
+    "yaptake": {
+      "version": "0.1.0",
+      "contentHash": "201aa144b451f1eda4c406d473c7f3df568d81f09779f41f06a8f78b86fae162",
+      "artifactHash": "b299bc6268600d8b1b372d9f8cc8de42c9d89cff91bd5fd1028f46fe0bc77542",
+      "github": "release_required",
+      "skillsSh": "public_install_required",
+      "chatgpt": "eligibility_and_review_required",
+      "claude": "review_required",
+      "cursor": "review_required"
+    }
+  }
 }

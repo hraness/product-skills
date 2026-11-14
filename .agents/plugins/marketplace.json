@@ -3,5 +3,54 @@
   "interface": {
     "displayName": "Hraness products"
   },
-  "plugins": []
+  "plugins": [
+    {
+      "name": "dawn",
+      "source": {
+        "source": "local",
+        "path": "./plugins/dawn"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    },
+    {
+      "name": "sponge",
+      "source": {
+        "source": "local",
+        "path": "./plugins/sponge"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    },
+    {
+      "name": "textmock",
+      "source": {
+        "source": "local",
+        "path": "./plugins/textmock"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    },
+    {
+      "name": "yaptake",
+      "source": {
+        "source": "local",
+        "path": "./plugins/yaptake"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
 }
