@@ -7,15 +7,16 @@ const repository = 'hraness/product-skills'; const origin = `https://github.com/
 const source = 'a'.repeat(40); const toolkitHash = 'b'.repeat(64);
 const missing = () => Object.assign(new Error('Missing provider object'), { status: 404 });
 function server({ candidate = source, hash = toolkitHash, ordinal = 8, main = candidate, failed = false } = {}) {
-  const releases = new Map(); const refs = new Map(); const assetBytes = new Map(); const local = new Map(); const requests = []; const gitCalls = []; let assetId = 1;
-  const releaseShape = (tag, target, draft) => ({ tag_name: tag, target_commitish: target, draft, prerelease: false, immutable: !draft, html_url: `${origin}/releases/tag/${tag}`, assets: [] });
+  const releases = new Map(); const refs = new Map(); const assetBytes = new Map(); const local = new Map(); const requests = []; const gitCalls = []; let assetId = 1, releaseId = 1;
+  const releaseShape = (tag, target, draft) => ({ id: releaseId++, tag_name: tag, target_commitish: target, draft, prerelease: false, immutable: !draft, html_url: `${origin}/releases/tag/${tag}`, assets: [] });
   const upload = (release, name, bytes) => { const id = assetId++; const asset = { id, name, size: bytes.length, digest: `sha256:${digest(bytes)}`, browser_download_url: `${origin}/releases/download/${release.tag_name}/${name}` }; release.assets.push(asset); assetBytes.set(id, bytes); };
   const read = async (path) => {
     if (path === `repos/${repository}`) return { full_name: repository, private: false };
     if (path.endsWith('/git/ref/heads/main')) return { object: { sha: main } };
     if (path.includes('/check-runs?')) return { check_runs: [{ id: 1, name: 'Required', head_sha: candidate, status: 'completed', conclusion: failed ? 'failure' : 'success', app: { id: 15368 } }] };
     if (path.includes('/releases?')) return [...releases.values()];
-    if (path.includes('/releases/tags/')) { const tag = path.split('/releases/tags/')[1]; if (!releases.has(tag)) throw missing(); return releases.get(tag); }
+    if (path.includes('/releases/tags/')) { const tag = path.split('/releases/tags/')[1]; if (!releases.has(tag) || releases.get(tag).draft) throw missing(); return releases.get(tag); }
+    if (/\/releases\/\d+$/.test(path)) { const release = [...releases.values()].find((release) => release.id === Number(path.split('/').at(-1))); if (!release) throw missing(); return release; }
     if (path.includes('/git/ref/tags/')) { const tag = path.split('/git/ref/tags/')[1]; if (!refs.has(tag)) throw missing(); return { object: { type: 'commit', sha: refs.get(tag) } }; }
     throw new Error(`Unexpected provider read ${path}`);
   };

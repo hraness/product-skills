@@ -5,24 +5,26 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
-import { digest, main as distribution, refreshRendered } from './distribution.mjs';
+import { main as distribution, refreshRendered } from './distribution.mjs';
 import { refreshBehindPull, repairMissingCheck, successfulRequired, validateUpdateFiles } from './github.mjs';
 import { deliverDependabot } from './dependabot.mjs';
 import { distributionAuthority, ownedByDistributionApp } from './authority.mjs';
 import { publishTooling } from './tooling.mjs';
 import { captureGenerated, mergePendingPublications, refreshGeneratedPull } from './refresh.mjs';
+import { publishReleaseAssets } from './releases.mjs';
+import { automationFailure, stage } from './diagnostics.mjs';
 const exec = promisify(execFile);
 const REPO = 'hraness/product-skills';
 const need = (v, message) => { if (!v) throw new Error(message); };
-async function gh(args) { const { stdout } = await exec('gh', args, { maxBuffer: 1048576, timeout: 60000 }); return stdout.trim(); }
+async function gh(args) { return stage(`github.${['api', 'pr', 'release', 'workflow'].includes(args[0]) ? args[0] : 'command'}`, async () => { const { stdout } = await exec('gh', args, { maxBuffer: 1048576, timeout: 60000 }); return stdout.trim(); }); }
 async function api(path) {
   if (/^repos\/hraness\/product-skills\/commits\/[a-f0-9]{40}\/check-runs\?per_page=100$/.test(path)) {
     need(process.env.REPORT_GH_TOKEN, 'The read-only check token is required');
-    return JSON.parse((await exec('gh', ['api', path], { env: { ...process.env, GH_TOKEN: process.env.REPORT_GH_TOKEN }, maxBuffer: 1048576, timeout: 60000 })).stdout);
+    return stage('checks.read', async () => JSON.parse((await exec('gh', ['api', path], { env: { ...process.env, GH_TOKEN: process.env.REPORT_GH_TOKEN }, maxBuffer: 1048576, timeout: 60000 })).stdout));
   }
   return JSON.parse(await gh(['api', path]));
 }
-async function git(args) { const { stdout } = await exec('git', ['-c', 'credential.helper=', '-c', 'credential.helper=!gh auth git-credential', ...args], { maxBuffer: 1048576, timeout: 60000 }); return stdout.trim(); }
+async function git(args) { return stage(`git.${['rev-parse', 'fetch', 'rev-list', 'diff', 'ls-files', 'show', 'checkout', 'add', 'commit', 'push', 'status'].includes(args[0]) ? args[0] : 'command'}`, async () => { const { stdout } = await exec('git', ['-c', 'credential.helper=', '-c', 'credential.helper=!gh auth git-credential', ...args], { maxBuffer: 1048576, timeout: 60000 }); return stdout.trim(); }); }
 async function apiWrite(method, path, body) {
   const directory = await mkdtemp(join(tmpdir(), 'product-skills-request-'));
   try { const file = join(directory, 'request.json'); await writeFile(file, JSON.stringify(body), { mode: 0o600 }); return JSON.parse(await gh(['api', '--method', method, path, '--input', file])); }
@@ -96,34 +98,22 @@ async function publish() {
   const sha = await git(['rev-parse', 'HEAD']); const main = await api(`repos/${REPO}/git/ref/heads/main`); need(main.object.sha === sha, 'Publication candidate is no longer main');
   const checks = await api(`repos/${REPO}/commits/${sha}/check-runs?per_page=100`);
   need(successfulRequired(checks, sha), 'The exact main Required check has not passed');
-  await distribution(['check']); await distribution(['package']);
+  await stage('package.check', () => distribution(['check'])); await stage('package.build', () => distribution(['package']));
   const plan = JSON.parse(await readFile('dist/release.json', 'utf8'));
   const pkg = JSON.parse(await readFile('package.json', 'utf8'));
   const tooling = await publishTooling({ sourceCommit: sha, toolkitHash: plan.toolkitHash, packageVersion: pkg.version, read: api, request: gh, git, downloadAsset: async (asset) => (await exec('gh', ['api', `repos/${REPO}/releases/assets/${asset.id}`, '-H', 'Accept: application/octet-stream'], { encoding: 'buffer', maxBuffer: 8192, timeout: 60000 })).stdout, writeArtifacts: async (artifacts) => { await mkdir('dist/tooling', { recursive: true }); const paths = {}; for (const [name, bytes] of Object.entries(artifacts)) { const path = `dist/tooling/${name}`; await writeFile(path, bytes); paths[name] = path; } return paths; } });
   process.stdout.write(`${JSON.stringify({ tooling })}\n`);
   if (!plan.products.length) { process.stdout.write('No admitted product package to publish.\n'); return; }
   need(/^integrations-[a-f0-9]{16}$/.test(plan.tag), 'Invalid release plan');
-  let release;
-  try { release = await api(`repos/${REPO}/releases/tags/${plan.tag}`); } catch (e) { if (!String(e.stderr).includes('404')) throw e; }
-  if (!release) {
-    await writeFile('/tmp/product-skills-release.md', `Product skills and local integration packages. Read each product README for runtime requirements and the first task.\n\n${plan.products.map((p) => `- ${p.id} ${p.version}: \`${p.file}\``).join('\n')}\n\nVerify archives with the attached SHA256SUMS. Directory approval and native client qualification are separate from this package release.\n`);
-    await gh(['release', 'create', plan.tag, '--repo', REPO, '--target', sha, '--title', 'Hraness product skills', '--notes-file', '/tmp/product-skills-release.md', '--draft']);
-    release = await api(`repos/${REPO}/releases/tags/${plan.tag}`);
-  }
+  await writeFile('/tmp/product-skills-release.md', `Product skills and local integration packages. Read each product README for runtime requirements and the first task.\n\n${plan.products.map((p) => `- ${p.id} ${p.version}: \`${p.file}\``).join('\n')}\n\nVerify archives with the attached SHA256SUMS. Directory approval and native client qualification are separate from this package release.\n`);
   const files = [...plan.products.map((p) => p.file), 'SHA256SUMS', 'release.json'];
-  const existing = release.assets ?? [];
-  need(existing.every((a) => files.includes(a.name)), 'Unexpected asset already exists on this release');
-  for (const file of files) {
-    const hash = digest(await readFile(`dist/${file}`)); const asset = existing.find((a) => a.name === file);
-    if (asset) need(asset.digest === `sha256:${hash}`, 'Existing release asset differs; no overwrite is allowed');
-    else { need(release.draft === true, 'An immutable publication cannot gain another asset'); await gh(['release', 'upload', plan.tag, `dist/${file}`, '--repo', REPO]); }
-  }
-  if (release.draft) await gh(['release', 'edit', plan.tag, '--repo', REPO, '--draft=false']);
+  const assets = Object.fromEntries(await Promise.all(files.map(async (file) => [file, await readFile(`dist/${file}`)])));
+  await publishReleaseAssets({ tag: plan.tag, target: sha, assets, paths: Object.fromEntries(files.map((file) => [file, `dist/${file}`])), title: 'Hraness product skills', notesPath: '/tmp/product-skills-release.md', read: api, request: gh, allowPublishedTargetReuse: true, beforePublish: async () => { const current = await api(`repos/${REPO}/git/ref/heads/main`); need(current.object.sha === sha && successfulRequired(await api(`repos/${REPO}/commits/${sha}/check-runs?per_page=100`), sha), 'Product publication candidate changed or lost its Required check'); } });
   await distribution(['record-github']);
 }
 const command = process.argv[2];
 if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1])).href) {
   const action = command === 'propose-products' ? () => propose('products') : command === 'propose-publications' ? () => propose('publications') : command === 'deliver' ? deliver : command === 'publish' ? publish : null;
   if (!action) { process.stderr.write('Use propose-products, propose-publications, deliver or publish.\n'); process.exitCode = 1; }
-  else action().catch(() => { process.stderr.write('Repository automation stopped. No gate was bypassed; inspect the run and reconcile remote state before retrying.\n'); process.exitCode = 1; });
+  else action().catch((error) => { process.stderr.write(`${automationFailure(error, command)}\nRepository automation stopped. Reconcile remote state before retrying.\n`); process.exitCode = 1; });
 }
