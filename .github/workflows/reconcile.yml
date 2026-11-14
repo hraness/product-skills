@@ -58,7 +58,7 @@ jobs:
         if: always()
         env:
           REPORT_GH_TOKEN: ${{ github.token }}
-          REFRESH_FAILED: ${{ failure() }}
+          REFRESH_FAILED: ${{ job.status == 'failure' }}
         run: |
           node --input-type=module <<'NODE'
           import { readFile, writeFile } from 'node:fs/promises';

@@ -103,6 +103,21 @@ only admitted products. The release stays a draft until its archives and
 checksums have been uploaded. An immutable public release readback must confirm
 the asset digests before it can enter `publication-ledger.json`.
 
+The publisher finds drafts through the authenticated release list and reads the
+selected release by numeric ID. GitHub's published-tag endpoint can return 404
+while that draft exists. A matching draft resumes with its existing assets;
+conflicting sources, duplicate versions or different bytes stop publication.
+After an interrupted create, upload or publish request, the publisher reads the
+same object before deciding whether the operation completed. It preserves
+existing releases and assets.
+
+Automation failures report the command, step, error type and HTTP status when
+available. They omit command arguments, credentials and provider response text.
+Workflow changes also need an Actions schema check: plain YAML and cost checks
+do not catch expression-context errors. The regression tests cover status
+functions inside environment values; use `job.status` there and status functions
+in the job or step condition.
+
 The release ledger update also travels through an App-owned protected pull
 request and ordinary CI. Its entries are append-only and use the actual API
 publication time. Store submissions and planned launches belong in

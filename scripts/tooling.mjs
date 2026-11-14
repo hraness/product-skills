@@ -1,4 +1,5 @@
 import { digest } from './distribution.mjs';
+import { optionalReleaseRead, publishReleaseAssets } from './releases.mjs';
 
 const REPOSITORY = 'hraness/product-skills';
 const ORIGIN = `https://github.com/${REPOSITORY}`;
@@ -14,11 +15,6 @@ export function toolingPlan({ packageVersion, sourceCommit, toolkitHash, ordinal
   const metadata = { schemaVersion: 1, version: releaseVersion, sourceCommit, toolkitHash };
   const bytes = json(metadata);
   return { tag: `v${releaseVersion}`, metadata, assets: { 'toolkit.json': bytes, SHA256SUMS: Buffer.from(`${digest(bytes)}  toolkit.json\n`) } };
-}
-
-async function optional(read, path) {
-  try { return await read(path); }
-  catch (error) { if (error.status === 404 || /\bHTTP 404\b/.test(String(error.stderr))) return null; throw error; }
 }
 
 export async function verifyToolingRelease(release, { read, downloadAsset }) {
@@ -84,23 +80,10 @@ export async function publishTooling({ sourceCommit, toolkitHash, packageVersion
   const plan = toolingPlan({ packageVersion, sourceCommit, toolkitHash, ordinal: Number(count) });
   need(!previous || Number(plan.metadata.version.split('.')[2]) > Number(previous.version.split('.')[2]), 'A tooling release cannot reuse or roll back its sequence');
   await currentCandidate(read, sourceCommit);
-  const existingTag = await optional(read, `repos/${REPOSITORY}/git/ref/tags/${plan.tag}`);
+  const existingTag = await optionalReleaseRead(read, `repos/${REPOSITORY}/git/ref/tags/${plan.tag}`);
   need(!existingTag || existingTag.object?.type === 'commit' && existingTag.object.sha === sourceCommit, 'The tooling version already identifies another source');
-  let release = await optional(read, `repos/${REPOSITORY}/releases/tags/${plan.tag}`);
   const files = await writeArtifacts({ ...plan.assets, 'notes.md': Buffer.from(`Shared Hraness distribution tools ${plan.metadata.version}.\n\nThe metadata and checksums identify the source commit used by the profile-link action and package publisher. Product skills have separate integration versions and releases.\n`) });
-  if (!release) {
-    await request(['release', 'create', plan.tag, '--repo', REPOSITORY, '--target', sourceCommit, '--title', `Hraness distribution tools ${plan.metadata.version}`, '--notes-file', files['notes.md'], '--draft']);
-    release = await read(`repos/${REPOSITORY}/releases/tags/${plan.tag}`);
-  }
-  need(release.tag_name === plan.tag && release.target_commitish === sourceCommit && release.prerelease === false && Array.isArray(release.assets) && release.assets.length <= 2 && release.assets.every((asset) => Object.hasOwn(plan.assets, asset.name)), 'Ambiguous existing tooling release; no overwrite is allowed');
-  for (const [name, bytes] of Object.entries(plan.assets)) {
-    const found = release.assets.filter((asset) => asset.name === name); need(found.length <= 1, 'Duplicate tooling asset');
-    if (found.length) need(found[0].digest === `sha256:${digest(bytes)}` && found[0].size === bytes.length, 'Existing tooling asset differs; no overwrite is allowed');
-    else { need(release.draft === true, 'A published tooling release cannot gain another asset'); await request(['release', 'upload', plan.tag, files[name], '--repo', REPOSITORY]); }
-  }
-  await currentCandidate(read, sourceCommit);
-  if (release.draft) await request(['release', 'edit', plan.tag, '--repo', REPOSITORY, '--draft=false']);
-  const published = await read(`repos/${REPOSITORY}/releases/tags/${plan.tag}`);
+  const published = await publishReleaseAssets({ tag: plan.tag, target: sourceCommit, assets: plan.assets, paths: files, title: `Hraness distribution tools ${plan.metadata.version}`, notesPath: files['notes.md'], read, request, beforePublish: () => currentCandidate(read, sourceCommit) });
   const verified = await verifyToolingRelease(published, { read, downloadAsset });
   need(JSON.stringify(verified) === JSON.stringify(plan.metadata), 'Published tooling metadata differs from this candidate');
   return { status: 'published', tag: plan.tag, metadata: verified };
