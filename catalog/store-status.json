@@ -2,10 +2,10 @@
   "schemaVersion": 1,
   "products": {
     "dawn": {
-      "version": "0.1.1",
-      "contentHash": "10557d00f33e5464d8bdef77be4d7ab5f4f4977673607e86f3329549dd7650ff",
-      "artifactHash": "b78803f0cc665e7f65561f2225c426a29ffb1abcc2bc3bd0931c6daeeb7979d0",
-      "github": "published",
+      "version": "0.1.2",
+      "contentHash": "7ec753feb777c32dffb4c183efe38768d42216152e2a8fe7d4f772496571b331",
+      "artifactHash": "d409b5177c9ce0a4e7befdb939dded7523a0d0f82ba0086d46eca6aa9b3ca691",
+      "github": "release_required",
       "skillsSh": "listed",
       "skillsShFirstVerifiedAt": "2026-11-14T23:54:16.409Z",
       "chatgpt": "review_required",
@@ -13,10 +13,10 @@
       "cursor": "review_required"
     },
     "sponge": {
-      "version": "0.1.2",
+      "version": "0.1.3",
       "contentHash": "b1aeb68c6a03b0760df9ce3ab1456ba76cf358132623e01a719ca9e63d859c8f",
-      "artifactHash": "c94c24dd014c950ba3d2c268e010629b8df9a7007b26862cb11bd4769daded53",
-      "github": "published",
+      "artifactHash": "349b74d9533f9e2f6824d04cc145600fda32d7f84a56999cb97beb8b4bb86ef8",
+      "github": "release_required",
       "skillsSh": "listed",
       "skillsShFirstVerifiedAt": "2026-11-14T23:54:16.409Z",
       "chatgpt": "eligibility_and_review_required",
@@ -24,10 +24,10 @@
       "cursor": "review_required"
     },
     "textmock": {
-      "version": "0.1.1",
+      "version": "0.1.2",
       "contentHash": "7870a0feced28a14eb7567f1079473f5bc1514896ba73a944c0b5d8e633ae2ca",
-      "artifactHash": "81c63f2486990a88335cd293fc9db982daa7f84ca3a2086f643f4d1128ead29f",
-      "github": "published",
+      "artifactHash": "6ef0b55ce848747e2a1191585a0198638a3a8c5737b2064da81e4b274fae4ca5",
+      "github": "release_required",
       "skillsSh": "listed",
       "skillsShFirstVerifiedAt": "2026-11-14T23:54:16.409Z",
       "chatgpt": "review_required",
@@ -35,10 +35,10 @@
       "cursor": "review_required"
     },
     "yaptake": {
-      "version": "0.1.1",
+      "version": "0.1.2",
       "contentHash": "201aa144b451f1eda4c406d473c7f3df568d81f09779f41f06a8f78b86fae162",
-      "artifactHash": "38e94d209f2b7d7354f566f6bd5ef5bf126a14e5b6a28550a7c6389fe2c24d42",
-      "github": "published",
+      "artifactHash": "2eb965e9f52193765186cf3faa4d9ffee6532012870bdac81e665c48c90f1968",
+      "github": "release_required",
       "skillsSh": "listed",
       "skillsShFirstVerifiedAt": "2026-11-14T23:54:16.409Z",
       "chatgpt": "eligibility_and_review_required",
