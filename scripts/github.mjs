@@ -1,5 +1,7 @@
 import { GUIDE_FILES, GUIDE_RECORD } from './guides.mjs';
 import { raycastPath } from './raycast.mjs';
+import { listingIconPath } from './listing.mjs';
+import { spongeSupportPath } from './sponge.mjs';
 
 export function validateUpdateFiles(kind, files) {
   if (!['products', 'publications', 'guides'].includes(kind) || !Array.isArray(files) || files.length === 0 || files.length >= 100) throw new Error('Invalid owned update files');
@@ -7,7 +9,7 @@ export function validateUpdateFiles(kind, files) {
   const product = '(?:dawn|yaptake|textmock|sponge)';
   const fixed = kind === 'publications' ? ['publication-ledger.json', 'catalog/store-status.json', 'catalog/homebrew-observation.json'] : ['README.md', 'catalog/admitted.json', 'catalog/portfolio.json', 'catalog/store-status.json', '.agents/plugins/marketplace.json', '.claude-plugin/marketplace.json', '.cursor-plugin/marketplace.json'];
   const generated = [new RegExp(`^bundles/${product}\\.json$`), new RegExp(`^skills/${product}/SKILL\\.md$`), new RegExp(`^plugins/(${product})/(?:LICENSE|README\\.md|plugin\\.json|runtime\\.json|mcp\\.json|\\.mcp\\.json|\\.(?:codex|claude|cursor)-plugin/plugin\\.json|skills/\\1/SKILL\\.md)$`), /^(?:plugins\/textmock\/)?skills\/textmock\/scripts\/textmock-link\.mjs$/, /^plugins\/textmock\/scripts\/textmock-link\.mjs$/, /^(?:plugins\/dawn\/)?skills\/dawn\/examples\/morning-study\.ts$/];
-  for (const path of files) if (typeof path !== 'string' || !(fixed.includes(path) || (kind === 'products' && (generated.some((pattern) => pattern.test(path)) || raycastPath(path))))) throw new Error('An owned update contains an unrelated file');
+  for (const path of files) if (typeof path !== 'string' || !(fixed.includes(path) || (kind === 'products' && (generated.some((pattern) => pattern.test(path)) || raycastPath(path) || listingIconPath(path) || spongeSupportPath(path))))) throw new Error('An owned update contains an unrelated file');
 }
 
 export function successfulRequired(value, sha) {

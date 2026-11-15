@@ -6,6 +6,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { APP_BOT } from '../scripts/authority.mjs';
 import { captureGenerated, mergePendingPublications, refreshGeneratedPull } from '../scripts/refresh.mjs';
+import { originalIcon } from './fixtures/listing-icon.mjs';
 
 const main = 'a'.repeat(40); const head = 'b'.repeat(40); const tree = 'c'.repeat(40); const mainTree = 'd'.repeat(40); const nextTree = 'e'.repeat(40); const nextHead = 'f'.repeat(40);
 const blob = (bytes) => createHash('sha1').update(`blob ${bytes.length}\0`).update(bytes).digest('hex');
@@ -75,4 +76,15 @@ test('desired file capture uses the closed path set and refuses symlink escapes'
     await assert.rejects(captureGenerated(root, 'products', ['scripts/private.mjs']));
     await rm(join(root, selected)); await symlink(join(outside, 'private.txt'), join(root, selected)); await assert.rejects(captureGenerated(root, 'products', [selected]));
   } finally { await rm(root, { recursive: true, force: true }); await rm(outside, { recursive: true, force: true }); }
+});
+
+test('a validated public icon refresh keeps exact binary bytes and rejects invalid images before any API write', async () => {
+  const path = 'plugins/sponge/assets/icon.png'; const bytes = originalIcon({ marker: 71 });
+  const current = server({ selectedPath: path, oldBytes: originalIcon() }); current.desired[path] = bytes;
+  await refreshGeneratedPull(current);
+  const blob = current.writes.find(entry => entry.path.endsWith('/git/blobs'));
+  assert(Buffer.from(blob.body.content, 'base64').equals(bytes));
+  assert.equal(current.writes.find(entry => entry.path.endsWith('/git/trees')).body.tree[0].mode, '100644');
+  const invalid = server({ selectedPath: path }); invalid.desired[path] = Buffer.from('not a PNG');
+  await assert.rejects(refreshGeneratedPull(invalid)); assert.equal(invalid.writes.length, 0);
 });

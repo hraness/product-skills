@@ -2,9 +2,9 @@
   "mcpServers": {
     "sponge": {
       "type": "stdio",
-      "command": "sponge",
+      "command": "node",
       "args": [
-        "mcp"
+        "${CLAUDE_PLUGIN_ROOT}/scripts/mcp.mjs"
       ]
     }
   }

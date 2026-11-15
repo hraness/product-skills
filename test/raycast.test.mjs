@@ -3,10 +3,13 @@ import assert from 'node:assert/strict';
 import { mkdtemp, mkdir, readFile, writeFile, rm, lstat, symlink, realpath, chmod, cp } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { runRaycast } from '../scripts/raycast/sponge.mjs';
+import { runRaycast } from '../scripts/sponge/raycast.mjs';
 import { RAYCAST_FILES, raycastFileMode, raycastPath, renderRaycast } from '../scripts/raycast.mjs';
-import { checkPackageFingerprints, checkRendered, digest, packages, reconcile, render, writeRendered, zip } from '../scripts/distribution.mjs';
+import { checkPackageFingerprints, checkRendered, digest, packages, reconcile as reconcileSources, render, writeRendered, zip } from '../scripts/distribution.mjs';
 import { validateUpdateFiles } from '../scripts/github.mjs';
+import { withOriginalIcon } from './fixtures/listing-icon.mjs';
+const reconcile = (options) => reconcileSources({ ...options, fetchImpl: withOriginalIcon(options.fetchImpl ?? fetch) });
+
 
 const requirements = { schemaVersion: 1, command: 'sponge', package: '@hraness/sponge', version: '1.2.3', node: '>=24.20.0', homepage: 'https://sponge.computer' };
 async function cli(t, changes = {}) {

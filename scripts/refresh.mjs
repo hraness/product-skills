@@ -5,6 +5,7 @@ import { APP_BOT } from './authority.mjs';
 import { appendPublications, checkLedgerAppendOnly, validateLedger } from './distribution.mjs';
 import { validateUpdateFiles } from './github.mjs';
 import { raycastFileMode } from './raycast.mjs';
+import { listingIconPath, validateListingPNG } from './listing.mjs';
 
 const REPOSITORY = 'hraness/product-skills';
 const need = (condition, message) => { if (!condition) throw new Error(message); };
@@ -38,7 +39,7 @@ export async function captureGenerated(root, kind, paths) {
       catch (error) { if (error.code !== 'ENOENT') throw error; missing = true; break; }
     }
     if (missing) output[path] = null;
-    else { const bytes = await readFile(target); need(bytes.length <= 512 * 1024, 'Generated refresh file exceeds its limit'); new TextDecoder('utf-8', { fatal: true }).decode(bytes); output[path] = bytes; }
+    else { const bytes = await readFile(target); need(bytes.length <= 512 * 1024, 'Generated refresh file exceeds its limit'); if (listingIconPath(path)) validateListingPNG(bytes); else new TextDecoder('utf-8', { fatal: true }).decode(bytes); output[path] = bytes; }
   }
   return output;
 }
@@ -48,6 +49,7 @@ export async function refreshGeneratedPull({ kind, branch, head, sourceBase, des
   need(new RegExp(`^automation/${kind}-\\d+-\\d+$`).test(branch) && bot.login === APP_BOT && Number.isSafeInteger(bot.id) && bot.id > 0, 'Invalid generated-update owner');
   const paths = Object.keys(desired); validateUpdateFiles(kind, paths);
   need(Object.values(desired).every((bytes) => bytes === null || Buffer.isBuffer(bytes)) && Object.values(desired).reduce((sum, bytes) => sum + (bytes?.length ?? 0), 0) <= 2 * 1024 * 1024, 'Invalid generated refresh contents');
+  for (const [path, bytes] of Object.entries(desired)) if (bytes !== null) { if (listingIconPath(path)) validateListingPNG(bytes); else new TextDecoder('utf-8', { fatal: true }).decode(bytes); }
   const prefix = `repos/${REPOSITORY}/`;
   need((await read(`${prefix}git/ref/heads/main`)).object?.sha === sourceBase, 'Protected main changed; regenerate desired files');
   need((await read(`${prefix}git/ref/heads/${branch}`)).object?.sha === head, 'Generated branch changed concurrently');

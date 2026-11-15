@@ -30,4 +30,4 @@ A package available here may still be awaiting directory review or host testing.
 
 Use Node.js 24. Run `npm run check` to validate sources, generated copies and package metadata. `npm run package` writes deterministic plugin ZIPs and `SHA256SUMS` under `dist/`. The package license covers these skills and integration files; product applications have their own terms.
 
-[Maintain packages](docs/MAINTAINING.md) · [MIT license](LICENSE)
+[Maintain packages](docs/MAINTAINING.md) · [Prepare a directory submission](docs/DIRECTORY_SUBMISSIONS.md) · [MIT license](LICENSE)

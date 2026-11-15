@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "sponge": {
+      "type": "stdio",
+      "command": "node",
+      "args": [
+        "./scripts/mcp.mjs"
+      ],
+      "cwd": "./"
+    }
+  }
+}

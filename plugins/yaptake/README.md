@@ -35,3 +35,25 @@ reference](https://yaptake.com/docs/agent-requests).
 
 The skill and integration files in this package use the MIT license.
 The Yaptake application has its [own license and terms](https://yaptake.com/terms).
+
+## Add the skill to an agent
+
+Set up the product as described above, then install its integration files.
+
+For Codex CLI:
+
+```sh
+codex plugin marketplace add https://github.com/hraness/product-skills.git
+codex plugin add yaptake@hraness-products
+```
+
+In Claude Code:
+
+```text
+/plugin install yaptake --marketplace hraness/product-skills
+```
+
+A Cursor team marketplace administrator can import
+`https://github.com/hraness/product-skills`, then select this product. See
+[Cursor's repository import instructions](https://cursor.com/docs/plugins#add-a-team-marketplace).
+These repository installs are separate from public directory approval.

@@ -1,7 +1,10 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
-import { appendPublications, checkLedgerAppendOnly, checkPackageFingerprints, digest, download, packages, parseUnique, reconcile, recordGithub, render, renderedPackageFingerprint, validateBundle, validateLedger, validatePortfolio, verifyApp, zip } from '../scripts/distribution.mjs';
+import { appendPublications, checkLedgerAppendOnly, checkPackageFingerprints, digest, download, packages, parseUnique, reconcile as reconcileSources, recordGithub, render, renderedPackageFingerprint, validateBundle, validateLedger, validatePortfolio, verifyApp, zip } from '../scripts/distribution.mjs';
+import { withOriginalIcon } from './fixtures/listing-icon.mjs';
+const reconcile = (options) => reconcileSources({ ...options, fetchImpl: withOriginalIcon(options.fetchImpl ?? fetch) });
+
 
 const license = await readFile(new URL('../LICENSE', import.meta.url), 'utf8');
 const portfolio = JSON.parse(await readFile(new URL('../catalog/portfolio.json', import.meta.url), 'utf8'));
@@ -240,14 +243,15 @@ test('generated root skills and standalone copies match and client routes stay i
   const first = await reconcile({ portfolio, state: empty(), bundles: {}, selected: ['sponge'], ...server() });
   const output = render(first.state, first.bundles, portfolio);
   assert.equal(output['skills/sponge/SKILL.md'], output['plugins/sponge/skills/sponge/SKILL.md']);
-  assert.equal(output['plugins/sponge/README.md'], first.bundles.sponge.files['README.md']);
+  assert(output['plugins/sponge/README.md'].startsWith(first.bundles.sponge.files['README.md'].trimEnd()));
+  assert(output['plugins/sponge/README.md'].includes('/plugin install sponge --marketplace hraness/product-skills'));
   const portable = JSON.parse(output['plugins/sponge/plugin.json']);
   assert.equal(portable.$schema, 'https://agent-plugins.org/schemas/1.0.0/plugin.schema.json');
   assert.equal(portable.extensions['com.openai'].requires_local_executor, true);
   const marketplace = JSON.parse(output['.agents/plugins/marketplace.json']);
   assert.equal(marketplace.plugins[0].source.path, './plugins/sponge');
   for (const client of ['claude', 'cursor', 'codex']) assert.equal(JSON.parse(output[`plugins/sponge/.${client}-plugin/plugin.json`]).skills, './skills/');
-  assert.deepEqual(JSON.parse(output['plugins/sponge/mcp.json']).mcpServers.sponge.args, ['mcp']);
+  assert.deepEqual(JSON.parse(output['plugins/sponge/mcp.json']).mcpServers.sponge.args, ['./scripts/mcp.mjs']);
   const next = bundle('sponge', 2); const updated = await reconcile({ portfolio, state: first.state, bundles: first.bundles, selected: ['sponge'], ...server(next) });
   assert.equal(JSON.parse(render(updated.state, updated.bundles, portfolio)['plugins/sponge/plugin.json']).version, '0.1.1');
   const noMcp = bundle('dawn'); delete noMcp.manifest.mcp; assert.doesNotThrow(() => validateBundle(noMcp, 'dawn'));
