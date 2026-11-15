@@ -43,3 +43,25 @@ and [SDK guide](https://dawnav.com/docs/sdk).
 
 The skill, original example and integration files in this package use the
 MIT license. Installing the skill does not grant access to the private preview.
+
+## Add the skill to an agent
+
+Set up the product as described above, then install its integration files.
+
+For Codex CLI:
+
+```sh
+codex plugin marketplace add https://github.com/hraness/product-skills.git
+codex plugin add dawn@hraness-products
+```
+
+In Claude Code:
+
+```text
+/plugin install dawn --marketplace hraness/product-skills
+```
+
+A Cursor team marketplace administrator can import
+`https://github.com/hraness/product-skills`, then select this product. See
+[Cursor's repository import instructions](https://cursor.com/docs/plugins#add-a-team-marketplace).
+These repository installs are separate from public directory approval.

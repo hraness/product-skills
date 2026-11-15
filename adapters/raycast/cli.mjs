@@ -1,12 +1,11 @@
 import { accessSync, constants, lstatSync, readFileSync, realpathSync } from 'node:fs';
-import { delimiter, dirname, isAbsolute, join, resolve } from 'node:path';
+import { delimiter, dirname, isAbsolute, join } from 'node:path';
 import { spawnSync } from 'node:child_process';
-import { pathToFileURL } from 'node:url';
 
-class CommandError extends Error {}
-const requireValue = (value, message) => { if (!value) throw new CommandError(message); };
-const control = /[\x00-\x1f\x7f]/;
-function jsonFile(path) {
+export class CommandError extends Error {}
+export const requireValue = (value, message) => { if (!value) throw new CommandError(message); };
+export const control = /[\x00-\x1f\x7f]/;
+export function jsonFile(path) {
   const info = lstatSync(path);
   requireValue(info.isFile() && !info.isSymbolicLink() && info.size <= 65536, 'Sponge package metadata is unavailable.');
   return JSON.parse(readFileSync(path, 'utf8'));
@@ -26,9 +25,9 @@ function nodeRequirement(value) {
   requireValue(atLeast(process.versions.node, value.slice(2)), 'Update Node.js using the Sponge setup guide.');
 }
 function selectedCommand(env) {
-  if (env.SPONGE_RAYCAST_CLI) {
-    requireValue(isAbsolute(env.SPONGE_RAYCAST_CLI) && !control.test(env.SPONGE_RAYCAST_CLI), 'Use an absolute SPONGE_RAYCAST_CLI path.');
-    return env.SPONGE_RAYCAST_CLI;
+  if (env.SPONGE_CLI) {
+    requireValue(isAbsolute(env.SPONGE_CLI) && !control.test(env.SPONGE_CLI), 'Use an absolute SPONGE_CLI path.');
+    return env.SPONGE_CLI;
   }
   for (const directory of (env.PATH ?? '').split(delimiter).filter(isAbsolute)) {
     const path = join(directory, 'sponge');
@@ -55,47 +54,20 @@ function installedCommand(requirements, env) {
   nodeRequirement(manifest.engines?.node);
   return { entry, version: manifest.version };
 }
-function execute(run, entry, args, env) {
+export function execute(run, entry, args, env) {
   const result = run(process.execPath, [entry, ...args], { env, encoding: 'utf8', input: '', timeout: 15000, maxBuffer: 256 * 1024, windowsHide: true });
   requireValue(!result.error && result.status === 0 && typeof result.stdout === 'string' && Buffer.byteLength(result.stdout) <= 256 * 1024, 'Sponge did not finish. Check your library before retrying.');
   return result.stdout;
 }
-function libraryArguments(env) {
-  if (!env.SPONGE_RAYCAST_LIBRARY) return [];
-  const path = env.SPONGE_RAYCAST_LIBRARY;
-  requireValue(isAbsolute(path) && path !== '/' && path.length <= 4096 && !control.test(path), 'Use an existing absolute SPONGE_RAYCAST_LIBRARY directory.');
+export function libraryArguments(path) {
+  if (!path) return [];
+  requireValue(isAbsolute(path) && path !== '/' && path.length <= 4096 && !control.test(path), 'Use an existing absolute Sponge library directory.');
   let info; try { info = lstatSync(path); } catch {}
-  requireValue(info?.isDirectory() && !info.isSymbolicLink(), 'Use an existing absolute SPONGE_RAYCAST_LIBRARY directory.');
+  requireValue(info?.isDirectory() && !info.isSymbolicLink(), 'Use an existing absolute Sponge library directory.');
   return ['--library', path];
 }
-export function runRaycast(action, input, { env = process.env, run = spawnSync, requirements = jsonFile(new URL('./requirements.json', import.meta.url)) } = {}) {
-  requireValue(['save', 'search'].includes(action) && typeof input === 'string' && input.length > 0 && input.trim() === input && input.length <= (action === 'save' ? 8192 : 1000) && input.isWellFormed() && !control.test(input), 'Enter one URL or search phrase.');
-  let value = input;
-  if (action === 'save') {
-    let url; try { url = new URL(input); } catch {}
-    requireValue(url && ['https:', 'http:'].includes(url.protocol) && !url.username && !url.password, 'Enter an HTTP or HTTPS URL without embedded credentials.');
-    value = url.href;
-  }
-  const library = libraryArguments(env);
-  const command = installedCommand(requirements, env);
+export function verifiedSpongeCommand(requirements, { env = process.env, run = spawnSync, commandPath = env.SPONGE_CLI } = {}) {
+  const command = installedCommand(requirements, { ...env, SPONGE_CLI: commandPath });
   requireValue(execute(run, command.entry, ['--version'], env).trim() === command.version, 'Sponge CLI version differs from its package. Reinstall it using the setup guide.');
-  if (action === 'save') {
-    const stdout = execute(run, command.entry, ['add', value, '--json', ...library], env);
-    let result; try { result = JSON.parse(stdout); } catch {}
-    requireValue(result?.ok === true && typeof result.itemId === 'string' && result.itemId.length > 0, 'Sponge returned an unexpected result. Check your library before retrying.');
-    if (result.duplicate === true) return 'Already in Sponge.';
-    requireValue(typeof result.jobId === 'string' && result.jobId.length > 0, 'Sponge returned an unexpected result. Check your library before retrying.');
-    return 'Queued for capture in Sponge.';
-  }
-  const stdout = execute(run, command.entry, ['search', '--mode', 'lexical', '--limit', '20', ...library, '--', value], env);
-  return stdout.replace(/\x1b\][^\x07]*(?:\x07|\x1b\\)/g, '').replace(/\x1b\[[0-?]*[ -/]*[@-~]/g, '').replace(/[\x00-\x08\x0b-\x1f\x7f]/g, '').trim() || 'No matching saved text.';
-}
-if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1])).href) {
-  try {
-    requireValue(process.argv.length === 4, 'Enter one URL or search phrase.');
-    process.stdout.write(runRaycast(process.argv[2], process.argv[3]) + '\n');
-  } catch (error) {
-    process.stderr.write((error instanceof CommandError ? error.message : 'Sponge command failed. Follow the setup guide in the README.') + '\n');
-    process.exitCode = 1;
-  }
+  return command;
 }

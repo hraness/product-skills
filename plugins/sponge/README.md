@@ -26,3 +26,36 @@ sync setup, and links to platform requirements.
 
 The skill and integration files use the [MIT license](LICENSE). The Sponge
 application is proprietary.
+
+## Add the skill to an agent
+
+Set up the product as described above, then install its integration files.
+
+For Codex CLI:
+
+```sh
+codex plugin marketplace add https://github.com/hraness/product-skills.git
+codex plugin add sponge@hraness-products
+```
+
+In Claude Code:
+
+```text
+/plugin install sponge --marketplace hraness/product-skills
+```
+
+A Cursor team marketplace administrator can import
+`https://github.com/hraness/product-skills`, then select this product. See
+[Cursor's repository import instructions](https://cursor.com/docs/plugins#add-a-team-marketplace).
+These repository installs are separate from public directory approval.
+
+## Local MCP setup
+
+The included launcher checks the installed `@hraness/sponge` package and runs a
+read-only version probe before starting its MCP server. It refuses an unrelated
+`sponge` command. It does not install software, sign in or initialize a library.
+
+The server uses your existing default library. To choose another existing library,
+set `SPONGE_MCP_LIBRARY` to its absolute directory in the agent's environment. If
+your Sponge command is outside PATH, set `SPONGE_CLI` to its absolute path. Follow
+the setup guide above when the launcher reports a missing command or library.

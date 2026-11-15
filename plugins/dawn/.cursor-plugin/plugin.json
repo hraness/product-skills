@@ -1,6 +1,6 @@
 {
   "name": "dawn",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A TypeScript music SDK and headless CLI for composing, arranging and rendering songs offline.",
   "author": {
     "name": "Hraness",
@@ -9,5 +9,6 @@
   "homepage": "https://dawnav.com/docs/agents",
   "repository": "https://github.com/hraness/product-skills",
   "license": "MIT",
-  "skills": "./skills/"
+  "skills": "./skills/",
+  "logo": "./assets/icon.png"
 }
