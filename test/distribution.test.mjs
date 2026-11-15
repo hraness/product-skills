@@ -294,3 +294,14 @@ test('a ClawHub publication pins its product, version, skill fingerprint and pub
   assert.throws(() => validateLedger({ schemaVersion: 1, publications: [{ ...entry, id: 'textmock-github-test', channel: 'github' }] }), /public allowlist/);
   assert.throws(() => clawhubPublicationId('textmock', '0.1.1', fingerprint.toUpperCase())); assert.throws(() => clawhubPublicationId('unknown', '0.1.1', fingerprint)); assert.throws(() => clawhubPublicationUrl('unknown'));
 });
+
+test('Claude manifests carry only the listing links each product site serves', async () => {
+  const { LISTING_LINKS, PRODUCTS } = await import('../scripts/distribution.mjs');
+  assert.deepEqual(Object.keys(LISTING_LINKS).sort(), Object.keys(PRODUCTS).sort());
+  for (const [id, links] of Object.entries(LISTING_LINKS)) {
+    assert.ok(links.privacyPolicyUrl, `${id} needs a privacy policy`);
+    for (const url of Object.values(links)) assert.equal(new URL(url).origin, PRODUCTS[id].url);
+    const manifest = JSON.parse(await readFile(new URL(`../plugins/${id}/.claude-plugin/plugin.json`, import.meta.url), 'utf8'));
+    for (const key of ['privacyPolicyUrl', 'supportUrl', 'termsOfServiceUrl']) assert.equal(manifest[key], links[key]);
+  }
+});

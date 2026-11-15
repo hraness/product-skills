@@ -11,6 +11,13 @@ import { SUBMISSIONS_INDEX, checkSubmissionHistory, readGovernedSubmissions, rea
 import { DIRECTORY_FILE, initialDirectoryObservations, mergePendingDirectoryObservations, observeDirectories, readDirectoryObservations, readDirectorySources, sourceSkillIdentity, validateDirectoryObservations } from './skills-sh-observer.mjs';
 
 export const PRODUCTS = Object.freeze({ dawn: { name: 'Dawn', url: 'https://dawnav.com' }, yaptake: { name: 'Yaptake', url: 'https://yaptake.com' }, textmock: { name: 'Textmock', url: 'https://textmock.com' }, sponge: { name: 'Sponge', url: 'https://sponge.computer' } });
+// Directory listing links. Only pages the product site actually serves; a missing page stays unset rather than pointing somewhere generic.
+export const LISTING_LINKS = Object.freeze({
+  dawn: { privacyPolicyUrl: 'https://dawnav.com/privacy' },
+  yaptake: { privacyPolicyUrl: 'https://yaptake.com/privacy', supportUrl: 'https://yaptake.com/support', termsOfServiceUrl: 'https://yaptake.com/terms' },
+  textmock: { privacyPolicyUrl: 'https://textmock.com/privacy', termsOfServiceUrl: 'https://textmock.com/terms' },
+  sponge: { privacyPolicyUrl: 'https://sponge.computer/privacy', supportUrl: 'https://sponge.computer/support' },
+});
 export const MCP_REGISTRY = Object.freeze({ origin: 'https://registry.modelcontextprotocol.io', name: 'io.github.hraness/sponge', product: 'sponge' });
 export const HOMEBREW_TAP = Object.freeze({ repository: 'hraness/homebrew-tap', repositoryId: 1382935233, ownerId: 307125679, product: 'yaptake', cask: 'Casks/yaptake.rb', catalog: 'catalog/yaptake.json', cursor: 'catalog/homebrew-observation.json' });
 export const CLAWHUB = Object.freeze({ origin: 'https://clawhub.ai', owner: 'hraness' });
@@ -232,7 +239,7 @@ export function render(state, bundles, portfolio, ledger = { schemaVersion: 1, p
     const oa = { requires_local_executor: true, interface: listingInterface(m, portfolio.projects.find((p) => p.id === id), Boolean(e.listingIcon)) };
     output[`${base}/plugin.json`] = json({ $schema: PLUGIN_SCHEMA, ...common, extensions: { 'com.openai': oa } });
     output[`${base}/.codex-plugin/plugin.json`] = json({ ...common, skills: './skills/', ...oa, ...(m.mcp ? { mcpServers: id === 'sponge' ? './mcp.codex.json' : './.mcp.json' } : {}) });
-    output[`${base}/.claude-plugin/plugin.json`] = json({ ...common, displayName: m.product.name, skills: './skills/', ...(e.listingIcon ? { icon: './assets/icon.png' } : {}) });
+    output[`${base}/.claude-plugin/plugin.json`] = json({ ...common, displayName: m.product.name, ...LISTING_LINKS[id], skills: './skills/', ...(e.listingIcon ? { icon: './assets/icon.png' } : {}) });
     output[`${base}/.cursor-plugin/plugin.json`] = json({ ...common, skills: './skills/', ...(e.listingIcon ? { logo: './assets/icon.png' } : {}), ...(m.mcp ? { mcpServers: './.mcp.json' } : {}) });
     if (m.mcp) {
       const servers = { [id]: id === 'sponge' ? spongePortableServer() : { type: 'stdio', command: m.mcp.command, args: m.mcp.args } };
