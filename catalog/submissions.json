@@ -64,6 +64,42 @@
       }
     },
     {
+      "repository": "emptymalei/awesome-research",
+      "products": [
+        "sponge"
+      ],
+      "decision": "eligible",
+      "reason": "The list covers tools for research work, including reading and organizing, and accepts additions by PR. Sponge fits as a reading library; Dawn, Textmock, and Yaptake are outside its subject.",
+      "rulesUrl": "https://github.com/emptymalei/awesome-research/blob/ad426f806b1b004adcac32857a94ac03a71a604b/CONTRIBUTING.md",
+      "reviewedAt": "2026-11-15T16:36:34.000Z",
+      "sourceCommit": "ad426f806b1b004adcac32857a94ac03a71a604b",
+      "reach": {
+        "stars": 2822,
+        "forks": 294,
+        "watchers": 62,
+        "pushedAt": "2026-11-11T10:52:35.000Z",
+        "archived": false
+      }
+    },
+    {
+      "repository": "gendotnew/macos-apps",
+      "products": [
+        "yaptake"
+      ],
+      "decision": "eligible",
+      "reason": "A curated list of macOS apps that includes paid apps such as ScreenFlow and PDF Expert, with a one-line entry format. Merges are slow: 31 PRs merged in total, the latest on 2026-09-09, with 197 open.",
+      "rulesUrl": "https://github.com/gendotnew/macos-apps/blob/9c63a4f869685f973cc918240dc8c299420a05a2/contributing.md",
+      "reviewedAt": "2026-11-15T16:36:34.000Z",
+      "sourceCommit": "9c63a4f869685f973cc918240dc8c299420a05a2",
+      "reach": {
+        "stars": 847,
+        "forks": 230,
+        "watchers": 24,
+        "pushedAt": "2026-09-09T07:19:36.000Z",
+        "archived": false
+      }
+    },
+    {
       "repository": "jaywcjlove/awesome-mac",
       "products": [
         "yaptake"
@@ -96,6 +132,46 @@
         "forks": 456,
         "watchers": 32,
         "pushedAt": "2026-11-10T14:16:42.000Z",
+        "archived": false
+      }
+    },
+    {
+      "repository": "xai-org/plugin-marketplace",
+      "products": [
+        "sponge",
+        "textmock",
+        "yaptake"
+      ],
+      "decision": "eligible",
+      "reason": "xAI's official plugin catalog for Grok Build. Each PR adds one entry pinned to a public commit, with a regenerated plugin index, so Sponge, Textmock, and Yaptake have separate PRs. Dawn is left out while its runtime is a private preview.",
+      "rulesUrl": "https://github.com/xai-org/plugin-marketplace/blob/42842cc7756cc0eedf9b82b24e222ec33d63b2cc/CONTRIBUTING.md",
+      "reviewedAt": "2026-11-15T16:36:34.000Z",
+      "sourceCommit": "42842cc7756cc0eedf9b82b24e222ec33d63b2cc",
+      "reach": {
+        "stars": 333,
+        "forks": 1277,
+        "watchers": 8,
+        "pushedAt": "2026-11-15T16:19:08.000Z",
+        "archived": false
+      }
+    },
+    {
+      "repository": "ZeroPointRepo/awesome-hermes-skills",
+      "products": [
+        "sponge",
+        "textmock",
+        "yaptake"
+      ],
+      "decision": "eligible",
+      "reason": "Lists Hermes Agent skills by category with a maturity tag, and accepts up to three skills from one author in a PR. The shared PR adds Sponge, Textmock, and Yaptake; Dawn is left out while its runtime is a private preview.",
+      "rulesUrl": "https://github.com/ZeroPointRepo/awesome-hermes-skills/blob/9fb166c3548ca7befb579c525991255bb6daac83/CONTRIBUTING.md",
+      "reviewedAt": "2026-11-15T16:36:34.000Z",
+      "sourceCommit": "9fb166c3548ca7befb579c525991255bb6daac83",
+      "reach": {
+        "stars": 683,
+        "forks": 191,
+        "watchers": 4,
+        "pushedAt": "2026-11-02T07:17:30.000Z",
         "archived": false
       }
     },
@@ -176,6 +252,24 @@
       }
     },
     {
+      "repository": "open-saas-directory/awesome-native-macosx-apps",
+      "products": [
+        "yaptake"
+      ],
+      "decision": "ineligible",
+      "reason": "The guide excludes self-promoted apps unless they are truly exceptional, so a submission from Yaptake's maker does not qualify.",
+      "rulesUrl": "https://github.com/open-saas-directory/awesome-native-macosx-apps/blob/1eabea7a6b56a3953c30d914943f98d532efcbfb/CONTRIBUTING.md",
+      "reviewedAt": "2026-11-15T16:36:34.000Z",
+      "sourceCommit": "1eabea7a6b56a3953c30d914943f98d532efcbfb",
+      "reach": {
+        "stars": 1693,
+        "forks": 217,
+        "watchers": 12,
+        "pushedAt": "2026-11-11T10:57:19.000Z",
+        "archived": false
+      }
+    },
+    {
       "repository": "punkpeye/awesome-mcp-servers",
       "products": [
         "sponge",
@@ -191,6 +285,24 @@
         "forks": 20025,
         "watchers": 53,
         "pushedAt": "2026-11-06T17:59:03.000Z",
+        "archived": false
+      }
+    },
+    {
+      "repository": "sindresorhus/awesome-whisper",
+      "products": [
+        "yaptake"
+      ],
+      "decision": "ineligible",
+      "reason": "The list covers Whisper and the apps and tools built on it. Yaptake transcribes with a pinned NVIDIA Parakeet Core ML model, not Whisper.",
+      "rulesUrl": "https://github.com/sindresorhus/awesome-whisper/blob/eaf6ad32566f664680695c0b3a450789426ebedd/contributing.md",
+      "reviewedAt": "2026-11-15T16:36:34.000Z",
+      "sourceCommit": "eaf6ad32566f664680695c0b3a450789426ebedd",
+      "reach": {
+        "stars": 2433,
+        "forks": 230,
+        "watchers": 27,
+        "pushedAt": "2026-09-17T05:00:10.000Z",
         "archived": false
       }
     },
@@ -458,6 +570,110 @@
       }
     },
     {
+      "repository": "hashgraph-online/awesome-codex-plugins",
+      "products": [
+        "dawn",
+        "sponge",
+        "textmock",
+        "yaptake"
+      ],
+      "decision": "deferred",
+      "reason": "Listing requires a centralized HOL plugin scanner score of at least 75, and the plugin repository must contain SECURITY.md and dependency lockfiles. product-skills has neither file yet.",
+      "rulesUrl": "https://github.com/hashgraph-online/awesome-codex-plugins/blob/8435b02b27b55500bf5b85da52001f57cac2ef6b/CONTRIBUTING.md",
+      "reviewedAt": "2026-11-15T16:36:34.000Z",
+      "sourceCommit": "8435b02b27b55500bf5b85da52001f57cac2ef6b",
+      "reach": {
+        "stars": 1577,
+        "forks": 494,
+        "watchers": 12,
+        "pushedAt": "2026-11-15T06:12:53.000Z",
+        "archived": false
+      }
+    },
+    {
+      "repository": "composio-community/awesome-claude-plugins",
+      "products": [
+        "dawn",
+        "sponge",
+        "textmock",
+        "yaptake"
+      ],
+      "decision": "deferred",
+      "reason": "The guide asks contributors to add a plugin folder to this repository, although some entries link to external repositories. The repository has merged 16 PRs in total, the latest on 2026-11-05, with 578 open.",
+      "rulesUrl": "https://github.com/composio-community/awesome-claude-plugins/blob/c511c77b6e4860bc076e5c5b3ac55c51030d602d/README.md",
+      "reviewedAt": "2026-11-15T16:36:34.000Z",
+      "sourceCommit": "c511c77b6e4860bc076e5c5b3ac55c51030d602d",
+      "reach": {
+        "stars": 1994,
+        "forks": 833,
+        "watchers": 16,
+        "pushedAt": "2026-11-05T04:02:31.000Z",
+        "archived": false
+      }
+    },
+    {
+      "repository": "RoggeOhta/awesome-codex-cli",
+      "products": [
+        "dawn",
+        "sponge",
+        "textmock",
+        "yaptake"
+      ],
+      "decision": "deferred",
+      "reason": "Entries need a specific Codex CLI integration, which the Codex plugin manifests provide, but no PR has ever been merged; 409 are open, and the last push was on 2026-09-06.",
+      "rulesUrl": "https://github.com/RoggeOhta/awesome-codex-cli/blob/bd5d0fdfdeacce4300ac17137e0c08be61764c62/CONTRIBUTING.md",
+      "reviewedAt": "2026-11-15T16:36:34.000Z",
+      "sourceCommit": "bd5d0fdfdeacce4300ac17137e0c08be61764c62",
+      "reach": {
+        "stars": 576,
+        "forks": 460,
+        "watchers": 9,
+        "pushedAt": "2026-09-06T12:00:35.000Z",
+        "archived": false
+      }
+    },
+    {
+      "repository": "spencerpauly/awesome-cursor-skills",
+      "products": [
+        "dawn",
+        "sponge",
+        "textmock",
+        "yaptake"
+      ],
+      "decision": "deferred",
+      "reason": "Entries must work in Cursor, and the guide asks for one PR per addition. Nine PRs have been merged in total, all on 2026-08-02, with 92 open.",
+      "rulesUrl": "https://github.com/spencerpauly/awesome-cursor-skills/blob/99cd2655788456cc1c685944dcf8c2de82c1ded4/CONTRIBUTING.md",
+      "reviewedAt": "2026-11-15T16:36:34.000Z",
+      "sourceCommit": "99cd2655788456cc1c685944dcf8c2de82c1ded4",
+      "reach": {
+        "stars": 891,
+        "forks": 216,
+        "watchers": 8,
+        "pushedAt": "2026-08-02T02:41:53.000Z",
+        "archived": false
+      }
+    },
+    {
+      "repository": "0xNyk/awesome-hermes-agent",
+      "products": [
+        "sponge",
+        "textmock",
+        "yaptake"
+      ],
+      "decision": "deferred",
+      "reason": "Resources are recommended by issue and added by maintainers; the guide asks contributors not to open PRs. It also asks for open-source projects, and the product runtimes are proprietary although the skills are MIT-licensed.",
+      "rulesUrl": "https://github.com/0xNyk/awesome-hermes-agent/blob/9c87ae281f7291702dc6eeb85305ec369578f24e/CONTRIBUTING.md",
+      "reviewedAt": "2026-11-15T16:36:34.000Z",
+      "sourceCommit": "9c87ae281f7291702dc6eeb85305ec369578f24e",
+      "reach": {
+        "stars": 6023,
+        "forks": 456,
+        "watchers": 32,
+        "pushedAt": "2026-10-27T14:12:42.000Z",
+        "archived": false
+      }
+    },
+    {
       "repository": "ad-si/awesome-music-production",
       "products": [
         "dawn"
@@ -584,6 +800,24 @@
       }
     },
     {
+      "repository": "marketingtoolslist/awesome-marketing",
+      "products": [
+        "textmock"
+      ],
+      "decision": "deferred",
+      "reason": "Textmock could fit as a marketing tool, but the latest merge was on 2025-08-14, with 202 PRs open.",
+      "rulesUrl": "https://github.com/marketingtoolslist/awesome-marketing/blob/6d5f7d65ce111b219c624d2375ccf6be78f9dab0/CONTRIBUTING.md",
+      "reviewedAt": "2026-11-15T16:36:34.000Z",
+      "sourceCommit": "6d5f7d65ce111b219c624d2375ccf6be78f9dab0",
+      "reach": {
+        "stars": 508,
+        "forks": 282,
+        "watchers": 17,
+        "pushedAt": "2026-07-27T07:26:41.000Z",
+        "archived": false
+      }
+    },
+    {
       "repository": "brettkromkamp/awesome-knowledge-management",
       "products": [
         "sponge"
@@ -654,6 +888,42 @@
         "forks": 203,
         "watchers": 13,
         "pushedAt": "2026-11-15T15:02:50.000Z",
+        "archived": false
+      }
+    },
+    {
+      "repository": "iCHAIT/awesome-macOS",
+      "products": [
+        "yaptake"
+      ],
+      "decision": "deferred",
+      "reason": "Only collaborators can open PRs, and a PR from a fork was refused on 2026-11-15. Issue suggestions were closed as not planned on 2026-10-27.",
+      "rulesUrl": "https://github.com/iCHAIT/awesome-macOS/blob/651d7ab32fff14590571399c04721146b1851d7d/.github/contributing.md",
+      "reviewedAt": "2026-11-15T16:36:34.000Z",
+      "sourceCommit": "651d7ab32fff14590571399c04721146b1851d7d",
+      "reach": {
+        "stars": 19493,
+        "forks": 1789,
+        "watchers": 376,
+        "pushedAt": "2026-10-21T09:12:04.000Z",
+        "archived": false
+      }
+    },
+    {
+      "repository": "krzemienski/awesome-video",
+      "products": [
+        "yaptake"
+      ],
+      "decision": "deferred",
+      "reason": "The guide recommends the submission form on awesome.video, and its media tools category lists commercial subtitle tools. Apart from a guide fix on 2026-10-25, no PR has been merged since 2025-03-14.",
+      "rulesUrl": "https://github.com/krzemienski/awesome-video/blob/392e8fefaea9badf60bb5c7e29b878d673248552/CONTRIBUTING.md",
+      "reviewedAt": "2026-11-15T16:36:34.000Z",
+      "sourceCommit": "392e8fefaea9badf60bb5c7e29b878d673248552",
+      "reach": {
+        "stars": 1951,
+        "forks": 294,
+        "watchers": 50,
+        "pushedAt": "2026-10-25T21:54:45.000Z",
         "archived": false
       }
     }
@@ -743,6 +1013,134 @@
       "github": {
         "state": "open",
         "updatedAt": "2026-11-15T14:36:08.000Z",
+        "mergedAt": null
+      }
+    },
+    {
+      "id": "sponge-awesome-research-149",
+      "products": [
+        "sponge"
+      ],
+      "channel": "github-collection",
+      "repository": "emptymalei/awesome-research",
+      "repositoryId": 20195519,
+      "number": 149,
+      "url": "https://github.com/emptymalei/awesome-research/pull/149",
+      "author": {
+        "id": 894119,
+        "login": "0thernet"
+      },
+      "submittedAt": "2026-11-15T16:16:17.000Z",
+      "github": {
+        "state": "open",
+        "updatedAt": "2026-11-15T16:16:17.000Z",
+        "mergedAt": null
+      }
+    },
+    {
+      "id": "three-skills-awesome-hermes-skills-181",
+      "products": [
+        "sponge",
+        "textmock",
+        "yaptake"
+      ],
+      "channel": "github-collection",
+      "repository": "ZeroPointRepo/awesome-hermes-skills",
+      "repositoryId": 1223597497,
+      "number": 181,
+      "url": "https://github.com/ZeroPointRepo/awesome-hermes-skills/pull/181",
+      "author": {
+        "id": 894119,
+        "login": "0thernet"
+      },
+      "submittedAt": "2026-11-15T16:17:08.000Z",
+      "github": {
+        "state": "open",
+        "updatedAt": "2026-11-15T16:17:08.000Z",
+        "mergedAt": null
+      }
+    },
+    {
+      "id": "sponge-xai-plugin-marketplace-2081",
+      "products": [
+        "sponge"
+      ],
+      "channel": "github-collection",
+      "repository": "xai-org/plugin-marketplace",
+      "repositoryId": 1240118170,
+      "number": 2081,
+      "url": "https://github.com/xai-org/plugin-marketplace/pull/2081",
+      "author": {
+        "id": 894119,
+        "login": "0thernet"
+      },
+      "submittedAt": "2026-11-15T16:23:19.000Z",
+      "github": {
+        "state": "open",
+        "updatedAt": "2026-11-15T16:24:20.000Z",
+        "mergedAt": null
+      }
+    },
+    {
+      "id": "textmock-xai-plugin-marketplace-2082",
+      "products": [
+        "textmock"
+      ],
+      "channel": "github-collection",
+      "repository": "xai-org/plugin-marketplace",
+      "repositoryId": 1240118170,
+      "number": 2082,
+      "url": "https://github.com/xai-org/plugin-marketplace/pull/2082",
+      "author": {
+        "id": 894119,
+        "login": "0thernet"
+      },
+      "submittedAt": "2026-11-15T16:27:50.000Z",
+      "github": {
+        "state": "open",
+        "updatedAt": "2026-11-15T16:27:51.000Z",
+        "mergedAt": null
+      }
+    },
+    {
+      "id": "yaptake-xai-plugin-marketplace-2083",
+      "products": [
+        "yaptake"
+      ],
+      "channel": "github-collection",
+      "repository": "xai-org/plugin-marketplace",
+      "repositoryId": 1240118170,
+      "number": 2083,
+      "url": "https://github.com/xai-org/plugin-marketplace/pull/2083",
+      "author": {
+        "id": 894119,
+        "login": "0thernet"
+      },
+      "submittedAt": "2026-11-15T16:27:56.000Z",
+      "github": {
+        "state": "open",
+        "updatedAt": "2026-11-15T16:27:57.000Z",
+        "mergedAt": null
+      }
+    },
+    {
+      "id": "yaptake-macos-apps-262",
+      "products": [
+        "yaptake"
+      ],
+      "channel": "github-collection",
+      "repository": "gendotnew/macos-apps",
+      "repositoryId": 93969351,
+      "number": 262,
+      "url": "https://github.com/gendotnew/macos-apps/pull/262",
+      "author": {
+        "id": 894119,
+        "login": "0thernet"
+      },
+      "submittedAt": "2026-11-15T16:34:23.000Z",
+      "github": {
+        "state": "open",
+        "updatedAt": "2026-11-15T16:34:23.000Z",
         "mergedAt": null
       }
     }
