@@ -113,6 +113,16 @@ updates; a repository import is not a public listing. See the
 [plugin reference](https://cursor.com/docs/reference/plugins) and
 [marketplace security policy](https://cursor.com/help/security-and-privacy/marketplace-security).
 
+## Submitted forms
+
+Web form acknowledgements are kept in dated records, starting with
+[15 November](../catalog/form-submissions-2026-11-15.json). A form
+acknowledgement or a submission page in review isn't a listing. On 15 November,
+Claude reviewers held the Dawn, Sponge and Yaptake directory copies, and the
+directory asked for changes to Textmock. Cursor received one publisher
+application for all four plugins. mcpservers.org received Sponge, and
+awesome.video received Yaptake.
+
 ## Demonstration cases
 
 Run cases in a fresh, disposable project or library using fictional data. Verify
