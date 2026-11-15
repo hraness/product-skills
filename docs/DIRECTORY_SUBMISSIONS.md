@@ -85,6 +85,16 @@ needs an eligible paid plan and the personal or organization role that permits
 directory management. Connect GitHub to that exact Claude organization with push
 access to `hraness/product-skills`.
 
+Until Anthropic verifies the publishing organization, the directory refuses
+plugins that run a local MCP server or ship scripts and other files that aren't
+Markdown, text, JSON, YAML or images. Submit the generated copy under
+`directory/claude/<product>` instead of `plugins/<product>`. It keeps the
+product's skill, its listing links and icon, and drops the local MCP
+configuration, launchers and adapters; Dawn's example becomes Markdown. Textmock
+has no copy yet because its skill needs the bundled link helper. A submission's
+path can't change later, so withdraw a refused `plugins/<product>` submission and
+submit the copy's path.
+
 Select the product's source path and protected `main` branch. Supply the real
 publisher name, contact email and required compliance answers. The form's data
 handling acknowledgements require the publisher's answers; the integration

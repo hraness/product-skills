@@ -6,7 +6,7 @@ const need = (condition, message) => { if (!condition) throw new Error(message);
 const productId = (id) => need(/^(?:dawn|yaptake|textmock|sponge)$/.test(id), 'Unknown listing product');
 const hash = (bytes) => createHash('sha256').update(bytes).digest('hex');
 const iconName = 'assets/icon.png';
-export function listingIconPath(path) { return /^plugins\/(?:dawn|yaptake|textmock|sponge)\/assets\/icon\.png$/.test(path); }
+export function listingIconPath(path) { return /^(?:plugins|directory\/claude)\/(?:dawn|yaptake|textmock|sponge)\/assets\/icon\.png$/.test(path); }
 export function portfolioIconURL(project) {
   productId(project.id); need(project.icon === `/products/${project.id}/icon.png`, 'Unexpected portfolio icon path');
   return new URL(project.icon, 'https://hraness.com/portfolio.json').href;
