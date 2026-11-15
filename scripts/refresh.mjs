@@ -97,7 +97,7 @@ export async function refreshGeneratedPull({ kind, branch, head, sourceBase, des
   }
   const nextTree = await write('POST', `${prefix}git/trees`, { base_tree: baseTree, tree: updates.map(({ bytes, ...entry }) => entry) });
   if (nextTree.sha === mainTree) return { changed: false, head, matchesMain: true };
-  const nextCommit = await write('POST', `${prefix}git/commits`, { message: kind === 'products' ? 'Refresh checked product files' : kind === 'guides' ? 'Refresh shared writing guides' : 'Preserve verified product publications', tree: sha(nextTree.sha), parents: [head], author: { name: bot.login, email: `${bot.id}+${bot.login}@users.noreply.github.com` } });
+  const nextCommit = await write('POST', `${prefix}git/commits`, { message: kind === 'submissions' ? 'Refresh verified submission states' : kind === 'products' ? 'Refresh checked product files' : kind === 'guides' ? 'Refresh shared writing guides' : 'Preserve verified product publications', tree: sha(nextTree.sha), parents: [head], author: { name: bot.login, email: `${bot.id}+${bot.login}@users.noreply.github.com` } });
   const next = sha(nextCommit.sha);
   need((await read(`${prefix}git/ref/heads/main`)).object?.sha === sourceBase, 'Protected main changed during generated refresh');
   // A single-parent, non-forced update refuses a divergent concurrent writer.

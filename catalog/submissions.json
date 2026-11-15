@@ -1,0 +1,397 @@
+{
+  "schemaVersion": 1,
+  "searches": [
+    {
+      "product": "dawn",
+      "intent": "Music composition tools and agent skills with explicit private-preview prerequisites. Exclude paper lists and do not present the private runtime as publicly installable.",
+      "queries": [
+        "awesome music in:name stars:>=200 archived:false is:public fork:false pushed:>={recent}",
+        "awesome live-coding in:name stars:>=100 archived:false is:public fork:false pushed:>={recent}",
+        "awesome skills in:name stars:>=500 archived:false is:public fork:false pushed:>={recent}"
+      ]
+    },
+    {
+      "product": "sponge",
+      "intent": "Local reading libraries, saving and annotating sources, CLI tools and installable MCP. Use the public homepage for proprietary runtime entries; do not label the runtime as open source.",
+      "queries": [
+        "awesome cli in:name stars:>=1000 archived:false is:public fork:false pushed:>={recent}",
+        "\"knowledge management\" topic:awesome-list stars:>=100 archived:false is:public fork:false pushed:>={recent}",
+        "awesome skills in:name stars:>=500 archived:false is:public fork:false pushed:>={recent}"
+      ]
+    },
+    {
+      "product": "textmock",
+      "intent": "Fictional conversation mockups, design assets and agent link helpers. Check live maintainer acceptance, not only large historical star counts. Never describe the product as real message capture.",
+      "queries": [
+        "awesome design in:name stars:>=500 archived:false is:public fork:false pushed:>={recent}",
+        "mockup topic:awesome-list stars:>=100 archived:false is:public fork:false pushed:>={recent}",
+        "awesome skills in:name stars:>=500 archived:false is:public fork:false pushed:>={recent}"
+      ]
+    },
+    {
+      "product": "yaptake",
+      "intent": "Released Mac video editors, transcript workflows and agent integrations. Distinguish editing existing footage from generative-video research.",
+      "queries": [
+        "awesome mac in:name stars:>=1000 archived:false is:public fork:false pushed:>={recent}",
+        "awesome video in:name stars:>=200 archived:false is:public fork:false pushed:>={recent}",
+        "awesome skills in:name stars:>=500 archived:false is:public fork:false pushed:>={recent}"
+      ]
+    }
+  ],
+  "targets": [
+    {
+      "repository": "BehiSecc/awesome-claude-skills",
+      "products": [
+        "dawn",
+        "sponge",
+        "textmock",
+        "yaptake"
+      ],
+      "decision": "eligible",
+      "reason": "The existing shared PR proposes all four product skills and states runtime prerequisites.",
+      "rulesUrl": "https://github.com/BehiSecc/awesome-claude-skills/blob/adf99015a0ad4dac11711c261f0f9b433e4215e7/README.md",
+      "reviewedAt": "2026-11-15T10:11:04.095Z",
+      "sourceCommit": "adf99015a0ad4dac11711c261f0f9b433e4215e7",
+      "reach": {
+        "stars": 10424,
+        "forks": 2094,
+        "watchers": 74,
+        "pushedAt": "2026-11-02T12:16:33.000Z",
+        "archived": false
+      }
+    },
+    {
+      "repository": "jaywcjlove/awesome-mac",
+      "products": [
+        "yaptake"
+      ],
+      "decision": "eligible",
+      "reason": "Native released video editor fits Audio and Video Tools; four language files are required and AI-assisted additions are welcome. No existing product entry or prior suggestion was found.",
+      "rulesUrl": "https://github.com/jaywcjlove/awesome-mac/blob/7241efb1aa9841083728ca1a8da25ef011e83f13/docs/CONTRIBUTING.md",
+      "reviewedAt": "2026-11-15T10:11:04.095Z",
+      "sourceCommit": "7241efb1aa9841083728ca1a8da25ef011e83f13",
+      "reach": {
+        "stars": 118567,
+        "forks": 10314,
+        "watchers": 1504,
+        "pushedAt": "2026-11-15T02:47:28.000Z",
+        "archived": false
+      }
+    },
+    {
+      "repository": "toolleeo/awesome-cli-apps-in-a-csv",
+      "products": [
+        "sponge"
+      ],
+      "decision": "eligible",
+      "reason": "The contribution guide allows a public homepage without a clonable source repository. One CSV row fits Note taking; app source stays private. No prior product-name or domain suggestion was found.",
+      "rulesUrl": "https://github.com/toolleeo/awesome-cli-apps-in-a-csv/blob/ecedca3e17ca879ddb204cd68752940e168f2616/CONTRIBUTING.md",
+      "reviewedAt": "2026-11-15T10:11:04.095Z",
+      "sourceCommit": "ecedca3e17ca879ddb204cd68752940e168f2616",
+      "reach": {
+        "stars": 2681,
+        "forks": 456,
+        "watchers": 32,
+        "pushedAt": "2026-11-10T14:16:42.000Z",
+        "archived": false
+      }
+    },
+    {
+      "repository": "agarrharr/awesome-cli-apps",
+      "products": [
+        "sponge"
+      ],
+      "decision": "ineligible",
+      "reason": "The repository is archived; new PRs cannot provide a maintained listing.",
+      "rulesUrl": null,
+      "reviewedAt": "2026-11-15T10:11:04.095Z",
+      "sourceCommit": null,
+      "reach": {
+        "stars": 20625,
+        "forks": 1560,
+        "watchers": 283,
+        "pushedAt": "2026-10-12T03:27:55.000Z",
+        "archived": true
+      }
+    },
+    {
+      "repository": "appcypher/awesome-mcp-servers",
+      "products": [
+        "sponge",
+        "yaptake"
+      ],
+      "decision": "ineligible",
+      "reason": "The repository is archived.",
+      "rulesUrl": null,
+      "reviewedAt": "2026-11-15T10:11:04.095Z",
+      "sourceCommit": null,
+      "reach": {
+        "stars": 5838,
+        "forks": 2781,
+        "watchers": 46,
+        "pushedAt": "2026-05-06T08:04:35.000Z",
+        "archived": true
+      }
+    },
+    {
+      "repository": "hesreallyhim/awesome-claude-code",
+      "products": [
+        "dawn",
+        "sponge",
+        "textmock",
+        "yaptake"
+      ],
+      "decision": "ineligible",
+      "reason": "Resource recommendations must be made by a human through the web issue form. The guide explicitly prohibits CLI recommendations and PRs; it also requires 14 days of history or 100 stars.",
+      "rulesUrl": "https://github.com/hesreallyhim/awesome-claude-code/blob/c7b893c49f775f1bd3d0f9e7b587c85580c99a42/CONTRIBUTING.md",
+      "reviewedAt": "2026-11-15T10:11:04.095Z",
+      "sourceCommit": "c7b893c49f775f1bd3d0f9e7b587c85580c99a42",
+      "reach": {
+        "stars": 58037,
+        "forks": 4962,
+        "watchers": 328,
+        "pushedAt": "2026-11-15T09:06:20.000Z",
+        "archived": false
+      }
+    },
+    {
+      "repository": "travisvn/awesome-claude-skills",
+      "products": [
+        "dawn",
+        "sponge",
+        "textmock",
+        "yaptake"
+      ],
+      "decision": "ineligible",
+      "reason": "The guide explicitly excludes AI-assisted submissions and automatically closes skills below 10 stars; it also excludes commercial-funnel-only skills.",
+      "rulesUrl": "https://github.com/travisvn/awesome-claude-skills/blob/1da55aa810f206d3fe2005e7e3989b15a275d942/CONTRIBUTING.md",
+      "reviewedAt": "2026-11-15T10:11:04.095Z",
+      "sourceCommit": "1da55aa810f206d3fe2005e7e3989b15a275d942",
+      "reach": {
+        "stars": 15820,
+        "forks": 2149,
+        "watchers": 108,
+        "pushedAt": "2026-04-28T19:30:24.000Z",
+        "archived": false
+      }
+    },
+    {
+      "repository": "VoltAgent/awesome-agent-skills",
+      "products": [
+        "dawn",
+        "sponge",
+        "textmock",
+        "yaptake"
+      ],
+      "decision": "deferred",
+      "reason": "The guide requires real community usage and rejects brand-new skills. Independent adoption of these newly published skills is not established.",
+      "rulesUrl": "https://github.com/VoltAgent/awesome-agent-skills/blob/6d483e29da745a010d88974ef6d0e50d15755e9a/CONTRIBUTING.md",
+      "reviewedAt": "2026-11-15T10:11:04.095Z",
+      "sourceCommit": "6d483e29da745a010d88974ef6d0e50d15755e9a",
+      "reach": {
+        "stars": 37195,
+        "forks": 4133,
+        "watchers": 223,
+        "pushedAt": "2026-11-05T10:43:36.000Z",
+        "archived": false
+      }
+    },
+    {
+      "repository": "ComposioHQ/awesome-claude-skills",
+      "products": [
+        "dawn",
+        "sponge",
+        "textmock",
+        "yaptake"
+      ],
+      "decision": "deferred",
+      "reason": "The guide requests copying a skill folder into its repository. An accepted external-link-only contribution path has not been verified; copying would create a separately maintained distribution source.",
+      "rulesUrl": "https://github.com/ComposioHQ/awesome-claude-skills/blob/be2a406907dbc61b73e6827ded415c96139d13a2/CONTRIBUTING.md",
+      "reviewedAt": "2026-11-15T10:11:04.095Z",
+      "sourceCommit": "be2a406907dbc61b73e6827ded415c96139d13a2",
+      "reach": {
+        "stars": 79533,
+        "forks": 9709,
+        "watchers": 465,
+        "pushedAt": "2026-09-18T07:16:11.000Z",
+        "archived": false
+      }
+    },
+    {
+      "repository": "sickn33/agentic-awesome-skills",
+      "products": [
+        "dawn",
+        "sponge",
+        "textmock",
+        "yaptake"
+      ],
+      "decision": "deferred",
+      "reason": "This library imports skill source rather than curating only links. Scripts require a separate maintainer-sponsored review path, and no automatic update relationship to canonical product bundles is established.",
+      "rulesUrl": "https://github.com/sickn33/agentic-awesome-skills/blob/560b762c309d6b96315855d7968727d3bca7df20/CONTRIBUTING.md",
+      "reviewedAt": "2026-11-15T10:11:04.095Z",
+      "sourceCommit": "560b762c309d6b96315855d7968727d3bca7df20",
+      "reach": {
+        "stars": 49732,
+        "forks": 7193,
+        "watchers": 304,
+        "pushedAt": "2026-11-14T16:18:00.000Z",
+        "archived": false
+      }
+    },
+    {
+      "repository": "ad-si/awesome-music-production",
+      "products": [
+        "dawn"
+      ],
+      "decision": "deferred",
+      "reason": "New entries need four months of history and either 100 stars or independent coverage. Those eligibility facts have not been established for the private-preview runtime. The rules also require author disclosure and an author-written usage description.",
+      "rulesUrl": "https://github.com/ad-si/awesome-music-production/blob/24db42097fa28777db1ea3f82455e11e8d812689/contributing.md",
+      "reviewedAt": "2026-11-15T10:11:04.095Z",
+      "sourceCommit": "24db42097fa28777db1ea3f82455e11e8d812689",
+      "reach": {
+        "stars": 1560,
+        "forks": 212,
+        "watchers": 16,
+        "pushedAt": "2026-11-08T07:23:39.000Z",
+        "archived": false
+      }
+    },
+    {
+      "repository": "noteflakes/awesome-music",
+      "products": [
+        "dawn"
+      ],
+      "decision": "deferred",
+      "reason": "The list requires generally used, stable projects. The public skill has a private-preview runtime prerequisite and no established general adoption.",
+      "rulesUrl": "https://github.com/noteflakes/awesome-music/blob/b4ce518c33188e0f49dacca6b7262c2770deaf68/CONTRIBUTING.md",
+      "reviewedAt": "2026-11-15T10:11:04.095Z",
+      "sourceCommit": "b4ce518c33188e0f49dacca6b7262c2770deaf68",
+      "reach": {
+        "stars": 2545,
+        "forks": 203,
+        "watchers": 59,
+        "pushedAt": "2026-05-27T20:46:02.000Z",
+        "archived": false
+      }
+    },
+    {
+      "repository": "pjagielski/awesome-live-coding-music",
+      "products": [
+        "dawn"
+      ],
+      "decision": "deferred",
+      "reason": "Its last push was 2022-09-20; a responsive current review path and publicly usable Dawn runtime are not established.",
+      "rulesUrl": "https://github.com/pjagielski/awesome-live-coding-music/blob/bcaee484bf9e2e0fe66096dcfbac7cb8e57a201d/README.md",
+      "reviewedAt": "2026-11-15T10:11:04.095Z",
+      "sourceCommit": "bcaee484bf9e2e0fe66096dcfbac7cb8e57a201d",
+      "reach": {
+        "stars": 651,
+        "forks": 22,
+        "watchers": 23,
+        "pushedAt": "2022-09-20T11:10:44.000Z",
+        "archived": false
+      }
+    },
+    {
+      "repository": "goabstract/Awesome-Design-Tools",
+      "products": [
+        "textmock"
+      ],
+      "decision": "deferred",
+      "reason": "The repository has no recent accepted PR evidence: its latest merged-PR search ends at 2020-09-28. Recent suggestions are closed without merge; current curation availability is unverified.",
+      "rulesUrl": "https://github.com/goabstract/Awesome-Design-Tools/blob/dc60e63c248c44acb42f09fb0c985b77b5fe4bf5/Contribution_Guidelines.md",
+      "reviewedAt": "2026-11-15T10:11:04.095Z",
+      "sourceCommit": "dc60e63c248c44acb42f09fb0c985b77b5fe4bf5",
+      "reach": {
+        "stars": 41900,
+        "forks": 2422,
+        "watchers": 560,
+        "pushedAt": "2024-07-28T19:57:31.000Z",
+        "archived": false
+      }
+    },
+    {
+      "repository": "gztchan/awesome-design",
+      "products": [
+        "textmock"
+      ],
+      "decision": "deferred",
+      "reason": "The latest merged-PR search ends at 2021-06-15; there is no verified current acceptance path.",
+      "rulesUrl": "https://github.com/gztchan/awesome-design/blob/89f81119a482c9c49c399c481a78ff6d82fd974c/README.md",
+      "reviewedAt": "2026-11-15T10:11:04.095Z",
+      "sourceCommit": "89f81119a482c9c49c399c481a78ff6d82fd974c",
+      "reach": {
+        "stars": 17781,
+        "forks": 1257,
+        "watchers": 444,
+        "pushedAt": "2024-07-04T18:17:39.000Z",
+        "archived": false
+      }
+    },
+    {
+      "repository": "brettkromkamp/awesome-knowledge-management",
+      "products": [
+        "sponge"
+      ],
+      "decision": "deferred",
+      "reason": "The subject and existing commercial/local-library entries fit. Its rules require first-hand experience, which should be tied to a current disposable-library CLI task before proposing a listing.",
+      "rulesUrl": "https://github.com/brettkromkamp/awesome-knowledge-management/blob/291fe063395e42d24e0a6c9c0fee1f0c551c9953/CONTRIBUTING.md",
+      "reviewedAt": "2026-11-15T10:11:04.095Z",
+      "sourceCommit": "291fe063395e42d24e0a6c9c0fee1f0c551c9953",
+      "reach": {
+        "stars": 891,
+        "forks": 142,
+        "watchers": 15,
+        "pushedAt": "2026-09-12T09:43:34.000Z",
+        "archived": false
+      }
+    }
+  ],
+  "submissions": [
+    {
+      "id": "yaptake-homebrew-tap-9",
+      "products": [
+        "yaptake"
+      ],
+      "channel": "homebrew",
+      "repository": "hraness/homebrew-tap",
+      "repositoryId": 1382935233,
+      "number": 9,
+      "url": "https://github.com/hraness/homebrew-tap/pull/9",
+      "author": {
+        "login": "0thernet",
+        "id": 894119
+      },
+      "submittedAt": "2026-11-14T21:47:02.000Z",
+      "github": {
+        "state": "closed",
+        "updatedAt": "2026-11-14T22:21:53.000Z",
+        "mergedAt": "2026-11-14T22:21:51.000Z"
+      }
+    },
+    {
+      "id": "four-skills-behisecc-1345",
+      "products": [
+        "dawn",
+        "sponge",
+        "textmock",
+        "yaptake"
+      ],
+      "channel": "github-collection",
+      "repository": "BehiSecc/awesome-claude-skills",
+      "repositoryId": 1078332194,
+      "number": 1345,
+      "url": "https://github.com/BehiSecc/awesome-claude-skills/pull/1345",
+      "author": {
+        "login": "0thernet",
+        "id": 894119
+      },
+      "submittedAt": "2026-11-15T01:16:59.000Z",
+      "github": {
+        "state": "open",
+        "updatedAt": "2026-11-15T01:16:59.000Z",
+        "mergedAt": null
+      }
+    }
+  ]
+}

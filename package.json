@@ -6,7 +6,7 @@
   "engines": { "node": "24.x" },
   "scripts": {
     "test": "node --test test/*.test.mjs",
-    "check": "node --test test/*.test.mjs && node scripts/distribution.mjs check && node scripts/guides.mjs check",
+    "check": "node --test test/*.test.mjs && node scripts/distribution.mjs check && node scripts/guides.mjs check && node scripts/submissions.mjs check",
     "reconcile": "node scripts/distribution.mjs reconcile",
     "package": "node scripts/distribution.mjs package"
   }

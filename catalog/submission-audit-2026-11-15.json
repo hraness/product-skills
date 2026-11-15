@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "scope": "Distribution initiative beginning 2026-11-14",
+  "queriedAt": "2026-11-15T10:11:04.095Z",
+  "author": "0thernet",
+  "query": "is:pr author:0thernet created:>=2026-11-14 -org:hraness -user:0thernet",
+  "incompleteResults": false,
+  "totalMatches": 1,
+  "submissionUrls": [
+    "https://github.com/BehiSecc/awesome-claude-skills/pull/1345"
+  ],
+  "ownedChannelUrls": [
+    "https://github.com/hraness/homebrew-tap/pull/9"
+  ],
+  "otherChannelSources": [
+    "publication-ledger.json",
+    "catalog/directory-observations.json",
+    "catalog/store-status.json"
+  ],
+  "limits": "This dated audit covers GitHub PRs returned for the submitting account and the retained registry, package-manager and directory records. It does not establish host form submissions without provider acknowledgements."
+}
