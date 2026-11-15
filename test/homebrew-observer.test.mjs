@@ -149,6 +149,7 @@ test('public transport is bounded GET-only without credentials or redirects', as
 test('the CLI persists ledger and cursor together and preserves both plus rendered output after source failure', async (t) => {
   const root = await mkdtemp(join(tmpdir(), 'homebrew-ledger-test-')); const prior = globalThis.fetch; t.after(async () => { globalThis.fetch = prior; await rm(root, { recursive: true, force: true }); });
   await mkdir(join(root, 'catalog')); await writeFile(join(root, 'catalog/admitted.json'), JSON.stringify({ schemaVersion: 1, products: {} })); await writeFile(join(root, 'catalog/portfolio.json'), await readFile(new URL('../catalog/portfolio.json', import.meta.url))); await writeFile(join(root, 'publication-ledger.json'), JSON.stringify(empty())); await writeFile(join(root, TAP.cursor), JSON.stringify(initialHomebrewCursor()));
+  await writeFile(join(root, 'catalog/directory-observations.json'), JSON.stringify({ schemaVersion: 1, scope: 'listing-presence', observations: [] }));
   const current = server(); globalThis.fetch = async (url) => new Response(JSON.stringify(await current.read(url.replace('https://api.github.com/', '')))); await main(['record-homebrew'], root);
   const files = ['publication-ledger.json', TAP.cursor, 'README.md']; const before = Object.fromEntries(await Promise.all(files.map(async (file) => [file, await readFile(join(root, file), 'utf8')])));
   assert.equal(JSON.parse(before['publication-ledger.json']).publications.length, 1); assert((await readHomebrewCursor(root)).throughCommit);

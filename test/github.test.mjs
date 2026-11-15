@@ -4,6 +4,10 @@ import { refreshBehindPull, repairMissingCheck, successfulRequired, updateOwnedB
 test('owned update branches contain only their exact generated files', () => {
   assert.doesNotThrow(() => validateUpdateFiles('products', ['catalog/admitted.json', 'plugins/sponge/skills/sponge/SKILL.md', 'plugins/yaptake/.claude-plugin/plugin.json']));
   assert.doesNotThrow(() => validateUpdateFiles('publications', ['publication-ledger.json', 'catalog/store-status.json']));
+  for (const kind of ['products', 'publications']) {
+    assert.doesNotThrow(() => validateUpdateFiles(kind, ['catalog/directory-observations.json']));
+    for (const path of ['catalog/directory-observations.json.bak', 'catalog/directory-verification-2026-11-14.json', 'catalog/../directory-observations.json']) assert.throws(() => validateUpdateFiles(kind, [path]));
+  }
   assert.doesNotThrow(() => validateUpdateFiles('products', ['plugins/textmock/scripts/textmock-link.mjs', 'plugins/textmock/skills/textmock/scripts/textmock-link.mjs', 'skills/textmock/scripts/textmock-link.mjs', 'plugins/dawn/skills/dawn/examples/morning-study.ts', 'skills/dawn/examples/morning-study.ts']));
   for (const path of ['scripts/distribution.mjs', '.github/workflows/check.yml', 'plugins/sponge/skills/yaptake/SKILL.md', 'plugins/sponge/../README.md', 'publication-ledger.json']) assert.throws(() => validateUpdateFiles('products', [path]));
   assert.throws(() => validateUpdateFiles('publications', ['README.md']));

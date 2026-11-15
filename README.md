@@ -17,7 +17,7 @@ npx skills add hraness/product-skills
 
 Choose the product skill during installation, then follow its setup and first task. Use Sponge's [Raycast commands](adapters/raycast/README.md) to queue URLs and search saved text.
 
-A package available here may still be awaiting directory review or host testing. See [package status](catalog/store-status.json) and [verified publications](publication-ledger.json).
+A package available here may still be awaiting directory review or host testing. See [package status](catalog/store-status.json), [skills.sh listing observations](docs/DIRECTORY_OBSERVATIONS.md) and [verified publications](publication-ledger.json).
 
 ## Product pages
 

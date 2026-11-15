@@ -29,6 +29,13 @@ jobs:
         with:
           node-version: 24
       - run: npm run reconcile
+      - name: Observe skills.sh listing presence
+        id: directories
+        continue-on-error: true
+        env:
+          GH_TOKEN: ''
+          REPORT_GH_TOKEN: ''
+        run: node scripts/distribution.mjs record-directories
       - run: npm run check
       - name: Mint the dedicated repository installation token
         id: app
@@ -51,7 +58,9 @@ jobs:
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: product-refresh-${{ github.run_id }}-${{ github.run_attempt }}
-          path: reconcile-report.json
+          path: |
+            reconcile-report.json
+            dist/directory-observation.json
           if-no-files-found: warn
           retention-days: 30
       - name: Surface pending sources
@@ -59,12 +68,13 @@ jobs:
         env:
           REPORT_GH_TOKEN: ${{ github.token }}
           REFRESH_FAILED: ${{ job.status == 'failure' }}
+          DIRECTORY_OUTCOME: ${{ steps.directories.outcome }}
         run: |
           node --input-type=module <<'NODE'
           import { readFile, writeFile } from 'node:fs/promises';
           let pending = true;
-          try { pending = process.env.REFRESH_FAILED === 'true' || JSON.parse(await readFile('reconcile-report.json', 'utf8')).outcomes.some((r) => r.status === 'pending'); } catch {}
-          if (pending) await writeFile('/tmp/product-refresh-issue.md', 'A public product bundle, guide or exact runtime release did not qualify. The last admitted package was preserved. Inspect the reconcile report and source publication before retrying.\n');
+          try { pending = process.env.REFRESH_FAILED === 'true' || process.env.DIRECTORY_OUTCOME !== 'success' || JSON.parse(await readFile('reconcile-report.json', 'utf8')).outcomes.some((r) => r.status === 'pending'); } catch {}
+          if (pending) await writeFile('/tmp/product-refresh-issue.md', 'A public product source, listing icon, released runtime or skills.sh listing did not verify. The prior admitted packages and directory observations were preserved. Inspect the refresh reports; listing presence is separate from a publisher release or host approval.\n');
           NODE
           export GH_TOKEN="$REPORT_GH_TOKEN"
           if [ -f /tmp/product-refresh-issue.md ]; then
@@ -72,4 +82,13 @@ jobs:
             if [ -z "$PRODUCT_REFRESH_ISSUE" ]; then
               gh issue create --repo hraness/product-skills --title 'Product package refresh needs attention' --body-file /tmp/product-refresh-issue.md
             fi
+          fi
+      - name: Require a completed directory observation
+        if: always()
+        env:
+          DIRECTORY_OUTCOME: ${{ steps.directories.outcome }}
+        run: |
+          if [ "$DIRECTORY_OUTCOME" != success ]; then
+            echo 'skills.sh listing verification is pending. Earlier directory observations and first verification dates are preserved.' >&2
+            exit 1
           fi

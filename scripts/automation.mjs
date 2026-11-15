@@ -1,6 +1,6 @@
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
-import { mkdir, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
+import { lstat, mkdir, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { resolve } from 'node:path';
@@ -10,10 +10,11 @@ import { refreshBehindPull, repairMissingCheck, successfulRequired, validateUpda
 import { deliverDependabot } from './dependabot.mjs';
 import { distributionAuthority, ownedByDistributionApp } from './authority.mjs';
 import { publishTooling } from './tooling.mjs';
-import { captureGenerated, mergePendingPublications, refreshGeneratedPull } from './refresh.mjs';
+import { captureGenerated, mergePendingDirectories, mergePendingPublications, readPendingDirectories, refreshGeneratedPull } from './refresh.mjs';
 import { publishReleaseAssets } from './releases.mjs';
 import { automationFailure, stage } from './diagnostics.mjs';
 import { mergePendingHomebrewCursor, readHomebrewCursor, validateHomebrewCursor } from './homebrew-observer.mjs';
+import { DIRECTORY_FILE, readDirectoryObservations, validateDirectoryObservations } from './skills-sh-observer.mjs';
 const exec = promisify(execFile);
 const REPO = 'hraness/product-skills';
 const need = (v, message) => { if (!v) throw new Error(message); };
@@ -53,7 +54,18 @@ export async function propose(kind) {
       const baselineCursor = validateHomebrewCursor(JSON.parse(await git(['show', `${sourceBase}:catalog/homebrew-observation.json`])));
       const cursor = await mergePendingHomebrewCursor(pendingCursor, await readHomebrewCursor(process.cwd()), baselineCursor);
       const ledger = mergePendingPublications(previous, desired, baseline);
-      await writeFile('publication-ledger.json', `${JSON.stringify(ledger, null, 2)}\n`); await writeFile('catalog/homebrew-observation.json', `${JSON.stringify(cursor, null, 2)}\n`); await refreshRendered();
+      await writeFile('publication-ledger.json', `${JSON.stringify(ledger, null, 2)}\n`); await writeFile('catalog/homebrew-observation.json', `${JSON.stringify(cursor, null, 2)}\n`);
+    }
+    if (['products', 'publications'].includes(kind)) {
+      const pendingDirectories = await readPendingDirectories(refreshed.head, api);
+      const baselineDirectories = validateDirectoryObservations(JSON.parse(await git(['show', `${sourceBase}:${DIRECTORY_FILE}`])));
+      let report = null;
+      try {
+        const info = await lstat('dist/directory-observation.json'); need(info.isFile() && !info.isSymbolicLink() && info.size <= 8192, 'Directory observation report must be a regular bounded file');
+        report = JSON.parse(await readFile('dist/directory-observation.json', 'utf8'));
+      } catch (error) { if (error.code !== 'ENOENT') throw error; }
+      const directories = mergePendingDirectories(pendingDirectories, await readDirectoryObservations(process.cwd()), baselineDirectories, report);
+      await writeFile(DIRECTORY_FILE, `${JSON.stringify(directories, null, 2)}\n`); await refreshRendered();
     }
     const desired = await captureGenerated(process.cwd(), kind, [...new Set([...files, ...await changedPaths()])]);
     const update = await refreshGeneratedPull({ kind, branch: existing.head.ref, head: refreshed.head, sourceBase, desired, bot, read: api, write: apiWrite });
@@ -67,7 +79,7 @@ export async function propose(kind) {
   need(/^automation\/(products|publications|guides)-\d+-\d+$/.test(branch), 'Invalid update branch');
   await git(['checkout', '-b', branch]); await git(['add', '-A']);
   const title = kind === 'products' ? 'Refresh released product skills' : kind === 'guides' ? 'Refresh shared writing guides' : 'Record verified product publications';
-  const body = kind === 'products' ? 'Refresh product packages from validated public sources. Runtime qualification and generated-copy checks run on this commit before integration.\n' : kind === 'guides' ? 'Refresh the six writing guides from hraness/.github. Preserve each Repository additions section and keep repository-specific contribution and agent instructions.\n' : 'Record verified product publications from public releases, active registry listings and checked Homebrew casks. Preserve earlier entries and the observed tap history.\n';
+  const body = kind === 'products' ? 'Refresh product packages from validated public sources and preserve separately verified directory presence. Runtime qualification and generated-copy checks run on this commit before integration.\n' : kind === 'guides' ? 'Refresh the six writing guides from hraness/.github. Preserve each Repository additions section and keep repository-specific contribution and agent instructions.\n' : 'Record verified product publications from public releases, active registry listings and checked Homebrew casks. Preserve earlier entries and the observed tap history. Keep skills.sh listing observations and first verification dates separate from publisher publication times.\n';
   await git(['-c', `user.name=${bot.login}`, '-c', `user.email=${bot.id}+${bot.login}@users.noreply.github.com`, 'commit', '-m', title]);
   const sha = await git(['rev-parse', 'HEAD']); await git(['push', 'origin', `HEAD:refs/heads/${branch}`]);
   await writeFile('/tmp/product-skills-pr.md', body);

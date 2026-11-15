@@ -24,11 +24,17 @@ Run with Node.js 24 from this checkout:
 ```sh
 node scripts/skills-sh-observer.mjs check
 node scripts/skills-sh-observer.mjs observe
+node scripts/distribution.mjs record-directories
 ```
 
 `check` validates the saved records. `observe` reads the four canonical public
 URLs and prints proposed records and a check report. It does not write files,
 install skills or send install telemetry.
+
+`record-directories` prepares the local observation and generated status update
+and saves a report at `dist/directory-observation.json`. It writes no publication
+ledger entry. A failed check saves a `pending` report and keeps the earlier
+observations and dates.
 
 The reader checks standard `application/ld+json` metadata and the canonical
 link. Each page must identify one schema.org `SoftwareApplication` with the
@@ -71,12 +77,30 @@ builds the expected identities from regular UTF-8 checkout files. The selected
 frontmatter uses one-line scalar `name` and `description` fields; unsupported
 YAML forms fail the check.
 
-An automatic refresh caller should preserve its source and branch checks, call
-the reader before writing, and use `mergePendingDirectoryObservations` when
-updating an existing generated proposal. That merge preserves committed first
-verification dates and the earlier of concurrent, uncommitted observations.
+The daily product refresh and the scheduled or main-check publisher run the
+reader before proposing an App-owned protected update. All four listings must
+verify before the observation file changes. An unavailable listing keeps the
+last good records, including a successful observation already waiting in an
+open proposal. Other verified product or publication updates can still be
+proposed; the final workflow step reports the pending directory check as a
+failure. Reports contain no credentials or private queries.
+
+Existing proposals use `mergePendingDirectoryObservations` to preserve committed
+first verification dates and the earlier of concurrent, uncommitted observations.
+The required check compares first dates against the governed base commit and
+refuses their removal or replacement. The first addition can start from a base
+without the observation file.
+
 The observer does not read or modify the admitted product catalog, so optional
 fields such as product icons remain with their existing owner.
+
+`catalog/store-status.json` uses `skillsSh: listed` when an observation's local
+source hash matches the generated root skill folder. It includes the saved date
+as `skillsShFirstVerifiedAt`. A changed skill awaiting another successful check
+uses `listing_verification_required` and keeps its earlier first date. Changes
+to plugin ZIP versions, icons or other files outside the skill folder do not
+erase a verified listing. A failed new network check does not overwrite this
+historical evidence; the pending workflow report describes that failed check.
 
 Use wording such as “skills.sh listing first verified” for search-measurement
 annotations. Keep this event distinct from a GitHub release or a publisher's

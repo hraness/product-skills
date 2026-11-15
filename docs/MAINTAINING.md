@@ -122,6 +122,14 @@ publication time. Store submissions and planned launches belong in
 `catalog/store-status.json`, not in that ledger. An approval or listing must be
 verified before a store publication can be recorded.
 
+skills.sh listing presence has a separate
+[observation record](DIRECTORY_OBSERVATIONS.md). The daily refresh and normal
+publisher verify the four canonical pages without credentials or install
+telemetry. `firstVerifiedAt` records our first successful check, not a publisher
+timestamp. Package status follows the selected skill folder's hash independently
+of ZIP and icon revisions. A pending read preserves previous observations and
+fails the workflow visibly after other verified updates can be proposed.
+
 The publisher also checks the [official MCP Registry](https://registry.modelcontextprotocol.io/docs)
 daily and after a successful main check. It reads every page for the fixed
 `io.github.hraness/sponge` server, then verifies a new active listing against
