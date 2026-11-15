@@ -198,6 +198,15 @@
       "url": "https://github.com/hraness/product-skills/releases/tag/integrations-55f5d38c3e11e331",
       "version": "0.1.3",
       "contentHash": "79d2df291b5693f5dd1d5b84b57921226c67a78b99828d428d7a5055e6a57fcd"
+    },
+    {
+      "id": "yaptake-mcp-registry-0-1-3",
+      "product": "yaptake",
+      "channel": "mcp-registry",
+      "publishedAt": "2026-11-15T19:50:18.922Z",
+      "url": "https://registry.modelcontextprotocol.io/v0.1/servers/io.github.hraness%2Fyaptake/versions/0.1.3",
+      "version": "0.1.3",
+      "contentHash": "f769d712833347d09fea5b770b17531911ca2322f3a1c4efc184e252008fe91f"
     }
   ]
 }

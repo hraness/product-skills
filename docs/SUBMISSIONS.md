@@ -49,6 +49,7 @@ These rows come from the existing records. The ledger keeps every earlier public
 | Sponge | GitHub package | [0.1.4](https://github.com/hraness/product-skills/releases/tag/integrations-55f5d38c3e11e331) | Published 2026-11-15 |
 | Yaptake | GitHub package | [0.1.3](https://github.com/hraness/product-skills/releases/tag/integrations-55f5d38c3e11e331) | Published 2026-11-15 |
 | Yaptake | GitHub package | [0.1.3](https://github.com/hraness/product-skills/releases/tag/integrations-55f5d38c3e11e331) | Published 2026-11-15 |
+| Yaptake | MCP Registry | [0.1.3](https://registry.modelcontextprotocol.io/v0.1/servers/io.github.hraness%2Fyaptake/versions/0.1.3) | Published 2026-11-15 |
 | Dawn | skills.sh | [Listed](https://www.skills.sh/hraness/product-skills/dawn) | First verified 2026-11-14 |
 | Sponge | skills.sh | [Listed](https://www.skills.sh/hraness/product-skills/sponge) | First verified 2026-11-14 |
 | Textmock | skills.sh | [Listed](https://www.skills.sh/hraness/product-skills/textmock) | First verified 2026-11-14 |
