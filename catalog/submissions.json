@@ -494,7 +494,7 @@
         "yaptake"
       ],
       "decision": "deferred",
-      "reason": "Every entry must already be published on ClawHub with passing tests, a clean security status and real community usage; brand-new skills are not accepted. Sponge, Textmock and Yaptake have been on ClawHub with clean scans since 15 November 2026 but have no community usage yet. Dawn is not published there.",
+      "reason": "Every entry must already be published on ClawHub with passing tests, a clean security status and real community usage; brand-new skills are not accepted. Sponge, Textmock and Yaptake have been on ClawHub with clean scans since 15 November 2026 but have no community usage yet. Dawn was submitted to ClawHub on 15 November and is pending publication.",
       "rulesUrl": "https://github.com/VoltAgent/awesome-openclaw-skills/blob/5492fcd98f7c52c69e1b2fa58790faf4fc90ce13/CONTRIBUTING.md",
       "reviewedAt": "2026-11-15T17:35:05.000Z",
       "sourceCommit": "5492fcd98f7c52c69e1b2fa58790faf4fc90ce13",
@@ -577,10 +577,10 @@
         "textmock",
         "yaptake"
       ],
-      "decision": "deferred",
-      "reason": "Listing requires a centralized HOL plugin scanner score of at least 75, and the plugin repository must contain SECURITY.md and dependency lockfiles. product-skills has neither file yet.",
+      "decision": "eligible",
+      "reason": "Listing requires a centralized HOL plugin scanner score of at least 75 plus SECURITY.md and dependency lockfiles. product-skills added both in PR 32; plugin-scanner 3.59.0 scores each plugin folder 84 to 85.",
       "rulesUrl": "https://github.com/hashgraph-online/awesome-codex-plugins/blob/8435b02b27b55500bf5b85da52001f57cac2ef6b/CONTRIBUTING.md",
-      "reviewedAt": "2026-11-15T16:36:34.000Z",
+      "reviewedAt": "2026-11-15T19:11:39.000Z",
       "sourceCommit": "8435b02b27b55500bf5b85da52001f57cac2ef6b",
       "reach": {
         "stars": 1577,
@@ -822,10 +822,10 @@
       "products": [
         "sponge"
       ],
-      "decision": "deferred",
-      "reason": "The subject and existing commercial/local-library entries fit. Its rules require first-hand experience, which should be tied to a current disposable-library CLI task before proposing a listing.",
+      "decision": "eligible",
+      "reason": "The subject and existing local-library entries fit. Its first-hand experience rule was met with a Sponge 0.41.0 trial on a disposable library on 15 November: save, search, read, highlight and comment.",
       "rulesUrl": "https://github.com/brettkromkamp/awesome-knowledge-management/blob/291fe063395e42d24e0a6c9c0fee1f0c551c9953/CONTRIBUTING.md",
-      "reviewedAt": "2026-11-15T10:11:04.095Z",
+      "reviewedAt": "2026-11-15T19:11:39.000Z",
       "sourceCommit": "291fe063395e42d24e0a6c9c0fee1f0c551c9953",
       "reach": {
         "stars": 891,
@@ -1141,6 +1141,51 @@
       "github": {
         "state": "open",
         "updatedAt": "2026-11-15T16:34:23.000Z",
+        "mergedAt": null
+      }
+    },
+    {
+      "id": "sponge-awesome-knowledge-management-143",
+      "products": [
+        "sponge"
+      ],
+      "channel": "github-collection",
+      "repository": "brettkromkamp/awesome-knowledge-management",
+      "repositoryId": 406408083,
+      "number": 143,
+      "url": "https://github.com/brettkromkamp/awesome-knowledge-management/pull/143",
+      "author": {
+        "login": "0thernet",
+        "id": 894119
+      },
+      "submittedAt": "2026-11-15T19:09:25.000Z",
+      "github": {
+        "state": "open",
+        "updatedAt": "2026-11-15T19:09:25.000Z",
+        "mergedAt": null
+      }
+    },
+    {
+      "id": "four-plugins-awesome-codex-plugins-726",
+      "products": [
+        "dawn",
+        "sponge",
+        "textmock",
+        "yaptake"
+      ],
+      "channel": "github-collection",
+      "repository": "hashgraph-online/awesome-codex-plugins",
+      "repositoryId": 1194181229,
+      "number": 726,
+      "url": "https://github.com/hashgraph-online/awesome-codex-plugins/pull/726",
+      "author": {
+        "login": "0thernet",
+        "id": 894119
+      },
+      "submittedAt": "2026-11-15T19:11:00.000Z",
+      "github": {
+        "state": "open",
+        "updatedAt": "2026-11-15T19:11:00.000Z",
         "mergedAt": null
       }
     }

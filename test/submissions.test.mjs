@@ -27,7 +27,7 @@ function network(values, failure = {}) {
 }
 
 test('one PR can cover several products while duplicate identities and unsafe searches fail', () => {
-  assert.equal(validateSubmissions(copy()).submissions.filter((row) => row.products.length === 4).length, 1);
+  assert.ok(validateSubmissions(copy()).submissions.some((row) => row.products.length === 4));
   const duplicate = copy(); duplicate.submissions.push({ ...duplicate.submissions[0], id: 'different-id' }); assert.throws(() => validateSubmissions(duplicate), /duplicate pull request/);
   for (const mutate of [
     (value) => { value.submissions[0].url += '?token=secret'; },
