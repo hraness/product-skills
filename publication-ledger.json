@@ -126,6 +126,42 @@
       "url": "https://clawhub.ai/hraness/skills/yaptake",
       "version": "0.1.1",
       "contentHash": "16774b00eacb1b875f8fa03f007e1675a86dfa8be867c72d526e953b0ee6569a"
+    },
+    {
+      "id": "dawn-github-0-1-2-d409b517",
+      "product": "dawn",
+      "channel": "github",
+      "publishedAt": "2026-11-15T18:18:36.000Z",
+      "url": "https://github.com/hraness/product-skills/releases/tag/integrations-259528199c5f21fa",
+      "version": "0.1.2",
+      "contentHash": "d409b5177c9ce0a4e7befdb939dded7523a0d0f82ba0086d46eca6aa9b3ca691"
+    },
+    {
+      "id": "sponge-github-0-1-3-349b74d9",
+      "product": "sponge",
+      "channel": "github",
+      "publishedAt": "2026-11-15T18:18:36.000Z",
+      "url": "https://github.com/hraness/product-skills/releases/tag/integrations-259528199c5f21fa",
+      "version": "0.1.3",
+      "contentHash": "349b74d9533f9e2f6824d04cc145600fda32d7f84a56999cb97beb8b4bb86ef8"
+    },
+    {
+      "id": "textmock-github-0-1-2-6ef0b55c",
+      "product": "textmock",
+      "channel": "github",
+      "publishedAt": "2026-11-15T18:18:36.000Z",
+      "url": "https://github.com/hraness/product-skills/releases/tag/integrations-259528199c5f21fa",
+      "version": "0.1.2",
+      "contentHash": "6ef0b55ce848747e2a1191585a0198638a3a8c5737b2064da81e4b274fae4ca5"
+    },
+    {
+      "id": "yaptake-github-0-1-2-2eb965e9",
+      "product": "yaptake",
+      "channel": "github",
+      "publishedAt": "2026-11-15T18:18:36.000Z",
+      "url": "https://github.com/hraness/product-skills/releases/tag/integrations-259528199c5f21fa",
+      "version": "0.1.2",
+      "contentHash": "2eb965e9f52193765186cf3faa4d9ffee6532012870bdac81e665c48c90f1968"
     }
   ]
 }
