@@ -66,15 +66,15 @@
         "yaptake"
       ],
       "decision": "eligible",
-      "reason": "Native released video editor fits Audio and Video Tools; four language files are required and AI-assisted additions are welcome. No existing product entry or prior suggestion was found.",
-      "rulesUrl": "https://github.com/jaywcjlove/awesome-mac/blob/7241efb1aa9841083728ca1a8da25ef011e83f13/docs/CONTRIBUTING.md",
-      "reviewedAt": "2026-11-15T10:11:04.095Z",
-      "sourceCommit": "7241efb1aa9841083728ca1a8da25ef011e83f13",
+      "reason": "Native released video editor fits Audio and Video Tools. Each entry goes in all five language files, and AI-assisted additions are welcome. No existing product entry or prior suggestion was found.",
+      "rulesUrl": "https://github.com/jaywcjlove/awesome-mac/blob/2c48d00c5267d0833e3a29b645662c1c982a4659/docs/CONTRIBUTING.md",
+      "reviewedAt": "2026-11-15T14:37:05.000Z",
+      "sourceCommit": "2c48d00c5267d0833e3a29b645662c1c982a4659",
       "reach": {
-        "stars": 118567,
-        "forks": 10314,
-        "watchers": 1504,
-        "pushedAt": "2026-11-15T02:47:28.000Z",
+        "stars": 118583,
+        "forks": 10319,
+        "watchers": 1505,
+        "pushedAt": "2026-11-15T11:16:09.000Z",
         "archived": false
       }
     },
@@ -84,9 +84,9 @@
         "sponge"
       ],
       "decision": "eligible",
-      "reason": "The contribution guide allows a public homepage without a clonable source repository. One CSV row fits Note taking; app source stays private. No prior product-name or domain suggestion was found.",
+      "reason": "The contribution guide allows a public homepage without a clonable source repository. One CSV row fits Note taking; app source stays private. No prior product-name or domain suggestion was found. Merges are infrequent: three from July to November 2026, with more than 100 pull requests open.",
       "rulesUrl": "https://github.com/toolleeo/awesome-cli-apps-in-a-csv/blob/ecedca3e17ca879ddb204cd68752940e168f2616/CONTRIBUTING.md",
-      "reviewedAt": "2026-11-15T10:11:04.095Z",
+      "reviewedAt": "2026-11-15T14:37:05.000Z",
       "sourceCommit": "ecedca3e17ca879ddb204cd68752940e168f2616",
       "reach": {
         "stars": 2681,
@@ -390,6 +390,48 @@
       "github": {
         "state": "open",
         "updatedAt": "2026-11-15T01:16:59.000Z",
+        "mergedAt": null
+      }
+    },
+    {
+      "id": "yaptake-awesome-mac-4643",
+      "products": [
+        "yaptake"
+      ],
+      "channel": "github-collection",
+      "repository": "jaywcjlove/awesome-mac",
+      "repositoryId": 63539055,
+      "number": 4643,
+      "url": "https://github.com/jaywcjlove/awesome-mac/pull/4643",
+      "author": {
+        "login": "0thernet",
+        "id": 894119
+      },
+      "submittedAt": "2026-11-15T14:35:13.000Z",
+      "github": {
+        "state": "open",
+        "updatedAt": "2026-11-15T14:35:13.000Z",
+        "mergedAt": null
+      }
+    },
+    {
+      "id": "sponge-awesome-cli-apps-csv-656",
+      "products": [
+        "sponge"
+      ],
+      "channel": "github-collection",
+      "repository": "toolleeo/awesome-cli-apps-in-a-csv",
+      "repositoryId": 94945792,
+      "number": 656,
+      "url": "https://github.com/toolleeo/awesome-cli-apps-in-a-csv/pull/656",
+      "author": {
+        "login": "0thernet",
+        "id": 894119
+      },
+      "submittedAt": "2026-11-15T14:36:08.000Z",
+      "github": {
+        "state": "open",
+        "updatedAt": "2026-11-15T14:36:08.000Z",
         "mergedAt": null
       }
     }
