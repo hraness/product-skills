@@ -231,6 +231,40 @@ directory in weekly grouped GitHub Actions Dependabot updates. This repository
 also tracks the composite action's own pinned dependencies. Verify the caller's
 actual PR, branch-refresh and main-check event flow after setup.
 
+## Track collection proposals
+
+[`catalog/submissions.json`](../catalog/submissions.json) keeps one record per
+GitHub proposal, including a shared proposal for several products. Its saved
+searches cover each product and its reviewed targets retain the exact
+contribution-rule commit. [`SUBMISSIONS.md`](SUBMISSIONS.md) is generated from
+that catalog, the publication ledger, directory observations and package status.
+No separate copy of a publication date needs updating.
+
+Run `node scripts/submissions.mjs search PRODUCT` for a saved public repository
+search. Read the contribution rules and search existing issues and PRs before
+preparing an entry. The command prints at most 20 results per query and marks
+limited or incomplete results. Stars and forks are public activity counts;
+they do not measure visitors or referral traffic. Human-only or adoption rules
+remain binding even when the project otherwise fits.
+
+Run `node scripts/submissions.mjs refresh` to prepare provider status updates.
+The reader makes only fixed public GitHub GET requests, with no credentials,
+redirects, issue comments or external PR creation. It verifies the target's
+numeric repository identity, original author, PR number, address and creation
+time. All saved PRs must verify before statuses change. Existing submission
+identities and first dates cannot be removed or rewritten by an ordinary update.
+The first catalog can be added to a governed base that has no such file.
+
+The daily `Refresh public submission states` workflow uses the existing scoped
+App and protected update path. A pending App proposal keeps a later verified
+provider state; current main keeps the search strategy, review decisions and
+submission identities. An unchanged read changes no timestamp. Failed reads
+preserve the records and fail the workflow visibly. Product and publication
+updates also regenerate the index. Provider status and the generated index do
+not alter product ZIP bytes or increment an integration version. The generated
+index is excluded from the tooling source hash so a status change alone does not
+create another tooling release.
+
 ## Prepare a directory submission
 
 Use the product's standalone ZIP and its README as the starting point. Test a

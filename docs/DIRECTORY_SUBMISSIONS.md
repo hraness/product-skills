@@ -1,5 +1,8 @@
 # Submit a product integration
 
+Check the [submission index](SUBMISSIONS.md) for prior proposals, verified listings
+and saved collection searches before starting another submission.
+
 Each product is a separate plugin in this repository's `hraness-products`
 marketplace. Its generated README contains install commands and product setup;
 its manifest contains the current description, integration version and icon.

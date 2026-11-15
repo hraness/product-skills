@@ -7,6 +7,7 @@ import { promisify } from 'node:util';
 import { raycastFileMode, raycastPath, renderRaycast } from './raycast.mjs';
 import { agentInstallInstructions, fetchListingIcon, listingIconBytes, listingIconPath, listingInterface, validateListingPNG } from './listing.mjs';
 import { renderSpongeSupport, spongeClaudeServer, spongePortableServer } from './sponge.mjs';
+import { SUBMISSIONS_INDEX, checkSubmissionHistory, readGovernedSubmissions, readSubmissions, renderSubmissions } from './submissions.mjs';
 import { DIRECTORY_FILE, initialDirectoryObservations, mergePendingDirectoryObservations, observeDirectories, readDirectoryObservations, readDirectorySources, sourceSkillIdentity, validateDirectoryObservations } from './skills-sh-observer.mjs';
 
 export const PRODUCTS = Object.freeze({ dawn: { name: 'Dawn', url: 'https://dawnav.com' }, yaptake: { name: 'Yaptake', url: 'https://yaptake.com' }, textmock: { name: 'Textmock', url: 'https://textmock.com' }, sponge: { name: 'Sponge', url: 'https://sponge.computer' } });
@@ -204,7 +205,7 @@ export async function reconcile({ state, bundles, portfolio, selected, fetchImpl
   return { state: nextState, bundles: nextBundles, outcomes, changed: outcomes.some((r) => r.status === 'updated') };
 }
 function pluginVersion(entry) { return `0.1.${entry.revision - 1}`; }
-export function render(state, bundles, portfolio, ledger = { schemaVersion: 1, publications: [] }, directories = initialDirectoryObservations()) {
+export function render(state, bundles, portfolio, ledger = { schemaVersion: 1, publications: [] }, directories = initialDirectoryObservations(), submissions = null) {
   stateCheck(state); validatePortfolio(portfolio); validateLedger(ledger); validateDirectoryObservations(directories); const output = {};
   const ids = Object.keys(state.products).sort();
   const openai = []; const claude = []; const cursor = [];
@@ -248,7 +249,8 @@ export function render(state, bundles, portfolio, ledger = { schemaVersion: 1, p
     const source = sourceSkillIdentity(id, skillFiles); const observation = directories.observations.find((row) => row.product === id);
     return [id, { version, contentHash: state.products[id].contentHash, artifactHash, github: published('github') ? 'published' : 'release_required', skillsSh: observation?.sourceSkillHash === source.sourceSkillHash ? 'listed' : 'listing_verification_required', skillsShFirstVerifiedAt: observation?.firstVerifiedAt ?? null, chatgpt: published('chatgpt') ? 'published' : bundles[id].manifest.mcp ? 'eligibility_and_review_required' : 'review_required', claude: published('claude') ? 'published' : 'review_required', cursor: published('cursor') ? 'published' : 'review_required' }];
   })) });
-  output['README.md'] = `# Hraness product skills\n\nSkills for working with [Hraness](https://hraness.com) products from a coding agent. Each package explains its workflow, setup and first task.\n\n${ids.length ? '## Product packages\n\n' + ids.map((id) => `- [${PRODUCTS[id].name}](plugins/${id}/README.md): ${portfolio.projects.find((p) => p.id === id).short}`).join('\n') + '\n\nRead the product package for its app, command and access requirements.\n\n```sh\nnpx skills add hraness/product-skills\n```\n\nChoose the product skill during installation, then follow its setup and first task. ' : 'Product packages are being prepared. ' }${ids.includes('sponge') ? "Use Sponge's [Raycast commands](adapters/raycast/README.md) to queue URLs and search saved text.\n\n" : ''}A package available here may still be awaiting directory review or host testing. See [package status](catalog/store-status.json), [skills.sh listing observations](docs/DIRECTORY_OBSERVATIONS.md) and [verified publications](publication-ledger.json).\n\n## Product pages\n\n${portfolio.projects.map((p) => `- [${p.name}](${p.url}): ${p.short}`).join('\n')}\n\n## Check a package\n\nUse Node.js 24. Run \`npm run check\` to validate sources, generated copies and package metadata. \`npm run package\` writes deterministic plugin ZIPs and \`SHA256SUMS\` under \`dist/\`. The package license covers these skills and integration files; product applications have their own terms.\n\n[Maintain packages](docs/MAINTAINING.md) · [Prepare a directory submission](docs/DIRECTORY_SUBMISSIONS.md) · [MIT license](LICENSE)\n`;
+  output['README.md'] = `# Hraness product skills\n\nSkills for working with [Hraness](https://hraness.com) products from a coding agent. Each package explains its workflow, setup and first task.\n\n${ids.length ? '## Product packages\n\n' + ids.map((id) => `- [${PRODUCTS[id].name}](plugins/${id}/README.md): ${portfolio.projects.find((p) => p.id === id).short}`).join('\n') + '\n\nRead the product package for its app, command and access requirements.\n\n```sh\nnpx skills add hraness/product-skills\n```\n\nChoose the product skill during installation, then follow its setup and first task. ' : 'Product packages are being prepared. ' }${ids.includes('sponge') ? "Use Sponge's [Raycast commands](adapters/raycast/README.md) to queue URLs and search saved text.\n\n" : ''}A package available here may still be awaiting directory review or host testing. See [package status](catalog/store-status.json), [skills.sh listing observations](docs/DIRECTORY_OBSERVATIONS.md) and [verified publications](publication-ledger.json).\n\n## Product pages\n\n${portfolio.projects.map((p) => `- [${p.name}](${p.url}): ${p.short}`).join('\n')}\n\n## Check a package\n\nUse Node.js 24. Run \`npm run check\` to validate sources, generated copies and package metadata. \`npm run package\` writes deterministic plugin ZIPs and \`SHA256SUMS\` under \`dist/\`. The package license covers these skills and integration files; product applications have their own terms.\n\n[Maintain packages](docs/MAINTAINING.md) · [Prepare a directory submission](docs/DIRECTORY_SUBMISSIONS.md) · [Submission index](docs/SUBMISSIONS.md) · [MIT license](LICENSE)\n`;
+  if (submissions) output[SUBMISSIONS_INDEX] = renderSubmissions(submissions, { ledger, directories, stores: JSON.parse(output['catalog/store-status.json']).products });
   return output;
 }
 export function renderedPackageFingerprint(id, entry, bundle, portfolio, { renderer = render, archive = zip } = {}) {
@@ -314,18 +316,26 @@ async function load(root) {
   for (const id of Object.keys(state.products)) bundles[id] = validateBundle(await readFile(join(root, `bundles/${id}.json`), 'utf8'), id);
   const ledger = validateLedger(await read('publication-ledger.json'));
   const directories = await readDirectoryObservations(root);
-  return { state, portfolio, bundles, ledger, directories };
+  let submissions = null; try { submissions = await readSubmissions(root); } catch (error) { if (error.code !== 'ENOENT') throw error; }
+  return { state, portfolio, bundles, ledger, directories, submissions };
 }
 export async function refreshRendered(root = process.cwd()) {
   const data = await load(root);
-  await writeRendered(root, render(data.state, data.bundles, data.portfolio, data.ledger, data.directories));
+  await writeRendered(root, render(data.state, data.bundles, data.portfolio, data.ledger, data.directories, data.submissions));
+}
+export async function updateSubmissionCatalog(root, submissions) {
+  const data = await load(root);
+  const before = render(data.state, data.bundles, data.portfolio, data.ledger, data.directories, data.submissions);
+  const output = render(data.state, data.bundles, data.portfolio, data.ledger, data.directories, submissions);
+  if (data.submissions) checkSubmissionHistory(data.submissions, submissions);
+  await writeFile(join(root, 'catalog/submissions.json'), json(submissions)); await writeRendered(root, output, before);
 }
 export async function recordDirectories({ root = process.cwd(), fetchImpl = fetch, now = Date.now } = {}) {
   await mkdir(join(root, 'dist'), { recursive: true });
   try {
-    const data = await load(root); const before = render(data.state, data.bundles, data.portfolio, data.ledger, data.directories);
+    const data = await load(root); const before = render(data.state, data.bundles, data.portfolio, data.ledger, data.directories, data.submissions);
     const result = await observeDirectories(data.directories, await readDirectorySources(root), { fetchImpl, now });
-    const output = render(data.state, data.bundles, data.portfolio, data.ledger, result.observations);
+    const output = render(data.state, data.bundles, data.portfolio, data.ledger, result.observations, data.submissions);
     const report = { ...result.report, observationsHash: digest(canonical(result.observations)) };
     await writeFile(join(root, DIRECTORY_FILE), json(result.observations)); await writeRendered(root, output, before);
     await writeFile(join(root, 'dist/directory-observation.json'), json(report)); return report;
@@ -337,8 +347,8 @@ async function tree(root, path) {
   const output = []; let entries; try { const info = await lstat(join(root, path)); need(info.isDirectory() && !info.isSymbolicLink(), 'Package roots must be regular directories'); entries = await readdir(join(root, path), { withFileTypes: true }); } catch (e) { if (e.code === 'ENOENT') return output; throw e; }
   for (const entry of entries) { need(!entry.isSymbolicLink(), 'Symlink is not admitted'); const p = `${path}/${entry.name}`; if (entry.isDirectory()) output.push(...await tree(root, p)); else { need(entry.isFile(), 'Non-file package entry'); output.push(p); } } return output;
 }
-async function toolSourceHash(root) {
-  const paths = ['package.json', 'AGENTS.md', 'CLAUDE.md', 'LICENSE', 'CONTRIBUTING.md', 'STYLE.md', 'WRITING.md', 'GENERATION_STYLE.md', 'MESSAGING.md', 'DOCUMENTATION_GUIDELINES.md', 'README_GUIDELINES.md', 'config/sources.json', ...await tree(root, 'scripts'), ...await tree(root, 'actions'), ...await tree(root, '.github/workflows'), ...await tree(root, 'test'), ...await tree(root, 'docs')].sort();
+export async function toolSourceHash(root) {
+  const paths = ['package.json', 'AGENTS.md', 'CLAUDE.md', 'LICENSE', 'CONTRIBUTING.md', 'STYLE.md', 'WRITING.md', 'GENERATION_STYLE.md', 'MESSAGING.md', 'DOCUMENTATION_GUIDELINES.md', 'README_GUIDELINES.md', 'config/sources.json', ...await tree(root, 'scripts'), ...await tree(root, 'actions'), ...await tree(root, '.github/workflows'), ...await tree(root, 'test'), ...await tree(root, 'docs')].filter((path) => path !== SUBMISSIONS_INDEX).sort();
   const sources = {};
   for (const path of paths) { need((await lstat(join(root, path))).isFile(), 'Toolkit source must be a regular file'); sources[path] = digest(await readFile(join(root, path))); }
   return digest(canonical(sources));
@@ -402,7 +412,7 @@ export async function recordGithub(ledger, releasePlan, { fetchImpl = fetch, tok
 export async function main(argv = process.argv.slice(2), root = process.cwd()) {
   const [command, ...rest] = argv; need(rest.length === 0 && ['check', 'reconcile', 'package', 'record-github', 'record-registry', 'record-homebrew', 'record-directories'].includes(command), 'Use check, reconcile, package, record-github, record-registry, record-homebrew or record-directories');
   if (command === 'record-directories') { process.stdout.write(json(await recordDirectories({ root }))); return; }
-  let data = await load(root); const before = render(data.state, data.bundles, data.portfolio, data.ledger, data.directories);
+  let data = await load(root); const before = render(data.state, data.bundles, data.portfolio, data.ledger, data.directories, data.submissions);
   if (command === 'check') {
     checkPackageFingerprints(data.state, data.bundles, data.portfolio);
     await checkRendered(root, before);
@@ -411,6 +421,8 @@ export async function main(argv = process.argv.slice(2), root = process.cwd()) {
     if (process.env.LEDGER_BASE_SHA) {
       checkLedgerAppendOnly(await readGovernedLedger(root, process.env.LEDGER_BASE_SHA), ledger);
       checkDirectoryDates(await readGovernedDirectories(root, process.env.LEDGER_BASE_SHA), data.directories);
+      const baselineSubmissions = await readGovernedSubmissions(root, process.env.LEDGER_BASE_SHA);
+      if (baselineSubmissions) { need(data.submissions, 'The submission catalog cannot be removed'); checkSubmissionHistory(baselineSubmissions, data.submissions); }
     }
     process.stdout.write(`${Object.keys(data.state.products).length} product packages checked.\n`); return;
   }
@@ -418,8 +430,8 @@ export async function main(argv = process.argv.slice(2), root = process.cwd()) {
     const config = JSON.parse(await readFile(join(root, 'config/sources.json'), 'utf8')); keys(config, ['schemaVersion', 'portfolio', 'selected']); need(config.schemaVersion === 1 && config.portfolio === 'https://hraness.com/portfolio.json', 'Unexpected source configuration');
     const portfolio = validatePortfolio(JSON.parse((await download(config.portfolio)).body));
     const result = await reconcile({ ...data, portfolio, selected: config.selected });
-    data = { state: result.state, bundles: result.bundles, portfolio, ledger: data.ledger, directories: data.directories };
-    const output = render(data.state, data.bundles, data.portfolio, data.ledger, data.directories);
+    data = { state: result.state, bundles: result.bundles, portfolio, ledger: data.ledger, directories: data.directories, submissions: data.submissions };
+    const output = render(data.state, data.bundles, data.portfolio, data.ledger, data.directories, data.submissions);
     // Every input and generated output is validated before the first source write.
     await mkdir(join(root, 'bundles'), { recursive: true });
     for (const [id, bundle] of Object.entries(data.bundles)) await writeFile(join(root, `bundles/${id}.json`), json(bundle));
@@ -431,7 +443,7 @@ export async function main(argv = process.argv.slice(2), root = process.cwd()) {
     try {
       const { observeMcpRegistry } = await import('./mcp-registry.mjs');
       const result = await observeMcpRegistry(data.ledger);
-      const output = render(data.state, data.bundles, data.portfolio, result.ledger, data.directories);
+      const output = render(data.state, data.bundles, data.portfolio, result.ledger, data.directories, data.submissions);
       await writeFile(join(root, 'publication-ledger.json'), json(result.ledger)); await writeRendered(root, output, before);
       await writeFile(join(root, 'dist/registry-observation.json'), json(result.report)); process.stdout.write(json(result.report));
     } catch (error) {
@@ -445,7 +457,7 @@ export async function main(argv = process.argv.slice(2), root = process.cwd()) {
     try {
       const { observeHomebrew, readHomebrewCursor } = await import('./homebrew-observer.mjs');
       const result = await observeHomebrew(data.ledger, await readHomebrewCursor(root));
-      const output = render(data.state, data.bundles, data.portfolio, result.ledger, data.directories);
+      const output = render(data.state, data.bundles, data.portfolio, result.ledger, data.directories, data.submissions);
       await writeFile(join(root, 'publication-ledger.json'), json(result.ledger)); await writeFile(join(root, HOMEBREW_TAP.cursor), json(result.cursor)); await writeRendered(root, output, before);
       await writeFile(join(root, 'dist/homebrew-observation.json'), json(result.report)); process.stdout.write(json(result.report));
     } catch (error) {
@@ -461,7 +473,7 @@ export async function main(argv = process.argv.slice(2), root = process.cwd()) {
     const ledger = JSON.parse(await readFile(join(root, 'publication-ledger.json'), 'utf8'));
     const updated = await recordGithub(ledger, plan, { token: process.env.GH_TOKEN });
     await writeFile(join(root, 'publication-ledger.json'), json(updated));
-    await writeRendered(root, render(data.state, data.bundles, data.portfolio, updated, data.directories), before);
+    await writeRendered(root, render(data.state, data.bundles, data.portfolio, updated, data.directories, data.submissions), before);
   }
   process.stdout.write(json({ tag: plan.tag, products: plan.products }));
 }
