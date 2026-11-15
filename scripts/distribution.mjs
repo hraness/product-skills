@@ -6,6 +6,7 @@ import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 import { raycastFileMode, raycastPath, renderRaycast } from './raycast.mjs';
 import { agentInstallInstructions, fetchListingIcon, listingIconBytes, listingIconPath, listingInterface, validateListingPNG } from './listing.mjs';
+import { CLAUDE_DIRECTORY_ROOT, claudeDirectoryFiles } from './claude-directory.mjs';
 import { renderSpongeSupport, spongeClaudeServer, spongePortableServer } from './sponge.mjs';
 import { SUBMISSIONS_INDEX, checkSubmissionHistory, readGovernedSubmissions, readSubmissions, renderSubmissions } from './submissions.mjs';
 import { DIRECTORY_FILE, initialDirectoryObservations, mergePendingDirectoryObservations, observeDirectories, readDirectoryObservations, readDirectorySources, sourceSkillIdentity, validateDirectoryObservations } from './skills-sh-observer.mjs';
@@ -240,6 +241,8 @@ export function render(state, bundles, portfolio, ledger = { schemaVersion: 1, p
     output[`${base}/plugin.json`] = json({ $schema: PLUGIN_SCHEMA, ...common, extensions: { 'com.openai': oa } });
     output[`${base}/.codex-plugin/plugin.json`] = json({ ...common, skills: './skills/', ...oa, ...(m.mcp ? { mcpServers: id === 'sponge' ? './mcp.codex.json' : './.mcp.json' } : {}) });
     output[`${base}/.claude-plugin/plugin.json`] = json({ ...common, displayName: m.product.name, ...LISTING_LINKS[id], skills: './skills/', ...(e.listingIcon ? { icon: './assets/icon.png' } : {}) });
+    const directoryCopy = claudeDirectoryFiles(id, bundle.files, { manifest: output[`${base}/.claude-plugin/plugin.json`], icon: e.listingIcon ? output[`${base}/assets/icon.png`] : null });
+    if (directoryCopy) for (const [path, value] of Object.entries(directoryCopy)) output[`${CLAUDE_DIRECTORY_ROOT}/${id}/${path}`] = value;
     output[`${base}/.cursor-plugin/plugin.json`] = json({ ...common, skills: './skills/', ...(e.listingIcon ? { logo: './assets/icon.png' } : {}), ...(m.mcp ? { mcpServers: './.mcp.json' } : {}) });
     if (m.mcp) {
       const servers = { [id]: id === 'sponge' ? spongePortableServer() : { type: 'stdio', command: m.mcp.command, args: m.mcp.args } };
@@ -284,7 +287,7 @@ export function checkPackageFingerprints(state, bundles, portfolio, options = {}
 }
 export async function checkRendered(root, output) {
   for (const [path, expected] of Object.entries(output)) { const target = join(root, path); const info = await lstat(target); need(info.isFile() && !info.isSymbolicLink() && Boolean(info.mode & 0o111) === (raycastFileMode(path) === '100755'), 'Generated file type or executable mode differs'); need((await readFile(target)).equals(Buffer.isBuffer(expected) ? expected : Buffer.from(expected)), `Generated file is stale: ${path}`); }
-  for (const path of [...await tree(root, 'plugins'), ...await tree(root, 'skills'), ...await tree(root, 'adapters')]) need(Object.hasOwn(output, path), `Unexpected package file: ${path}`);
+  for (const path of [...await tree(root, 'plugins'), ...await tree(root, 'skills'), ...await tree(root, 'adapters'), ...await tree(root, CLAUDE_DIRECTORY_ROOT)]) need(Object.hasOwn(output, path), `Unexpected package file: ${path}`);
 }
 async function safeTarget(root, path) {
   need(!path.startsWith('/') && path.split('/').every((p) => p && p !== '.' && p !== '..' && /^[A-Za-z0-9_.-]+$/.test(p)), 'Unsafe output path');
@@ -293,7 +296,7 @@ async function safeTarget(root, path) {
   return target;
 }
 export async function writeRendered(root, output, previous = {}) {
-  for (const path of Object.keys(previous)) if (!Object.hasOwn(output, path)) { need(path.startsWith('plugins/') || path.startsWith('skills/') || raycastPath(path), 'Refusing to remove a non-package file'); await rm(await safeTarget(root, path)); }
+  for (const path of Object.keys(previous)) if (!Object.hasOwn(output, path)) { need(path.startsWith('plugins/') || path.startsWith('skills/') || path.startsWith(`${CLAUDE_DIRECTORY_ROOT}/`) || raycastPath(path), 'Refusing to remove a non-package file'); await rm(await safeTarget(root, path)); }
   for (const [path, value] of Object.entries(output)) { need(typeof value === 'string' || Buffer.isBuffer(value) && listingIconPath(path), 'Only selected listing icons may contain binary data'); if (Buffer.isBuffer(value)) validateListingPNG(value); const target = await safeTarget(root, path); const temp = `${target}.new-${process.pid}`; await writeFile(temp, value, { flag: 'wx', mode: raycastFileMode(path) === '100755' ? 0o755 : 0o644 }); await rename(temp, target); }
 }
 function crc32(buffer) { let crc = 0xffffffff; for (const value of buffer) { crc ^= value; for (let i = 0; i < 8; i++) crc = (crc >>> 1) ^ (0xedb88320 & -(crc & 1)); } return (crc ^ 0xffffffff) >>> 0; }

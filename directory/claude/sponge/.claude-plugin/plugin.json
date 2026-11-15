@@ -1,0 +1,17 @@
+{
+  "name": "sponge",
+  "version": "0.1.3",
+  "description": "Save articles and PDFs to a reading library captured by a computer you control. Highlight passages, keep notes, and find ideas through search or your coding agent.",
+  "author": {
+    "name": "Hraness",
+    "url": "https://hraness.com"
+  },
+  "homepage": "https://sponge.computer/docs/agents",
+  "repository": "https://github.com/hraness/product-skills",
+  "license": "MIT",
+  "displayName": "Sponge",
+  "privacyPolicyUrl": "https://sponge.computer/privacy",
+  "supportUrl": "https://sponge.computer/support",
+  "skills": "./skills/",
+  "icon": "./assets/icon.png"
+}
