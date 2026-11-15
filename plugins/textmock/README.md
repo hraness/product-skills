@@ -29,3 +29,25 @@ The helper accepts `name`, `messages`, optional `dark` and optional `clock`. Eac
 The helper encodes conversation content in the fragment after `#`, which browsers omit from navigation requests. Anyone with the complete link can read it. Keep full links out of logs when they contain private material.
 
 Read [Use Textmock from an agent](https://textmock.com/docs/agents) for the browser API and Mac command, or the [conversation format](https://textmock.com/docs/conversation-format) for the app's full document shape. The MIT license covers this skill and helper; the Textmock application has its own terms.
+
+## Add the skill to an agent
+
+Set up the product as described above, then install its integration files.
+
+For Codex CLI:
+
+```sh
+codex plugin marketplace add https://github.com/hraness/product-skills.git
+codex plugin add textmock@hraness-products
+```
+
+In Claude Code:
+
+```text
+/plugin install textmock --marketplace hraness/product-skills
+```
+
+A Cursor team marketplace administrator can import
+`https://github.com/hraness/product-skills`, then select this product. See
+[Cursor's repository import instructions](https://cursor.com/docs/plugins#add-a-team-marketplace).
+These repository installs are separate from public directory approval.

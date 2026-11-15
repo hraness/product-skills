@@ -5,6 +5,8 @@ import { pathToFileURL } from 'node:url';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 import { raycastFileMode, raycastPath, renderRaycast } from './raycast.mjs';
+import { agentInstallInstructions, fetchListingIcon, listingIconBytes, listingIconPath, listingInterface, validateListingPNG } from './listing.mjs';
+import { renderSpongeSupport, spongeClaudeServer, spongePortableServer } from './sponge.mjs';
 
 export const PRODUCTS = Object.freeze({ dawn: { name: 'Dawn', url: 'https://dawnav.com' }, yaptake: { name: 'Yaptake', url: 'https://yaptake.com' }, textmock: { name: 'Textmock', url: 'https://textmock.com' }, sponge: { name: 'Sponge', url: 'https://sponge.computer' } });
 export const MCP_REGISTRY = Object.freeze({ origin: 'https://registry.modelcontextprotocol.io', name: 'io.github.hraness/sponge', product: 'sponge' });
@@ -157,12 +159,13 @@ function stateCheck(state) {
   keys(state, ['schemaVersion', 'products']); need(state.schemaVersion === 1 && object(state.products), 'Invalid admitted catalog');
   for (const [id, entry] of Object.entries(state.products)) {
     need(Object.hasOwn(PRODUCTS, id), 'Unknown admitted product');
-    keys(entry, ['contentHash', 'sourceHash', 'revision', 'runtimeVersion', 'runtimeBuild', 'etag', 'qualification'], ['packageFingerprint', 'integrationFormat', 'presentationHash']);
+    keys(entry, ['contentHash', 'sourceHash', 'revision', 'runtimeVersion', 'runtimeBuild', 'etag', 'qualification'], ['packageFingerprint', 'integrationFormat', 'presentationHash', 'listingIcon']);
     need(/^[a-f0-9]{64}$/.test(entry.contentHash) && /^[a-f0-9]{64}$/.test(entry.sourceHash) && Number.isSafeInteger(entry.revision) && entry.revision >= 1 && entry.revision <= 1000000 && (entry.etag === null || (typeof entry.etag === 'string' && entry.etag.length <= 256 && !/[\r\n]/.test(entry.etag))) && (entry.runtimeBuild === null || (typeof entry.runtimeBuild === 'string' && /^[1-9]\d{0,8}$/.test(entry.runtimeBuild))), 'Invalid admitted identity');
     need(entry.packageFingerprint === undefined || /^[a-f0-9]{64}$/.test(entry.packageFingerprint), 'Invalid rendered package identity');
     // Legacy fields remain readable until the next successful reconciliation.
     need(entry.integrationFormat === undefined || (Number.isSafeInteger(entry.integrationFormat) && entry.integrationFormat >= 1 && entry.integrationFormat <= 1000000), 'Unsupported legacy integration format');
     need(entry.presentationHash === undefined || /^[a-f0-9]{64}$/.test(entry.presentationHash), 'Invalid product presentation identity');
+    if (entry.listingIcon !== undefined) listingIconBytes(entry.listingIcon, id);
     version(entry.runtimeVersion); const q = entry.qualification;
     if (q?.type === 'npm') { keys(q, ['type', 'package', 'version', 'integrity']); need(q.package === `@hraness/${id}` && q.version === entry.runtimeVersion && entry.runtimeBuild === null && /^sha512-[A-Za-z0-9+/=]+$/.test(q.integrity), 'Invalid npm qualification'); }
     else if (q?.type === 'app') { keys(q, ['type', 'sha256', 'metadataHash', 'feedHash']); need(id === 'yaptake' && entry.runtimeBuild !== null && ['sha256', 'metadataHash', 'feedHash'].every((key) => /^[a-f0-9]{64}$/.test(q[key])), 'Invalid app qualification'); }
@@ -188,13 +191,14 @@ export async function reconcile({ state, bundles, portfolio, selected, fetchImpl
         const qualification = previous?.contentHash === contentHash ? previous.qualification : await qualify(bundle, { fetchImpl });
         candidate = { contentHash, sourceHash: digest(response.body), revision: previous?.revision ?? 1, runtimeVersion: runtime.version, runtimeBuild: runtime.build ?? null, etag: response.etag, qualification };
       }
+      candidate.listingIcon = await fetchListingIcon(portfolio.projects.find((project) => project.id === id), { previous: previous?.listingIcon, fetchImpl });
       delete candidate.integrationFormat; delete candidate.presentationHash;
       const fingerprint = renderedPackageFingerprint(id, candidate, bundle, portfolio, { renderer, archive });
       if (previous?.packageFingerprint === fingerprint) { outcomes.push({ id, status: 'unchanged' }); continue; }
       need(!previous || previous.revision < 1000000, 'Integration revision limit reached');
       nextState.products[id] = { ...candidate, revision: (previous?.revision ?? 0) + 1, packageFingerprint: fingerprint };
       nextBundles[id] = bundle; outcomes.push({ id, status: 'updated' });
-    } catch { outcomes.push({ id, status: 'pending', reason: 'Source, documentation or released runtime did not qualify; the admitted package was preserved.' }); }
+    } catch { outcomes.push({ id, status: 'pending', reason: 'Source, documentation, listing icon or released runtime did not qualify; the admitted package was preserved.' }); }
   }
   return { state: nextState, bundles: nextBundles, outcomes, changed: outcomes.some((r) => r.status === 'updated') };
 }
@@ -207,22 +211,26 @@ export function render(state, bundles, portfolio, ledger = { schemaVersion: 1, p
     const bundle = validateBundle(bundles[id], id); const e = state.products[id]; need(digest(canonical(bundle)) === e.contentHash, 'Admitted source hash mismatch');
     const m = bundle.manifest; need(m.runtime.version === e.runtimeVersion && (m.runtime.build ?? null) === e.runtimeBuild && m.runtime.install.type === e.qualification.type, 'Admitted runtime identity mismatch'); const version = pluginVersion(e); const base = `plugins/${id}`;
     for (const [path, value] of Object.entries(bundle.files)) output[`${base}/${path}`] = value;
+    output[`${base}/README.md`] = bundle.files['README.md'].trimEnd() + '\n\n' + agentInstallInstructions(id);
+    if (e.listingIcon) output[`${base}/assets/icon.png`] = listingIconBytes(e.listingIcon, id);
     for (const [path, value] of Object.entries(bundle.files)) if (path.startsWith(`skills/${id}/`)) output[path] = value;
     if (id === 'textmock') for (const prefix of ['', `${base}/`]) output[`${prefix}skills/textmock/scripts/textmock-link.mjs`] = bundle.files[TEXTMOCK_HELPER];
     if (id === 'sponge') {
+      for (const [path, value] of Object.entries(renderSpongeSupport(m))) output[`${base}/${path}`] = value;
       for (const [path, value] of Object.entries(renderRaycast(m, '../../README.md'))) output[base + '/adapters/raycast/' + path] = value;
       for (const [path, value] of Object.entries(renderRaycast(m, '../../plugins/sponge/README.md'))) output['adapters/raycast/' + path] = value;
     }
     const common = { name: id, version, description: m.product.description, author: { name: 'Hraness', url: 'https://hraness.com' }, homepage: m.product.agentGuideUrl, repository: REPOSITORY, license: 'MIT' };
-    const oa = { requires_local_executor: true, interface: { displayName: m.product.name, shortDescription: portfolio.projects.find((p) => p.id === id).short, developerName: 'Hraness', category: 'Productivity', websiteURL: m.product.url } };
+    const oa = { requires_local_executor: true, interface: listingInterface(m, portfolio.projects.find((p) => p.id === id), Boolean(e.listingIcon)) };
     output[`${base}/plugin.json`] = json({ $schema: PLUGIN_SCHEMA, ...common, extensions: { 'com.openai': oa } });
-    output[`${base}/.codex-plugin/plugin.json`] = json({ ...common, skills: './skills/', ...oa, ...(m.mcp ? { mcpServers: './.mcp.json' } : {}) });
-    output[`${base}/.claude-plugin/plugin.json`] = json({ ...common, displayName: m.product.name, skills: './skills/' });
-    output[`${base}/.cursor-plugin/plugin.json`] = json({ ...common, skills: './skills/', ...(m.mcp ? { mcpServers: './.mcp.json' } : {}) });
+    output[`${base}/.codex-plugin/plugin.json`] = json({ ...common, skills: './skills/', ...oa, ...(m.mcp ? { mcpServers: id === 'sponge' ? './mcp.codex.json' : './.mcp.json' } : {}) });
+    output[`${base}/.claude-plugin/plugin.json`] = json({ ...common, displayName: m.product.name, skills: './skills/', ...(e.listingIcon ? { icon: './assets/icon.png' } : {}) });
+    output[`${base}/.cursor-plugin/plugin.json`] = json({ ...common, skills: './skills/', ...(e.listingIcon ? { logo: './assets/icon.png' } : {}), ...(m.mcp ? { mcpServers: './.mcp.json' } : {}) });
     if (m.mcp) {
-      const servers = { [id]: { type: 'stdio', command: m.mcp.command, args: m.mcp.args } };
+      const servers = { [id]: id === 'sponge' ? spongePortableServer() : { type: 'stdio', command: m.mcp.command, args: m.mcp.args } };
       output[`${base}/mcp.json`] = json({ $schema: MCP_SCHEMA, mcpServers: servers });
-      output[`${base}/.mcp.json`] = json({ mcpServers: servers });
+      output[`${base}/.mcp.json`] = json({ mcpServers: id === 'sponge' ? { sponge: spongeClaudeServer() } : servers });
+      if (id === 'sponge') output[`${base}/mcp.codex.json`] = json({ mcpServers: servers });
     }
     output[`${base}/runtime.json`] = json(m.runtime);
     openai.push({ name: id, source: { source: 'local', path: `./${base}` }, policy: { installation: 'AVAILABLE', authentication: 'ON_INSTALL' }, category: 'Productivity' });
@@ -237,7 +245,7 @@ export function render(state, bundles, portfolio, ledger = { schemaVersion: 1, p
     const published = (channel) => ledger.publications.some((p) => p.product === id && p.channel === channel && p.version === version && p.contentHash === artifactHash);
     return [id, { version, contentHash: state.products[id].contentHash, artifactHash, github: published('github') ? 'published' : 'release_required', skillsSh: published('skills-sh') ? 'published' : 'public_install_required', chatgpt: published('chatgpt') ? 'published' : bundles[id].manifest.mcp ? 'eligibility_and_review_required' : 'review_required', claude: published('claude') ? 'published' : 'review_required', cursor: published('cursor') ? 'published' : 'review_required' }];
   })) });
-  output['README.md'] = `# Hraness product skills\n\nSkills for working with [Hraness](https://hraness.com) products from a coding agent. Each package explains its workflow, setup and first task.\n\n${ids.length ? '## Product packages\n\n' + ids.map((id) => `- [${PRODUCTS[id].name}](plugins/${id}/README.md): ${portfolio.projects.find((p) => p.id === id).short}`).join('\n') + '\n\nRead the product package for its app, command and access requirements.\n\n```sh\nnpx skills add hraness/product-skills\n```\n\nChoose the product skill during installation, then follow its setup and first task. ' : 'Product packages are being prepared. ' }${ids.includes('sponge') ? "Use Sponge's [Raycast commands](adapters/raycast/README.md) to queue URLs and search saved text.\n\n" : ''}A package available here may still be awaiting directory review or host testing. See [package status](catalog/store-status.json) and [verified publications](publication-ledger.json).\n\n## Product pages\n\n${portfolio.projects.map((p) => `- [${p.name}](${p.url}): ${p.short}`).join('\n')}\n\n## Check a package\n\nUse Node.js 24. Run \`npm run check\` to validate sources, generated copies and package metadata. \`npm run package\` writes deterministic plugin ZIPs and \`SHA256SUMS\` under \`dist/\`. The package license covers these skills and integration files; product applications have their own terms.\n\n[Maintain packages](docs/MAINTAINING.md) · [MIT license](LICENSE)\n`;
+  output['README.md'] = `# Hraness product skills\n\nSkills for working with [Hraness](https://hraness.com) products from a coding agent. Each package explains its workflow, setup and first task.\n\n${ids.length ? '## Product packages\n\n' + ids.map((id) => `- [${PRODUCTS[id].name}](plugins/${id}/README.md): ${portfolio.projects.find((p) => p.id === id).short}`).join('\n') + '\n\nRead the product package for its app, command and access requirements.\n\n```sh\nnpx skills add hraness/product-skills\n```\n\nChoose the product skill during installation, then follow its setup and first task. ' : 'Product packages are being prepared. ' }${ids.includes('sponge') ? "Use Sponge's [Raycast commands](adapters/raycast/README.md) to queue URLs and search saved text.\n\n" : ''}A package available here may still be awaiting directory review or host testing. See [package status](catalog/store-status.json) and [verified publications](publication-ledger.json).\n\n## Product pages\n\n${portfolio.projects.map((p) => `- [${p.name}](${p.url}): ${p.short}`).join('\n')}\n\n## Check a package\n\nUse Node.js 24. Run \`npm run check\` to validate sources, generated copies and package metadata. \`npm run package\` writes deterministic plugin ZIPs and \`SHA256SUMS\` under \`dist/\`. The package license covers these skills and integration files; product applications have their own terms.\n\n[Maintain packages](docs/MAINTAINING.md) · [Prepare a directory submission](docs/DIRECTORY_SUBMISSIONS.md) · [MIT license](LICENSE)\n`;
   return output;
 }
 export function renderedPackageFingerprint(id, entry, bundle, portfolio, { renderer = render, archive = zip } = {}) {
@@ -257,7 +265,7 @@ export function checkPackageFingerprints(state, bundles, portfolio, options = {}
   for (const [id, entry] of Object.entries(state.products)) need(entry.packageFingerprint === renderedPackageFingerprint(id, entry, bundles[id], portfolio, options), 'Reconcile changed rendered packages before checking or packaging');
 }
 export async function checkRendered(root, output) {
-  for (const [path, expected] of Object.entries(output)) { const target = join(root, path); const info = await lstat(target); need(info.isFile() && !info.isSymbolicLink() && Boolean(info.mode & 0o111) === (raycastFileMode(path) === '100755'), 'Generated file type or executable mode differs'); need(await readFile(target, 'utf8') === expected, `Generated file is stale: ${path}`); }
+  for (const [path, expected] of Object.entries(output)) { const target = join(root, path); const info = await lstat(target); need(info.isFile() && !info.isSymbolicLink() && Boolean(info.mode & 0o111) === (raycastFileMode(path) === '100755'), 'Generated file type or executable mode differs'); need((await readFile(target)).equals(Buffer.isBuffer(expected) ? expected : Buffer.from(expected)), `Generated file is stale: ${path}`); }
   for (const path of [...await tree(root, 'plugins'), ...await tree(root, 'skills'), ...await tree(root, 'adapters')]) need(Object.hasOwn(output, path), `Unexpected package file: ${path}`);
 }
 async function safeTarget(root, path) {
@@ -268,13 +276,14 @@ async function safeTarget(root, path) {
 }
 export async function writeRendered(root, output, previous = {}) {
   for (const path of Object.keys(previous)) if (!Object.hasOwn(output, path)) { need(path.startsWith('plugins/') || path.startsWith('skills/') || raycastPath(path), 'Refusing to remove a non-package file'); await rm(await safeTarget(root, path)); }
-  for (const [path, value] of Object.entries(output)) { const target = await safeTarget(root, path); const temp = `${target}.new-${process.pid}`; await writeFile(temp, value, { flag: 'wx', mode: raycastFileMode(path) === '100755' ? 0o755 : 0o644 }); await rename(temp, target); }
+  for (const [path, value] of Object.entries(output)) { need(typeof value === 'string' || Buffer.isBuffer(value) && listingIconPath(path), 'Only selected listing icons may contain binary data'); if (Buffer.isBuffer(value)) validateListingPNG(value); const target = await safeTarget(root, path); const temp = `${target}.new-${process.pid}`; await writeFile(temp, value, { flag: 'wx', mode: raycastFileMode(path) === '100755' ? 0o755 : 0o644 }); await rename(temp, target); }
 }
 function crc32(buffer) { let crc = 0xffffffff; for (const value of buffer) { crc ^= value; for (let i = 0; i < 8; i++) crc = (crc >>> 1) ^ (0xedb88320 & -(crc & 1)); } return (crc ^ 0xffffffff) >>> 0; }
 export function zip(files) {
   const local = []; const central = []; let offset = 0;
   for (const path of Object.keys(files).sort()) {
     need(/^[A-Za-z0-9_.\/-]+$/.test(path) && !path.split('/').some((p) => !p || p === '.' || p === '..') && !path.startsWith('/'), 'Unsafe ZIP path');
+    need(typeof files[path] === 'string' || Buffer.isBuffer(files[path]) && (path === 'assets/icon.png' || listingIconPath(path)), 'Only selected listing icons may contain binary ZIP data'); if (Buffer.isBuffer(files[path])) validateListingPNG(files[path]);
     const name = Buffer.from(path); const bytes = Buffer.from(files[path]); const crc = crc32(bytes);
     const h = Buffer.alloc(30); h.writeUInt32LE(0x04034b50); h.writeUInt16LE(20, 4); h.writeUInt16LE(0x800, 6); h.writeUInt16LE(33, 12); h.writeUInt32LE(crc, 14); h.writeUInt32LE(bytes.length, 18); h.writeUInt32LE(bytes.length, 22); h.writeUInt16LE(name.length, 26);
     local.push(h, name, bytes);
@@ -284,7 +293,7 @@ export function zip(files) {
   return Buffer.concat([...local, directory, end]);
 }
 export function packages(state, output, { toolkitHash = null } = {}) {
-  stateCheck(state); need(Object.values(state.products).every((entry) => /^[a-f0-9]{64}$/.test(entry.packageFingerprint ?? '')), 'Reconcile rendered package identities before packaging');
+  stateCheck(state); need(Object.values(state.products).every((entry) => entry.listingIcon), 'Reconcile public listing icons before packaging'); need(Object.values(state.products).every((entry) => /^[a-f0-9]{64}$/.test(entry.packageFingerprint ?? '')), 'Reconcile rendered package identities before packaging');
   need(toolkitHash === null || /^[a-f0-9]{64}$/.test(toolkitHash), 'Invalid toolkit source hash');
   const artifacts = {}; const products = [];
   for (const [id, entry] of Object.entries(state.products).sort()) {

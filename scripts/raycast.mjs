@@ -1,6 +1,7 @@
 import { readFileSync } from 'node:fs';
+import { spongeModule, spongeRequirements } from './sponge.mjs';
 
-export const RAYCAST_FILES = Object.freeze(['README.md', 'requirements.json', 'save-url.sh', 'search-library.sh', 'sponge.mjs']);
+export const RAYCAST_FILES = Object.freeze(['README.md', 'requirements.json', 'save-url.sh', 'search-library.sh', 'sponge.mjs', 'cli.mjs']);
 const commands = new Set(['save-url.sh', 'search-library.sh']);
 export function raycastFileMode(path) {
   const prefix = ['adapters/raycast/', 'plugins/sponge/adapters/raycast/'].find((value) => path.startsWith(value));
@@ -14,15 +15,12 @@ export function renderRaycast(manifest, setupLink) {
   const values = { PRODUCT: manifest.product.name, SETUP_LINK: setupLink, VERSION: manifest.runtime.version, NODE: manifest.runtime.node.slice(2) };
   const output = {};
   for (const file of RAYCAST_FILES.filter((value) => value !== 'requirements.json')) {
-    const source = readFileSync(new URL('./raycast/' + file, import.meta.url), 'utf8');
+    const source = ['cli.mjs', 'sponge.mjs'].includes(file) ? spongeModule(file === 'sponge.mjs' ? 'raycast.mjs' : file) : readFileSync(new URL('./raycast/' + file, import.meta.url), 'utf8');
     output[file] = source.replace(/\{\{([A-Z_]+)\}\}/g, (_match, name) => {
       if (!Object.hasOwn(values, name)) throw new Error('Unknown Raycast template field');
       return values[name];
     });
   }
-  output['requirements.json'] = JSON.stringify({
-    schemaVersion: 1, command: manifest.runtime.command, package: manifest.runtime.install.package,
-    version: manifest.runtime.version, node: manifest.runtime.node, homepage: manifest.product.url,
-  }, null, 2) + '\n';
+  output['requirements.json'] = JSON.stringify(spongeRequirements(manifest), null, 2) + '\n';
   return output;
 }

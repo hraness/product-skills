@@ -3,10 +3,11 @@
   "mcpServers": {
     "sponge": {
       "type": "stdio",
-      "command": "sponge",
+      "command": "node",
       "args": [
-        "mcp"
-      ]
+        "./scripts/mcp.mjs"
+      ],
+      "cwd": "./"
     }
   }
 }
