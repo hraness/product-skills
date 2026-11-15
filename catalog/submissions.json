@@ -16,7 +16,8 @@
       "queries": [
         "awesome cli in:name stars:>=1000 archived:false is:public fork:false pushed:>={recent}",
         "\"knowledge management\" topic:awesome-list stars:>=100 archived:false is:public fork:false pushed:>={recent}",
-        "awesome skills in:name stars:>=500 archived:false is:public fork:false pushed:>={recent}"
+        "awesome skills in:name stars:>=500 archived:false is:public fork:false pushed:>={recent}",
+        "awesome mcp in:name stars:>=1000 archived:false is:public fork:false pushed:>={recent}"
       ]
     },
     {
@@ -25,7 +26,8 @@
       "queries": [
         "awesome design in:name stars:>=500 archived:false is:public fork:false pushed:>={recent}",
         "mockup topic:awesome-list stars:>=100 archived:false is:public fork:false pushed:>={recent}",
-        "awesome skills in:name stars:>=500 archived:false is:public fork:false pushed:>={recent}"
+        "awesome skills in:name stars:>=500 archived:false is:public fork:false pushed:>={recent}",
+        "\"design resources\" in:name,description stars:>=500 archived:false is:public fork:false pushed:>={recent}"
       ]
     },
     {
@@ -34,7 +36,8 @@
       "queries": [
         "awesome mac in:name stars:>=1000 archived:false is:public fork:false pushed:>={recent}",
         "awesome video in:name stars:>=200 archived:false is:public fork:false pushed:>={recent}",
-        "awesome skills in:name stars:>=500 archived:false is:public fork:false pushed:>={recent}"
+        "awesome skills in:name stars:>=500 archived:false is:public fork:false pushed:>={recent}",
+        "awesome mcp in:name stars:>=1000 archived:false is:public fork:false pushed:>={recent}"
       ]
     }
   ],
@@ -134,6 +137,24 @@
       }
     },
     {
+      "repository": "bergside/awesome-design-skills",
+      "products": [
+        "textmock"
+      ],
+      "decision": "ineligible",
+      "reason": "This is a registry of visual design-style skills stored in the repository and pulled by the typeui.sh CLI. Textmock makes conversation mockups and is not a design style. No PR has been merged.",
+      "rulesUrl": "https://github.com/bergside/awesome-design-skills/blob/f631a09b4fcc0166f2e2c1a8c81906ef680c57e8/README.md",
+      "reviewedAt": "2026-11-15T15:26:28.000Z",
+      "sourceCommit": "f631a09b4fcc0166f2e2c1a8c81906ef680c57e8",
+      "reach": {
+        "stars": 3664,
+        "forks": 341,
+        "watchers": 22,
+        "pushedAt": "2026-06-28T10:05:22.000Z",
+        "archived": false
+      }
+    },
+    {
       "repository": "hesreallyhim/awesome-claude-code",
       "products": [
         "dawn",
@@ -155,6 +176,25 @@
       }
     },
     {
+      "repository": "punkpeye/awesome-mcp-servers",
+      "products": [
+        "sponge",
+        "yaptake"
+      ],
+      "decision": "ineligible",
+      "reason": "The scope covers MCP servers with a public GitHub repository that people install and run themselves; remote-only servers go to a separate list. The Sponge and Yaptake MCP servers ship inside proprietary runtimes, and product-skills holds only integration text.",
+      "rulesUrl": "https://github.com/punkpeye/awesome-mcp-servers/blob/f431a5cd95cebf038e587715635b9d1a0a4d0c02/CONTRIBUTING.md",
+      "reviewedAt": "2026-11-15T15:26:28.000Z",
+      "sourceCommit": "f431a5cd95cebf038e587715635b9d1a0a4d0c02",
+      "reach": {
+        "stars": 97731,
+        "forks": 20025,
+        "watchers": 53,
+        "pushedAt": "2026-11-06T17:59:03.000Z",
+        "archived": false
+      }
+    },
+    {
       "repository": "travisvn/awesome-claude-skills",
       "products": [
         "dawn",
@@ -172,6 +212,80 @@
         "forks": 2149,
         "watchers": 108,
         "pushedAt": "2026-04-28T19:30:24.000Z",
+        "archived": false
+      }
+    },
+    {
+      "repository": "VoltAgent/awesome-claude-design",
+      "products": [
+        "textmock"
+      ],
+      "decision": "ineligible",
+      "reason": "A collection of DESIGN.md files that describe brand design systems for Claude Design. Textmock makes conversation mockups and is not a design system. No PR has been merged.",
+      "rulesUrl": "https://github.com/VoltAgent/awesome-claude-design/blob/8f746b5bbb69cc7544fa850c126a71f754091951/README.md",
+      "reviewedAt": "2026-11-15T15:26:28.000Z",
+      "sourceCommit": "8f746b5bbb69cc7544fa850c126a71f754091951",
+      "reach": {
+        "stars": 4567,
+        "forks": 496,
+        "watchers": 27,
+        "pushedAt": "2026-06-20T17:54:18.000Z",
+        "archived": false
+      }
+    },
+    {
+      "repository": "VoltAgent/awesome-design-md",
+      "products": [
+        "textmock"
+      ],
+      "decision": "ineligible",
+      "reason": "A collection of DESIGN.md files that describe the design systems of developer-focused websites. Textmock makes conversation mockups and is not a design system.",
+      "rulesUrl": "https://github.com/VoltAgent/awesome-design-md/blob/fcc70284932276d085f01ef9f83edde90b1258cb/README.md",
+      "reviewedAt": "2026-11-15T15:26:28.000Z",
+      "sourceCommit": "fcc70284932276d085f01ef9f83edde90b1258cb",
+      "reach": {
+        "stars": 127642,
+        "forks": 14132,
+        "watchers": 466,
+        "pushedAt": "2026-10-28T15:45:40.000Z",
+        "archived": false
+      }
+    },
+    {
+      "repository": "wong2/awesome-mcp-servers",
+      "products": [
+        "sponge",
+        "yaptake"
+      ],
+      "decision": "ineligible",
+      "reason": "The README states that the list does not accept PRs and directs server submissions to the mcpservers.org form, a directory channel outside this PR catalog.",
+      "rulesUrl": "https://github.com/wong2/awesome-mcp-servers/blob/39eb1d76d76e562657f3c657266a504cea159e23/README.md",
+      "reviewedAt": "2026-11-15T15:26:28.000Z",
+      "sourceCommit": "39eb1d76d76e562657f3c657266a504cea159e23",
+      "reach": {
+        "stars": 4409,
+        "forks": 2269,
+        "watchers": 48,
+        "pushedAt": "2026-07-13T12:44:30.000Z",
+        "archived": false
+      }
+    },
+    {
+      "repository": "yzfly/Awesome-MCP-ZH",
+      "products": [
+        "sponge",
+        "yaptake"
+      ],
+      "decision": "ineligible",
+      "reason": "The guide generally declines servers whose core is a private or closed-source binary without a verifiable implementation in a repository. The Sponge and Yaptake MCP servers ship inside proprietary runtimes.",
+      "rulesUrl": "https://github.com/yzfly/Awesome-MCP-ZH/blob/dc9d5b46a99748b313274906305ad167c79323f4/CONTRIBUTING.md",
+      "reviewedAt": "2026-11-15T15:26:28.000Z",
+      "sourceCommit": "dc9d5b46a99748b313274906305ad167c79323f4",
+      "reach": {
+        "stars": 7835,
+        "forks": 1134,
+        "watchers": 31,
+        "pushedAt": "2026-11-14T04:16:03.000Z",
         "archived": false
       }
     },
@@ -239,6 +353,111 @@
       }
     },
     {
+      "repository": "heilcheng/awesome-agent-skills",
+      "products": [
+        "dawn",
+        "sponge",
+        "textmock",
+        "yaptake"
+      ],
+      "decision": "deferred",
+      "reason": "The agent rules require a public folder with SKILL.md and at least 20 stars, and say not to open a PR for a repository created in the last 14 days. product-skills was created on 2026-11-14 and had no stars at review. Accepted entries are merged in weekly batches.",
+      "rulesUrl": "https://github.com/heilcheng/awesome-agent-skills/blob/a92b1f3a9cdf00b056a8cc3247f214a139a95ae3/AGENTS.md",
+      "reviewedAt": "2026-11-15T15:26:28.000Z",
+      "sourceCommit": "a92b1f3a9cdf00b056a8cc3247f214a139a95ae3",
+      "reach": {
+        "stars": 6392,
+        "forks": 848,
+        "watchers": 35,
+        "pushedAt": "2026-11-09T01:42:59.000Z",
+        "archived": false
+      }
+    },
+    {
+      "repository": "VoltAgent/awesome-openclaw-skills",
+      "products": [
+        "dawn",
+        "sponge",
+        "textmock",
+        "yaptake"
+      ],
+      "decision": "deferred",
+      "reason": "Every entry must already be published on ClawHub with passing tests, a clean security status and real community usage; brand-new skills are not accepted. No product skill has been published to ClawHub.",
+      "rulesUrl": "https://github.com/VoltAgent/awesome-openclaw-skills/blob/5492fcd98f7c52c69e1b2fa58790faf4fc90ce13/CONTRIBUTING.md",
+      "reviewedAt": "2026-11-15T15:26:28.000Z",
+      "sourceCommit": "5492fcd98f7c52c69e1b2fa58790faf4fc90ce13",
+      "reach": {
+        "stars": 53788,
+        "forks": 5069,
+        "watchers": 307,
+        "pushedAt": "2026-10-30T13:21:07.000Z",
+        "archived": false
+      }
+    },
+    {
+      "repository": "composio-community/awesome-codex-skills",
+      "products": [
+        "dawn",
+        "sponge",
+        "textmock",
+        "yaptake"
+      ],
+      "decision": "deferred",
+      "reason": "Most entries are skill folders stored in this repository, so a listing would create a separately maintained copy. The last merge was on 2026-07-26, with 327 PRs open.",
+      "rulesUrl": "https://github.com/composio-community/awesome-codex-skills/blob/0930e1373789d2eda449039f7ac154b33031de89/README.md",
+      "reviewedAt": "2026-11-15T15:26:28.000Z",
+      "sourceCommit": "0930e1373789d2eda449039f7ac154b33031de89",
+      "reach": {
+        "stars": 17328,
+        "forks": 1768,
+        "watchers": 46,
+        "pushedAt": "2026-07-26T01:14:54.000Z",
+        "archived": false
+      }
+    },
+    {
+      "repository": "Prat011/awesome-llm-skills",
+      "products": [
+        "dawn",
+        "sponge",
+        "textmock",
+        "yaptake"
+      ],
+      "decision": "deferred",
+      "reason": "The guide asks contributors to add a skill folder to this repository, which would create a separately maintained copy. Ten PRs have been merged in total, the latest on 2026-07-14, with 198 open.",
+      "rulesUrl": "https://github.com/Prat011/awesome-llm-skills/blob/35e1ea23b6c5f50c420d5591973aa8ad4f2931ff/CONTRIBUTING.md",
+      "reviewedAt": "2026-11-15T15:26:28.000Z",
+      "sourceCommit": "35e1ea23b6c5f50c420d5591973aa8ad4f2931ff",
+      "reach": {
+        "stars": 1865,
+        "forks": 383,
+        "watchers": 9,
+        "pushedAt": "2026-07-14T09:53:56.000Z",
+        "archived": false
+      }
+    },
+    {
+      "repository": "libukai/awesome-agent-skills",
+      "products": [
+        "dawn",
+        "sponge",
+        "textmock",
+        "yaptake"
+      ],
+      "decision": "deferred",
+      "reason": "The README selects resources for quality and has no contribution guide. Six PRs have been merged in total, the latest on 2026-09-04, with 161 open.",
+      "rulesUrl": "https://github.com/libukai/awesome-agent-skills/blob/3159af9b36eda650e6e4e7ac7ff8bd59f24f4983/README.md",
+      "reviewedAt": "2026-11-15T15:26:28.000Z",
+      "sourceCommit": "3159af9b36eda650e6e4e7ac7ff8bd59f24f4983",
+      "reach": {
+        "stars": 5221,
+        "forks": 499,
+        "watchers": 22,
+        "pushedAt": "2026-10-25T15:11:49.000Z",
+        "archived": false
+      }
+    },
+    {
       "repository": "ad-si/awesome-music-production",
       "products": [
         "dawn"
@@ -293,6 +512,24 @@
       }
     },
     {
+      "repository": "Curated-Awesome-Lists/awesome-ai-music-generation",
+      "products": [
+        "dawn"
+      ],
+      "decision": "deferred",
+      "reason": "Its tools and software section lists publicly usable products, including a Claude Code music plugin. There is no contribution guide; 12 PRs have been merged in total, the latest on 2026-09-04, with 38 open. Dawn's runtime is a private preview, so an entry would not be publicly usable.",
+      "rulesUrl": "https://github.com/Curated-Awesome-Lists/awesome-ai-music-generation/blob/fd51484a9c6087a500681ef5c32f289235369c80/README.md",
+      "reviewedAt": "2026-11-15T15:26:28.000Z",
+      "sourceCommit": "fd51484a9c6087a500681ef5c32f289235369c80",
+      "reach": {
+        "stars": 508,
+        "forks": 89,
+        "watchers": 7,
+        "pushedAt": "2026-09-04T19:28:29.000Z",
+        "archived": false
+      }
+    },
+    {
       "repository": "goabstract/Awesome-Design-Tools",
       "products": [
         "textmock"
@@ -329,6 +566,24 @@
       }
     },
     {
+      "repository": "bradtraversy/design-resources-for-developers",
+      "products": [
+        "textmock"
+      ],
+      "decision": "deferred",
+      "reason": "New resource submissions are paused; only PRs opened before 2026-10-18 are still reviewed. If submissions reopen, the linked functionality must stay free without trials, watermarked output or essential paid exports.",
+      "rulesUrl": "https://github.com/bradtraversy/design-resources-for-developers/blob/035bac33121d13f51983c2997ba7369abdce082c/contributing.md",
+      "reviewedAt": "2026-11-15T15:26:28.000Z",
+      "sourceCommit": "035bac33121d13f51983c2997ba7369abdce082c",
+      "reach": {
+        "stars": 67407,
+        "forks": 12312,
+        "watchers": 996,
+        "pushedAt": "2026-10-18T12:50:03.000Z",
+        "archived": false
+      }
+    },
+    {
       "repository": "brettkromkamp/awesome-knowledge-management",
       "products": [
         "sponge"
@@ -343,6 +598,62 @@
         "forks": 142,
         "watchers": 15,
         "pushedAt": "2026-09-12T09:43:34.000Z",
+        "archived": false
+      }
+    },
+    {
+      "repository": "TensorBlock/awesome-mcp-servers",
+      "products": [
+        "sponge",
+        "yaptake"
+      ],
+      "decision": "deferred",
+      "reason": "Entries come from category PRs or an issue form and feed a hosted MCP index, and a scheduled check reports entries with missing GitHub repositories. Acceptance of a proprietary local runtime without a public server repository has not been verified.",
+      "rulesUrl": "https://github.com/TensorBlock/awesome-mcp-servers/blob/03694cfab0c35ee1915b3fd720e2aa4a6672f812/README.md",
+      "reviewedAt": "2026-11-15T15:26:28.000Z",
+      "sourceCommit": "03694cfab0c35ee1915b3fd720e2aa4a6672f812",
+      "reach": {
+        "stars": 1083,
+        "forks": 2037,
+        "watchers": 9,
+        "pushedAt": "2026-11-15T11:13:09.000Z",
+        "archived": false
+      }
+    },
+    {
+      "repository": "YuzeHao2023/Awesome-MCP-Servers",
+      "products": [
+        "sponge",
+        "yaptake"
+      ],
+      "decision": "deferred",
+      "reason": "There is no contribution guide; 26 PRs have been merged in total, one in the last 90 days, with 576 open.",
+      "rulesUrl": "https://github.com/YuzeHao2023/Awesome-MCP-Servers/blob/3c0425321091c5298fdba124eb9b1e147ddf89d6/README.md",
+      "reviewedAt": "2026-11-15T15:26:28.000Z",
+      "sourceCommit": "3c0425321091c5298fdba124eb9b1e147ddf89d6",
+      "reach": {
+        "stars": 1092,
+        "forks": 606,
+        "watchers": 8,
+        "pushedAt": "2026-11-13T12:52:02.000Z",
+        "archived": false
+      }
+    },
+    {
+      "repository": "zhuyansen/awesome-claude-video-skills",
+      "products": [
+        "yaptake"
+      ],
+      "decision": "deferred",
+      "reason": "Repositories are proposed in an issue and graded by a model against their README. Below 50 stars an entry needs five stars and must clear a README quality bar; product-skills had no stars at review, and its README covers four products.",
+      "rulesUrl": "https://github.com/zhuyansen/awesome-claude-video-skills/blob/1f1f5ef42d3bcf8792a9d93ed9770104bf0c5f29/README.md",
+      "reviewedAt": "2026-11-15T15:26:28.000Z",
+      "sourceCommit": "1f1f5ef42d3bcf8792a9d93ed9770104bf0c5f29",
+      "reach": {
+        "stars": 2114,
+        "forks": 203,
+        "watchers": 13,
+        "pushedAt": "2026-11-15T15:02:50.000Z",
         "archived": false
       }
     }
