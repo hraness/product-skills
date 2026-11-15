@@ -1,0 +1,57 @@
+{
+  "schemaVersion": 1,
+  "scope": "Directory and marketplace web forms submitted on 2026-11-15",
+  "observedAt": "2026-11-15T18:43:53Z",
+  "limits": "Each row records the acknowledgement the form or management page showed when it was observed. None of these is a published listing; add a publication record only after the public listing can be read back.",
+  "submissions": [
+    {
+      "products": ["dawn"],
+      "channel": "claude-directory",
+      "reference": "https://claude.ai/directory/manage/plugins/dec02a0a-ebc6-4285-9daf-7567a84c53aa",
+      "source": "directory/claude/dawn at 8404128",
+      "observedState": "In review; passed the automated scan"
+    },
+    {
+      "products": ["sponge"],
+      "channel": "claude-directory",
+      "reference": "https://claude.ai/directory/manage/plugins/5809954c-aca2-4989-8c83-9d2344068cce",
+      "source": "directory/claude/sponge at 8404128",
+      "observedState": "In review; passed the automated scan"
+    },
+    {
+      "products": ["yaptake"],
+      "channel": "claude-directory",
+      "reference": "https://claude.ai/directory/manage/plugins/8e06caad-084d-4861-9105-26f78e7d21cb",
+      "source": "directory/claude/yaptake at 8404128",
+      "observedState": "In review; passed the automated scan"
+    },
+    {
+      "products": ["textmock"],
+      "channel": "claude-directory",
+      "reference": "https://claude.ai/directory/manage/plugins/034395b4-3d4f-4a78-9d83-96568795f343",
+      "source": "plugins/textmock at 17ac2ff",
+      "observedState": "Needs changes; the directory refuses the bundled link helper from an unverified organization"
+    },
+    {
+      "products": ["dawn", "sponge", "textmock", "yaptake"],
+      "channel": "cursor-publisher-application",
+      "reference": "https://cursor.com/marketplace/publish",
+      "source": "https://github.com/hraness/product-skills",
+      "observedState": "Application received; Cursor follows up by email after review"
+    },
+    {
+      "products": ["sponge"],
+      "channel": "mcpservers.org",
+      "reference": "https://mcpservers.org/submit",
+      "source": "https://sponge.computer/docs/agents",
+      "observedState": "Submitted on the free plan; review within two weeks"
+    },
+    {
+      "products": ["yaptake"],
+      "channel": "awesome.video",
+      "reference": "https://awesome.video/submit",
+      "source": "https://yaptake.com",
+      "observedState": "Submitted as a Media Tools resource by the hraness GitHub sign-in; pending review"
+    }
+  ]
+}
