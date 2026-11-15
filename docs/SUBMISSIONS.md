@@ -20,6 +20,10 @@ The [submission catalog](../catalog/submissions.json) owns saved searches, revie
 | Yaptake | [gendotnew/macos-apps #262](https://github.com/gendotnew/macos-apps/pull/262) | 2026-11-15 | Submitted; open |
 | Sponge | [brettkromkamp/awesome-knowledge-management #143](https://github.com/brettkromkamp/awesome-knowledge-management/pull/143) | 2026-11-15 | Submitted; open |
 | Dawn, Sponge, Textmock, Yaptake | [hashgraph-online/awesome-codex-plugins #726](https://github.com/hashgraph-online/awesome-codex-plugins/pull/726) | 2026-11-15 | Submitted; open |
+| Sponge | [davila7/claude-code-templates #1571](https://github.com/davila7/claude-code-templates/pull/1571) | 2026-11-15 | Submitted; open |
+| Dawn | [davila7/claude-code-templates #1572](https://github.com/davila7/claude-code-templates/pull/1572) | 2026-11-15 | Submitted; open |
+| Textmock | [davila7/claude-code-templates #1573](https://github.com/davila7/claude-code-templates/pull/1573) | 2026-11-15 | Submitted; open |
+| Yaptake | [davila7/claude-code-templates #1574](https://github.com/davila7/claude-code-templates/pull/1574) | 2026-11-15 | Submitted; open |
 
 ## Published packages and verified listings
 
@@ -157,6 +161,7 @@ Stars are dated public popularity counts, not traffic measurements. Review decis
 | [zhuyansen/awesome-claude-video-skills](https://github.com/zhuyansen/awesome-claude-video-skills) | Yaptake | 2,114 | deferred: Repositories are proposed in an issue and graded by a model against their README. Below 50 stars an entry needs five stars and must clear a README quality bar; product-skills had no stars at review, and its README covers four products. | [Rules; 2026-11-15](https://github.com/zhuyansen/awesome-claude-video-skills/blob/1f1f5ef42d3bcf8792a9d93ed9770104bf0c5f29/README.md) |
 | [iCHAIT/awesome-macOS](https://github.com/iCHAIT/awesome-macOS) | Yaptake | 19,493 | deferred: Only collaborators can open PRs, and a PR from a fork was refused on 2026-11-15. Issue suggestions were closed as not planned on 2026-10-27. | [Rules; 2026-11-15](https://github.com/iCHAIT/awesome-macOS/blob/651d7ab32fff14590571399c04721146b1851d7d/.github/contributing.md) |
 | [krzemienski/awesome-video](https://github.com/krzemienski/awesome-video) | Yaptake | 1,951 | deferred: The guide recommends the submission form on awesome.video, and its media tools category lists commercial subtitle tools. Apart from a guide fix on 2026-10-25, no PR has been merged since 2025-03-14. | [Rules; 2026-11-15](https://github.com/krzemienski/awesome-video/blob/392e8fefaea9badf60bb5c7e29b878d673248552/CONTRIBUTING.md) |
+| [davila7/claude-code-templates](https://github.com/davila7/claude-code-templates) | Dawn, Sponge, Textmock, Yaptake | 33,750 | eligible: The aitmpl.com catalog lists external skills by repository path and accepts MCP configurations by PR. Each product gets its own PR, pinned to a product-skills commit. | [Rules; 2026-11-15](https://github.com/davila7/claude-code-templates/blob/22dd06e16a3ced89e66fb1de7c3f20b2265829eb/CONTRIBUTING.md) |
 
 ## Maintain the records
 
