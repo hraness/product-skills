@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "scope": "listing-presence",
+  "observations": [
+    {
+      "product": "dawn",
+      "url": "https://www.skills.sh/hraness/product-skills/dawn",
+      "firstVerifiedAt": "2026-11-14T23:54:16.409Z",
+      "sourceSkillHash": "c6641e74c2e1995f1e8d47b069254515f9450ad9145669b587221cb4c048a62e"
+    },
+    {
+      "product": "sponge",
+      "url": "https://www.skills.sh/hraness/product-skills/sponge",
+      "firstVerifiedAt": "2026-11-14T23:54:16.409Z",
+      "sourceSkillHash": "96feee5c6b1e6467feb61055d0db8b2a9b5d766f289323dc6d2c3881341aee61"
+    },
+    {
+      "product": "textmock",
+      "url": "https://www.skills.sh/hraness/product-skills/textmock",
+      "firstVerifiedAt": "2026-11-14T23:54:16.409Z",
+      "sourceSkillHash": "1dcd7b6a30e893d6c42475af39c7ebf682133891147ddd5d98860d1158421fae"
+    },
+    {
+      "product": "yaptake",
+      "url": "https://www.skills.sh/hraness/product-skills/yaptake",
+      "firstVerifiedAt": "2026-11-14T23:54:16.409Z",
+      "sourceSkillHash": "9c11388d49e08a34a9cf46116d78fd301d47709ac4a8db54688d6cf15d4f0097"
+    }
+  ]
+}

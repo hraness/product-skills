@@ -1,0 +1,90 @@
+{
+  "schemaVersion": 1,
+  "scope": "listing-presence",
+  "firstVerifiedAt": "2026-11-14T23:54:16.409Z",
+  "publisherTimestampAvailable": false,
+  "source": {
+    "repository": "https://github.com/hraness/product-skills",
+    "commit": "d674880d223e3da7bfe5e804af990057f3aed370"
+  },
+  "listings": [
+    {
+      "product": "dawn",
+      "url": "https://www.skills.sh/hraness/product-skills/dawn",
+      "name": "dawn",
+      "description": "Compose or edit a local Dawn song in TypeScript, check its score, and render audio or MIDI with an installed Dawn CLI.",
+      "publisher": "hraness",
+      "sourceSkillHash": "c6641e74c2e1995f1e8d47b069254515f9450ad9145669b587221cb4c048a62e",
+      "responseSha256": "d6afe8cd3f6e07c2313034f695970a43eb2d8b7c271e13eb3987abcdaf1c01ef"
+    },
+    {
+      "product": "sponge",
+      "url": "https://www.skills.sh/hraness/product-skills/sponge",
+      "name": "sponge",
+      "description": "Find sources and answer questions from a Sponge reading library, or save and annotate reading when asked. Use for tasks involving saved articles, PDFs, highlights, and notes in Sponge.",
+      "publisher": "hraness",
+      "sourceSkillHash": "96feee5c6b1e6467feb61055d0db8b2a9b5d766f289323dc6d2c3881341aee61",
+      "responseSha256": "381d6fc1c19256bbcfd6aafa1a6a8c6cdc83fd4558a4f8321809d184238f84ad"
+    },
+    {
+      "product": "textmock",
+      "url": "https://www.skills.sh/hraness/product-skills/textmock",
+      "name": "textmock",
+      "description": "Make fictional text conversations that open as editable Textmock links, or edit and render an existing Textmock conversation through its browser API or Mac command.",
+      "publisher": "hraness",
+      "sourceSkillHash": "1dcd7b6a30e893d6c42475af39c7ebf682133891147ddd5d98860d1158421fae",
+      "responseSha256": "a11dfa73a25a58c631d913f870026890f1c57df874af48c84625e315b6c17ab5"
+    },
+    {
+      "product": "yaptake",
+      "url": "https://www.skills.sh/hraness/product-skills/yaptake",
+      "name": "yaptake",
+      "description": "Edit a Yaptake video project through its transcript. Use for cutting words or retakes, shortening pauses, fixing captions, arranging clips, changing the output format, or adding on-screen text in Yaptake.",
+      "publisher": "hraness",
+      "sourceSkillHash": "9c11388d49e08a34a9cf46116d78fd301d47709ac4a8db54688d6cf15d4f0097",
+      "responseSha256": "e3322ed6c3852c4dea99b16c63f10d6bdf487c78509313de6ece89b6bb01c8f2"
+    }
+  ],
+  "installation": {
+    "verifiedAt": "2026-11-14T23:53:29.718Z",
+    "package": "skills",
+    "version": "1.8.1",
+    "tarball": "https://registry.npmjs.org/skills/-/skills-1.8.1.tgz",
+    "integrity": "sha512-QK3wlZ5j8wcpLPUOXt7+1Gu1f9JKpv7lBpO0zmqKa5VBrt45/woVo8Max1x4wha3pCNafNHiiodYK6Xi/0alQQ==",
+    "tarballSha256": "e4757551dc15dc05a0bf12b74eccd29cba7d2b08221325661d083f8703f9db5e",
+    "scope": "temporary-project",
+    "agent": "codex",
+    "attempts": 1,
+    "telemetryAcknowledged": true,
+    "filesMatchSource": true,
+    "checkedUserConfigurationUnchanged": true,
+    "temporaryProjectRemoved": true,
+    "files": {
+      "dawn/SKILL.md": {
+        "bytes": 2330,
+        "sha256": "6030d0c03d6c66756ff15e1b79c939d2d944e9e8c707b30662c6a2f641c64c0d"
+      },
+      "dawn/examples/morning-study.ts": {
+        "bytes": 1007,
+        "sha256": "31634ba37f791fd7deda74e17947ddf3442ec2b21ab1cc21460cf78d15ba2fe1"
+      },
+      "sponge/SKILL.md": {
+        "bytes": 2812,
+        "sha256": "58a815522f826ea0c3dae8fdef12ba35f2238b5f011f6139e343883b3a352866"
+      },
+      "textmock/SKILL.md": {
+        "bytes": 2241,
+        "sha256": "4526affa36a7ea164ec77e5457c8d3d1d6ba115a082e6e688e16bafec87dc456"
+      },
+      "textmock/scripts/textmock-link.mjs": {
+        "bytes": 5488,
+        "sha256": "3d7ebc0cee08ac435c6e42f0928b56385b582a8fbeeaa48a6e3e5e4380ce1abd"
+      },
+      "yaptake/SKILL.md": {
+        "bytes": 6042,
+        "sha256": "e53f6f6880a3ec7e76c53f655704b816cdc17725b42f20c3c0f5a009af37a9a8"
+      }
+    }
+  },
+  "remoteDirectoryFileBytesVerified": false
+}
