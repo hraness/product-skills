@@ -1,0 +1,54 @@
+name: MCP Registry
+on:
+  workflow_run:
+    workflows: [Publish checked packages]
+    branches: [main]
+    types: [completed]
+  workflow_dispatch:
+    inputs:
+      operation:
+        description: preflight checks the organization namespace; publish lists the released Yaptake MCP bundle.
+        required: true
+        default: preflight
+        type: choice
+        options: [preflight, publish]
+permissions:
+  contents: read
+concurrency:
+  group: mcp-registry
+  cancel-in-progress: false
+jobs:
+  registry:
+    # The publisher can finish its release and still fail a later observation
+    # step, so any completed run is a candidate. The helper rechecks main, its
+    # Required result and the immutable release before it publishes anything.
+    if: >-
+      github.repository == 'hraness/product-skills' &&
+      github.repository_id == '1458031600' &&
+      github.ref == 'refs/heads/main' &&
+      (github.event_name == 'workflow_dispatch' ||
+       (github.event_name == 'workflow_run' &&
+        github.event.workflow_run.head_repository.id == 1458031600 &&
+        github.event.workflow_run.head_branch == 'main'))
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      checks: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24
+      - name: Rebuild the checked release plan
+        if: github.event_name == 'workflow_run' || inputs.operation == 'publish'
+        run: node scripts/distribution.mjs package
+      - name: Publish or verify the Yaptake listing
+        env:
+          GH_TOKEN: ${{ github.token }}
+          OPERATION: ${{ github.event_name == 'workflow_run' && 'publish' || inputs.operation }}
+        run: node scripts/mcp-registry-publish.mjs "$OPERATION"

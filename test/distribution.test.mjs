@@ -262,7 +262,8 @@ test('ZIP artifacts are deterministic, independent of file insertion order and r
   const first = await reconcile({ portfolio, state: empty(), bundles: {}, selected: ['sponge'], ...server() });
   const plan = packages(first.state, render(first.state, first.bundles, portfolio));
   assert.equal(digest(plan.artifacts['sponge-0.1.0.zip']), plan.products[0].sha256);
-  assert.equal(plan.artifacts.SHA256SUMS.toString(), `${plan.products[0].sha256}  sponge-0.1.0.zip\n`);
+  assert.equal(digest(plan.artifacts['sponge-0.1.0.mcpb']), plan.products[0].mcpb.sha256); assert.equal(plan.products[0].mcpb.file, 'sponge-0.1.0.mcpb');
+  assert.equal(plan.artifacts.SHA256SUMS.toString(), `${plan.products[0].sha256}  sponge-0.1.0.zip\n${plan.products[0].mcpb.sha256}  sponge-0.1.0.mcpb\n`);
   assert.ok(plan.artifacts['sponge-0.1.0.zip'].includes(Buffer.from('.claude-plugin/plugin.json')));
   const helper = packages(first.state, render(first.state, first.bundles, portfolio), { toolkitHash: 'a'.repeat(64) });
   assert.notEqual(helper.tag, plan.tag); assert.deepEqual(helper.products, plan.products);

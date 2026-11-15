@@ -29,7 +29,7 @@
     "yaptake": {
       "contentHash": "201aa144b451f1eda4c406d473c7f3df568d81f09779f41f06a8f78b86fae162",
       "sourceHash": "38e8d877f5e7f69395ed133e99ad076296ab9954969e0470e4741b3a5d5312f4",
-      "revision": 3,
+      "revision": 4,
       "runtimeVersion": "0.1.0",
       "runtimeBuild": "231",
       "etag": "W/\"9246cc1537e7595c9580f17189beb1db\"",
@@ -39,7 +39,7 @@
         "metadataHash": "8c140ed1cf32f86693308881726e80907ec405740a6a0f02b930d3d80c16ece2",
         "feedHash": "076e05bd7f875eb2b929abaafd637db5429e951ea9a6af5571e23dfd6fe21148"
       },
-      "packageFingerprint": "0079818b74d574bf807663ac38ff3d1fb6c5fadd67b97e4ae6934ca0352672b3",
+      "packageFingerprint": "3514fc39e89bbbb5431739381df0b17413e3a4482426d1c7d4b5092db6633224",
       "listingIcon": {
         "url": "https://hraness.com/products/yaptake/icon.png",
         "sha256": "d155cb1ebb5b058e4b2c9bf3a2383cd773d33c644afbdd3df2f99bc14ae49320",
@@ -73,7 +73,7 @@
     "sponge": {
       "contentHash": "b1aeb68c6a03b0760df9ce3ab1456ba76cf358132623e01a719ca9e63d859c8f",
       "sourceHash": "18fb756bc4a95ff14b2c2ff8209eb514d44631f0bb7ea534ea1065557781daf7",
-      "revision": 4,
+      "revision": 5,
       "runtimeVersion": "0.41.1",
       "runtimeBuild": null,
       "etag": "W/\"4ab4d46aabdbf43ab73956cf31b8f9b2\"",
@@ -83,7 +83,7 @@
         "version": "0.41.1",
         "integrity": "sha512-PkUJeD7UFV4I/TFZXLpnMyk6jP/j4ntrjhVC55jFNoI+Hv3g04yZF0hQ7BgsN2CcHW2D40rRxB1Qj7JMBAlqeA=="
       },
-      "packageFingerprint": "cc58ce38e6c47759b1411cd8349994bc5ba89f31821d2e7718faefcd9c084047",
+      "packageFingerprint": "6a5ac10bc2e2237f78669ffc738a7c40a3a42a34a3857388c51cd2ad3551d4a2",
       "listingIcon": {
         "url": "https://hraness.com/products/sponge/icon.png",
         "sha256": "fdcff0c9caeffc9f28e423dbb31cb6da7d721306d59e11aa307b329da46eb849",

@@ -8,6 +8,7 @@ import { raycastFileMode, raycastPath, renderRaycast } from './raycast.mjs';
 import { agentInstallInstructions, fetchListingIcon, listingIconBytes, listingIconPath, listingInterface, validateListingPNG } from './listing.mjs';
 import { CLAUDE_DIRECTORY_ROOT, claudeDirectoryFiles } from './claude-directory.mjs';
 import { renderSpongeSupport, spongeClaudeServer, spongePortableServer } from './sponge.mjs';
+import { MCPB_PRODUCTS, MCPB_ROOT, mcpbFile, mcpbPath, renderMcpb } from './mcpb.mjs';
 import { SUBMISSIONS_INDEX, checkSubmissionHistory, readGovernedSubmissions, readSubmissions, renderSubmissions } from './submissions.mjs';
 import { DIRECTORY_FILE, initialDirectoryObservations, mergePendingDirectoryObservations, observeDirectories, readDirectoryObservations, readDirectorySources, sourceSkillIdentity, validateDirectoryObservations } from './skills-sh-observer.mjs';
 
@@ -20,6 +21,8 @@ export const LISTING_LINKS = Object.freeze({
   sponge: { privacyPolicyUrl: 'https://sponge.computer/privacy', supportUrl: 'https://sponge.computer/support' },
 });
 export const MCP_REGISTRY = Object.freeze({ origin: 'https://registry.modelcontextprotocol.io', name: 'io.github.hraness/sponge', product: 'sponge' });
+// Sponge's entry is published from its npm release; Yaptake's from this repository's MCP bundle release.
+export const MCP_REGISTRY_SERVERS = Object.freeze({ sponge: MCP_REGISTRY.name, yaptake: 'io.github.hraness/yaptake' });
 export const HOMEBREW_TAP = Object.freeze({ repository: 'hraness/homebrew-tap', repositoryId: 1382935233, ownerId: 307125679, product: 'yaptake', cask: 'Casks/yaptake.rb', catalog: 'catalog/yaptake.json', cursor: 'catalog/homebrew-observation.json' });
 export const CLAWHUB = Object.freeze({ origin: 'https://clawhub.ai', owner: 'hraness' });
 export const REPOSITORY = 'https://github.com/hraness/product-skills';
@@ -51,8 +54,9 @@ export function parseUnique(raw) {
 }
 export function version(v) { need(typeof v === 'string' && /^(0|[1-9]\d{0,8})\.(0|[1-9]\d{0,8})\.(0|[1-9]\d{0,8})$/.test(v), 'An exact release version is required'); return v.split('.').map(Number); }
 export function compareVersion(a, b) { const av = version(a); const bv = version(b); for (let i = 0; i < 3; i++) if (av[i] !== bv[i]) return av[i] > bv[i] ? 1 : -1; return 0; }
-export function mcpRegistryPublicationId(value) { version(value); return `sponge-mcp-registry-${value.replaceAll('.', '-')}`; }
-export function mcpRegistryPublicationUrl(value) { version(value); return `${MCP_REGISTRY.origin}/v0.1/servers/${encodeURIComponent(MCP_REGISTRY.name)}/versions/${value}`; }
+const registryProduct = (product) => need(typeof product === 'string' && Object.hasOwn(MCP_REGISTRY_SERVERS, product), 'Unknown MCP Registry server');
+export function mcpRegistryPublicationId(value, product = MCP_REGISTRY.product) { version(value); registryProduct(product); return `${product}-mcp-registry-${value.replaceAll('.', '-')}`; }
+export function mcpRegistryPublicationUrl(value, product = MCP_REGISTRY.product) { version(value); registryProduct(product); return `${MCP_REGISTRY.origin}/v0.1/servers/${encodeURIComponent(MCP_REGISTRY_SERVERS[product])}/versions/${value}`; }
 export function homebrewPublicationId(value, build) { version(value); need(typeof build === 'string' && /^[1-9]\d{0,8}$/.test(build), 'An exact Homebrew build is required'); return `yaptake-homebrew-${value.replaceAll('.', '-')}-${build}`; }
 export function homebrewPublicationUrl(commit) { need(/^[a-f0-9]{40}$/.test(commit), 'An exact Homebrew publication commit is required'); return `https://github.com/${HOMEBREW_TAP.repository}/blob/${commit}/${HOMEBREW_TAP.cask}`; }
 // A ClawHub record's contentHash is the registry's skill fingerprint: SHA-256 of
@@ -249,6 +253,7 @@ export function render(state, bundles, portfolio, ledger = { schemaVersion: 1, p
       output[`${base}/mcp.json`] = json({ $schema: MCP_SCHEMA, mcpServers: servers });
       output[`${base}/.mcp.json`] = json({ mcpServers: id === 'sponge' ? { sponge: spongeClaudeServer() } : servers });
       if (id === 'sponge') output[`${base}/mcp.codex.json`] = json({ mcpServers: servers });
+      if (MCPB_PRODUCTS.includes(id)) for (const [path, value] of Object.entries(renderMcpb(m, { version, icon: e.listingIcon ? listingIconBytes(e.listingIcon, id) : null, license: bundle.files.LICENSE, links: LISTING_LINKS[id], author: common.author, repository: REPOSITORY }))) output[`${MCPB_ROOT}/${id}/${path}`] = value;
     }
     output[`${base}/runtime.json`] = json(m.runtime);
     openai.push({ name: id, source: { source: 'local', path: `./${base}` }, policy: { installation: 'AVAILABLE', authentication: 'ON_INSTALL' }, category: 'Productivity' });
@@ -279,15 +284,18 @@ export function renderedPackageFingerprint(id, entry, bundle, portfolio, { rende
   const prefix = `plugins/${id}/`;
   const files = Object.fromEntries(Object.entries(output).filter(([path]) => path.startsWith(prefix)).map(([path, value]) => [path.slice(prefix.length), value]));
   need(Object.keys(files).length > 0, 'Rendered package has no files');
-  return digest(canonical({ source: digest(canonical(bundle)), archive: digest(archive(files)) }));
+  // A product with an MCP bundle also binds that bundle's bytes to its version.
+  const bundled = prefixed(output, `${MCPB_ROOT}/${id}/`);
+  return digest(canonical({ source: digest(canonical(bundle)), archive: digest(archive(files)), ...(Object.keys(bundled).length ? { mcpb: digest(archive(bundled)) } : {}) }));
 }
+function prefixed(output, prefix) { return Object.fromEntries(Object.entries(output).filter(([path]) => path.startsWith(prefix)).map(([path, value]) => [path.slice(prefix.length), value])); }
 export function checkPackageFingerprints(state, bundles, portfolio, options = {}) {
   stateCheck(state); validatePortfolio(portfolio);
   for (const [id, entry] of Object.entries(state.products)) need(entry.packageFingerprint === renderedPackageFingerprint(id, entry, bundles[id], portfolio, options), 'Reconcile changed rendered packages before checking or packaging');
 }
 export async function checkRendered(root, output) {
   for (const [path, expected] of Object.entries(output)) { const target = join(root, path); const info = await lstat(target); need(info.isFile() && !info.isSymbolicLink() && Boolean(info.mode & 0o111) === (raycastFileMode(path) === '100755'), 'Generated file type or executable mode differs'); need((await readFile(target)).equals(Buffer.isBuffer(expected) ? expected : Buffer.from(expected)), `Generated file is stale: ${path}`); }
-  for (const path of [...await tree(root, 'plugins'), ...await tree(root, 'skills'), ...await tree(root, 'adapters'), ...await tree(root, CLAUDE_DIRECTORY_ROOT)]) need(Object.hasOwn(output, path), `Unexpected package file: ${path}`);
+  for (const path of [...await tree(root, 'plugins'), ...await tree(root, 'skills'), ...await tree(root, 'adapters'), ...await tree(root, CLAUDE_DIRECTORY_ROOT), ...await tree(root, MCPB_ROOT)]) need(Object.hasOwn(output, path), `Unexpected package file: ${path}`);
 }
 async function safeTarget(root, path) {
   need(!path.startsWith('/') && path.split('/').every((p) => p && p !== '.' && p !== '..' && /^[A-Za-z0-9_.-]+$/.test(p)), 'Unsafe output path');
@@ -296,7 +304,7 @@ async function safeTarget(root, path) {
   return target;
 }
 export async function writeRendered(root, output, previous = {}) {
-  for (const path of Object.keys(previous)) if (!Object.hasOwn(output, path)) { need(path.startsWith('plugins/') || path.startsWith('skills/') || path.startsWith(`${CLAUDE_DIRECTORY_ROOT}/`) || raycastPath(path), 'Refusing to remove a non-package file'); await rm(await safeTarget(root, path)); }
+  for (const path of Object.keys(previous)) if (!Object.hasOwn(output, path)) { need(path.startsWith('plugins/') || path.startsWith('skills/') || path.startsWith(`${CLAUDE_DIRECTORY_ROOT}/`) || raycastPath(path) || mcpbPath(path), 'Refusing to remove a non-package file'); await rm(await safeTarget(root, path)); }
   for (const [path, value] of Object.entries(output)) { need(typeof value === 'string' || Buffer.isBuffer(value) && listingIconPath(path), 'Only selected listing icons may contain binary data'); if (Buffer.isBuffer(value)) validateListingPNG(value); const target = await safeTarget(root, path); const temp = `${target}.new-${process.pid}`; await writeFile(temp, value, { flag: 'wx', mode: raycastFileMode(path) === '100755' ? 0o755 : 0o644 }); await rename(temp, target); }
 }
 function crc32(buffer) { let crc = 0xffffffff; for (const value of buffer) { crc ^= value; for (let i = 0; i < 8; i++) crc = (crc >>> 1) ^ (0xedb88320 & -(crc & 1)); } return (crc ^ 0xffffffff) >>> 0; }
@@ -319,9 +327,12 @@ export function packages(state, output, { toolkitHash = null } = {}) {
   const artifacts = {}; const products = [];
   for (const [id, entry] of Object.entries(state.products).sort()) {
     const prefix = `plugins/${id}/`; const files = Object.fromEntries(Object.entries(output).filter(([p]) => p.startsWith(prefix)).map(([p, value]) => [p.slice(prefix.length), value]));
-    const name = `${id}-${pluginVersion(entry)}.zip`; artifacts[name] = zip(files); products.push({ id, version: pluginVersion(entry), file: name, sha256: digest(artifacts[name]), sourceHash: entry.sourceHash });
+    const name = `${id}-${pluginVersion(entry)}.zip`; artifacts[name] = zip(files);
+    const bundled = prefixed(output, `${MCPB_ROOT}/${id}/`); let mcpb;
+    if (Object.keys(bundled).length) { const file = mcpbFile(id, pluginVersion(entry)); artifacts[file] = zip(bundled); mcpb = { file, sha256: digest(artifacts[file]) }; }
+    products.push({ id, version: pluginVersion(entry), file: name, sha256: digest(artifacts[name]), sourceHash: entry.sourceHash, ...(mcpb ? { mcpb } : {}) });
   }
-  artifacts['SHA256SUMS'] = Buffer.from(products.map((p) => `${p.sha256}  ${p.file}\n`).join(''));
+  artifacts['SHA256SUMS'] = Buffer.from(products.flatMap((p) => [`${p.sha256}  ${p.file}\n`, ...(p.mcpb ? [`${p.mcpb.sha256}  ${p.mcpb.file}\n`] : [])]).join(''));
   const tag = `integrations-${digest(canonical({ products, toolkitHash })).slice(0, 16)}`;
   artifacts['release.json'] = Buffer.from(json({ schemaVersion: 1, tag, toolkitHash, products }));
   return { artifacts, tag, products };
@@ -375,7 +386,7 @@ export function validateLedger(ledger) {
     keys(p, ['id', 'product', 'channel', 'publishedAt', 'url', 'version', 'contentHash']);
     need(/^[a-z0-9][a-z0-9-]{0,63}$/.test(p.id) && !seen.has(p.id) && Object.hasOwn(PRODUCTS, p.product) && ['github', 'skills-sh', 'chatgpt', 'claude', 'cursor', 'homebrew', 'raycast', 'mcp-registry', 'clawhub'].includes(p.channel) && /^[a-f0-9]{64}$/.test(p.contentHash), 'Invalid publication identity');
     need(typeof p.publishedAt === 'string' && new Date(p.publishedAt).toISOString() === p.publishedAt, 'An actual ISO publication timestamp is required'); version(p.version);
-    if (p.channel === 'mcp-registry') need(p.product === MCP_REGISTRY.product && p.id === mcpRegistryPublicationId(p.version) && p.url === mcpRegistryPublicationUrl(p.version), 'MCP Registry publication identity or address differs');
+    if (p.channel === 'mcp-registry') need(Object.hasOwn(MCP_REGISTRY_SERVERS, p.product) && p.id === mcpRegistryPublicationId(p.version, p.product) && p.url === mcpRegistryPublicationUrl(p.version, p.product), 'MCP Registry publication identity or address differs');
     if (p.channel === 'homebrew') {
       const build = /^yaptake-homebrew-\d+-\d+-\d+-([1-9]\d{0,8})$/.exec(p.id)?.[1];
       const commit = /^https:\/\/github\.com\/hraness\/homebrew-tap\/blob\/([a-f0-9]{40})\/Casks\/yaptake\.rb$/.exec(p.url)?.[1];
@@ -423,7 +434,12 @@ export async function recordGithub(ledger, releasePlan, { fetchImpl = fetch, tok
   const release = JSON.parse((await download(`https://api.github.com/repos/hraness/product-skills/releases/tags/${releasePlan.tag}`, { fetchImpl, token, limit: 262144 })).body);
   need(release.tag_name === releasePlan.tag && !release.draft && release.immutable === true && typeof release.published_at === 'string' && release.html_url === `${REPOSITORY}/releases/tag/${releasePlan.tag}`, 'Release is not an immutable public publication');
   const entries = [];
-  for (const p of releasePlan.products) { const assets = release.assets.filter((a) => a.name === p.file); need(assets.length === 1 && assets[0].digest === `sha256:${p.sha256}` && assets[0].browser_download_url === `${REPOSITORY}/releases/download/${releasePlan.tag}/${p.file}`, 'Published artifact digest mismatch'); if (ledger.publications.some((previous) => previous.product === p.id && previous.channel === 'github' && previous.version === p.version && previous.contentHash === p.sha256)) continue; entries.push({ id: `${p.id}-github-${p.version.replaceAll('.', '-')}-${p.sha256.slice(0, 8)}`, product: p.id, channel: 'github', publishedAt: new Date(release.published_at).toISOString(), url: release.html_url, version: p.version, contentHash: p.sha256 }); }
+  for (const p of releasePlan.products) for (const [kind, artifact] of [['github', p], ...(p.mcpb ? [['mcpb', p.mcpb]] : [])]) {
+    const assets = release.assets.filter((a) => a.name === artifact.file); need(assets.length === 1 && assets[0].digest === `sha256:${artifact.sha256}` && assets[0].browser_download_url === `${REPOSITORY}/releases/download/${releasePlan.tag}/${artifact.file}`, 'Published artifact digest mismatch');
+    // An MCP bundle is a second immutable GitHub artifact of the same product version.
+    if (ledger.publications.some((previous) => previous.product === p.id && previous.channel === 'github' && previous.version === p.version && previous.contentHash === artifact.sha256)) continue;
+    entries.push({ id: `${p.id}-${kind}-${p.version.replaceAll('.', '-')}-${artifact.sha256.slice(0, 8)}`, product: p.id, channel: 'github', publishedAt: new Date(release.published_at).toISOString(), url: release.html_url, version: p.version, contentHash: artifact.sha256 });
+  }
   return appendPublications(ledger, entries);
 }
 export async function main(argv = process.argv.slice(2), root = process.cwd()) {
@@ -459,12 +475,14 @@ export async function main(argv = process.argv.slice(2), root = process.cwd()) {
     await mkdir(join(root, 'dist'), { recursive: true });
     try {
       const { observeMcpRegistry } = await import('./mcp-registry.mjs');
-      const result = await observeMcpRegistry(data.ledger);
+      // Every listing verifies before the ledger is written.
+      const sponge = await observeMcpRegistry(data.ledger); const yaptake = await observeMcpRegistry(sponge.ledger, { product: 'yaptake' });
+      const result = { ledger: yaptake.ledger, report: { schemaVersion: 1, source: 'official-mcp-registry', status: 'observed', servers: [sponge.report, yaptake.report] } };
       const output = render(data.state, data.bundles, data.portfolio, result.ledger, data.directories, data.submissions);
       await writeFile(join(root, 'publication-ledger.json'), json(result.ledger)); await writeRendered(root, output, before);
       await writeFile(join(root, 'dist/registry-observation.json'), json(result.report)); process.stdout.write(json(result.report));
     } catch (error) {
-      await writeFile(join(root, 'dist/registry-observation.json'), json({ schemaVersion: 1, source: 'official-mcp-registry', status: 'pending', reason: 'Registry data or its exact public npm metadata did not verify; prior publication records were preserved.' }));
+      await writeFile(join(root, 'dist/registry-observation.json'), json({ schemaVersion: 1, source: 'official-mcp-registry', status: 'pending', reason: 'Registry data, its exact public npm metadata or its immutable MCP bundle release did not verify; prior publication records were preserved.' }));
       throw error;
     }
     return;
