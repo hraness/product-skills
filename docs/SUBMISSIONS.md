@@ -39,6 +39,10 @@ These rows come from the existing records. The ledger keeps every earlier public
 | Sponge | ClawHub skill | [0.1.2](https://clawhub.ai/hraness/skills/sponge) | Published 2026-11-15 |
 | Textmock | ClawHub skill | [0.1.1](https://clawhub.ai/hraness/skills/textmock) | Published 2026-11-15 |
 | Yaptake | ClawHub skill | [0.1.1](https://clawhub.ai/hraness/skills/yaptake) | Published 2026-11-15 |
+| Dawn | GitHub package | [0.1.2](https://github.com/hraness/product-skills/releases/tag/integrations-259528199c5f21fa) | Published 2026-11-15 |
+| Sponge | GitHub package | [0.1.3](https://github.com/hraness/product-skills/releases/tag/integrations-259528199c5f21fa) | Published 2026-11-15 |
+| Textmock | GitHub package | [0.1.2](https://github.com/hraness/product-skills/releases/tag/integrations-259528199c5f21fa) | Published 2026-11-15 |
+| Yaptake | GitHub package | [0.1.2](https://github.com/hraness/product-skills/releases/tag/integrations-259528199c5f21fa) | Published 2026-11-15 |
 | Dawn | skills.sh | [Listed](https://www.skills.sh/hraness/product-skills/dawn) | First verified 2026-11-14 |
 | Sponge | skills.sh | [Listed](https://www.skills.sh/hraness/product-skills/sponge) | First verified 2026-11-14 |
 | Textmock | skills.sh | [Listed](https://www.skills.sh/hraness/product-skills/textmock) | First verified 2026-11-14 |
