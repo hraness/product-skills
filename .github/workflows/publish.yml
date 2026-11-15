@@ -55,6 +55,13 @@ jobs:
           GH_TOKEN: ''
           REPORT_GH_TOKEN: ''
         run: node scripts/distribution.mjs record-homebrew
+      - name: Observe skills.sh listing presence
+        id: directories
+        continue-on-error: true
+        env:
+          GH_TOKEN: ''
+          REPORT_GH_TOKEN: ''
+        run: node scripts/distribution.mjs record-directories
       - name: Mint the dedicated token for the ledger pull request
         id: app
         uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
@@ -80,13 +87,14 @@ jobs:
           path: dist/
           if-no-files-found: warn
           retention-days: 90
-      - name: Require completed public publication observations
+      - name: Require completed public observations
         if: always()
         env:
           REGISTRY_OUTCOME: ${{ steps.registry.outcome }}
           HOMEBREW_OUTCOME: ${{ steps.homebrew.outcome }}
+          DIRECTORY_OUTCOME: ${{ steps.directories.outcome }}
         run: |
-          if [ "$REGISTRY_OUTCOME" != success ] || [ "$HOMEBREW_OUTCOME" != success ]; then
-            echo 'Public publication observation is pending. Earlier publication records are preserved.' >&2
+          if [ "$REGISTRY_OUTCOME" != success ] || [ "$HOMEBREW_OUTCOME" != success ] || [ "$DIRECTORY_OUTCOME" != success ]; then
+            echo 'A public observation is pending. Earlier publication records and directory observations are preserved.' >&2
             exit 1
           fi

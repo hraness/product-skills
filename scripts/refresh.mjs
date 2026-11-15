@@ -2,15 +2,41 @@ import { createHash } from 'node:crypto';
 import { lstat, readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { APP_BOT } from './authority.mjs';
-import { appendPublications, checkLedgerAppendOnly, validateLedger } from './distribution.mjs';
+import { appendPublications, checkLedgerAppendOnly, digest, parseUnique, validateLedger } from './distribution.mjs';
 import { validateUpdateFiles } from './github.mjs';
 import { raycastFileMode } from './raycast.mjs';
 import { listingIconPath, validateListingPNG } from './listing.mjs';
+import { DIRECTORY_FILE, DIRECTORY_IDS, mergePendingDirectoryObservations, validateDirectoryObservations } from './skills-sh-observer.mjs';
 
 const REPOSITORY = 'hraness/product-skills';
 const need = (condition, message) => { if (!condition) throw new Error(message); };
 const sha = (value) => { need(typeof value === 'string' && /^[a-f0-9]{40}$/.test(value), 'Invalid generated-update Git identity'); return value; };
 const blobHash = (bytes) => createHash('sha1').update(`blob ${bytes.length}\0`).update(bytes).digest('hex');
+const canonical = (value) => JSON.stringify(Array.isArray(value) ? value.map((entry) => JSON.parse(canonical(entry))) : value !== null && typeof value === 'object' ? Object.fromEntries(Object.keys(value).sort().map((key) => [key, JSON.parse(canonical(value[key]))])) : value);
+
+export function mergePendingDirectories(pending, desired, baseline, report, options = {}) {
+  for (const value of [pending, desired, baseline]) validateDirectoryObservations(value, options);
+  const observed = report?.schemaVersion === 1 && report.scope === 'listing-presence' && report.status === 'verified'
+    && report.remoteFileBytesVerified === false && JSON.stringify(report.products) === JSON.stringify(DIRECTORY_IDS)
+    && typeof report.checkedAt === 'string' && Number.isFinite(Date.parse(report.checkedAt)) && new Date(report.checkedAt).toISOString() === report.checkedAt
+    && Date.parse(report.checkedAt) <= (options.now ?? Date.now)() && report.observationsHash === digest(canonical(desired));
+  // An unavailable fresh read must not erase a prior successful observation
+  // already waiting in this App's protected proposal.
+  return mergePendingDirectoryObservations(pending, observed ? desired : pending, baseline, options);
+}
+
+export async function readPendingDirectories(head, read) {
+  const prefix = `repos/${REPOSITORY}/`; sha(head);
+  const commit = await read(`${prefix}git/commits/${head}`); need(commit.sha === head, 'Pending directory commit differs');
+  const treeSha = sha(commit.tree?.sha); const tree = await read(`${prefix}git/trees/${treeSha}?recursive=1`);
+  need(tree.sha === treeSha && tree.truncated === false && Array.isArray(tree.tree) && tree.tree.length <= 5000, 'Cannot inspect the pending directory record');
+  const entries = tree.tree.filter((entry) => entry.path === DIRECTORY_FILE);
+  need(entries.length === 1 && entries[0].type === 'blob' && entries[0].mode === '100644' && Number.isSafeInteger(entries[0].size) && entries[0].size > 0 && entries[0].size <= 8192, 'Pending directory observations must be a regular bounded file');
+  const blob = await read(`${prefix}git/blobs/${sha(entries[0].sha)}`);
+  need(blob.encoding === 'base64' && typeof blob.content === 'string' && blob.content.length <= 16384 && blob.size === entries[0].size, 'Pending directory observations are unavailable');
+  const bytes = Buffer.from(blob.content, 'base64'); need(bytes.length === blob.size && blobHash(bytes) === entries[0].sha, 'Pending directory observation blob differs');
+  return validateDirectoryObservations(parseUnique(new TextDecoder('utf-8', { fatal: true }).decode(bytes)));
+}
 
 export function mergePendingPublications(pending, desired, baseline) {
   validateLedger(pending); validateLedger(desired); validateLedger(baseline);

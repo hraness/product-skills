@@ -41,3 +41,14 @@ test('publication admits trusted scheduled and manual recovery plus canonical su
   const fork = context('workflow_run'); fork.event.workflow_run.head_repository.id = 1; assert.equal(admit(fork), false);
   const branch = context('workflow_run'); branch.event.workflow_run.head_branch = 'proposal'; assert.equal(admit(branch), false);
 });
+
+test('directory failures preserve useful proposals and still fail both automatic workflows', async () => {
+  for (const name of ['publish', 'reconcile']) {
+    const source = await readFile(new URL(`../.github/workflows/${name}.yml`, import.meta.url), 'utf8');
+    const observation = source.indexOf('id: directories'); const proposal = source.indexOf(`node scripts/automation.mjs propose-${name === 'publish' ? 'publications' : 'products'}`);
+    const check = source.lastIndexOf('"$DIRECTORY_OUTCOME" != success');
+    assert(observation > 0 && proposal > observation && check > proposal, `${name} must propose separately verified changes before its final directory-failure check`);
+    assert.match(source.slice(observation, source.indexOf('run: node scripts/distribution.mjs record-directories') + 64), /continue-on-error: true\n\s+env:\n\s+GH_TOKEN: ''\n\s+REPORT_GH_TOKEN: ''/);
+    assert.match(source.slice(check), /exit 1/);
+  }
+});

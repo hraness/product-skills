@@ -124,6 +124,7 @@ test('the collection command persists actual publications with zero admitted plu
     await mkdir(join(root, 'catalog'));
     await writeFile(join(root, 'catalog/admitted.json'), JSON.stringify({ schemaVersion: 1, products: {} }));
     await writeFile(join(root, 'catalog/portfolio.json'), await readFile(new URL('../catalog/portfolio.json', import.meta.url)));
+    await writeFile(join(root, 'catalog/directory-observations.json'), JSON.stringify({ schemaVersion: 1, scope: 'listing-presence', observations: [] }));
     await writeFile(join(root, 'publication-ledger.json'), `${JSON.stringify(empty(), null, 2)}\n`);
     globalThis.fetch = server().fetchImpl; await main(['record-registry'], root);
     const recorded = await readFile(join(root, 'publication-ledger.json'), 'utf8');
