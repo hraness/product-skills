@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
-import { appendPublications, checkLedgerAppendOnly, checkPackageFingerprints, digest, download, packages, parseUnique, reconcile as reconcileSources, recordGithub, render, renderedPackageFingerprint, validateBundle, validateLedger, validatePortfolio, verifyApp, zip } from '../scripts/distribution.mjs';
+import { appendPublications, checkLedgerAppendOnly, checkPackageFingerprints, clawhubPublicationId, clawhubPublicationUrl, digest, download, packages, parseUnique, reconcile as reconcileSources, recordGithub, render, renderedPackageFingerprint, validateBundle, validateLedger, validatePortfolio, verifyApp, zip } from '../scripts/distribution.mjs';
 import { withOriginalIcon } from './fixtures/listing-icon.mjs';
 const reconcile = (options) => reconcileSources({ ...options, fetchImpl: withOriginalIcon(options.fetchImpl ?? fetch) });
 
@@ -282,4 +282,15 @@ test('only immutable public GitHub release readback can add an idempotent public
   assert.deepEqual(await recordGithub(verified, plan, { fetchImpl }), verified);
   release.immutable = false; await assert.rejects(recordGithub(ledger, plan, { fetchImpl })); release.immutable = true;
   release.assets[0].digest = `sha256:${'b'.repeat(64)}`; await assert.rejects(recordGithub(ledger, plan, { fetchImpl }));
+});
+test('a ClawHub publication pins its product, version, skill fingerprint and public page', () => {
+  const fingerprint = 'a72ab99bd5d23fc589a7519b8e063f4c4fcc0fc825513a8a6f260c73fdfd82ca';
+  const entry = { id: clawhubPublicationId('textmock', '0.1.1', fingerprint), product: 'textmock', channel: 'clawhub', publishedAt: '2026-11-15T17:17:19.247Z', url: clawhubPublicationUrl('textmock'), version: '0.1.1', contentHash: fingerprint };
+  assert.equal(entry.id, 'textmock-clawhub-0-1-1-a72ab99b'); assert.equal(entry.url, 'https://clawhub.ai/hraness/skills/textmock');
+  const ledger = appendPublications({ schemaVersion: 1, publications: [] }, [entry]); assert.deepEqual(appendPublications(ledger, [entry]), ledger);
+  for (const change of [{ product: 'sponge' }, { id: `${entry.id}-other` }, { version: '0.1.2' }, { contentHash: 'b'.repeat(64) }, { url: 'https://clawhub.ai/hraness/skills/sponge' }, { url: 'https://clawhub.ai/someone/skills/textmock' }, { url: `${entry.url}?version=0.1.1` }, { url: 'https://github.com/hraness/product-skills' }, { publishedAt: '2999-01-01T00:00:00.000Z' }]) {
+    assert.throws(() => validateLedger({ schemaVersion: 1, publications: [{ ...entry, ...change }] }), undefined, JSON.stringify(change));
+  }
+  assert.throws(() => validateLedger({ schemaVersion: 1, publications: [{ ...entry, id: 'textmock-github-test', channel: 'github' }] }), /public allowlist/);
+  assert.throws(() => clawhubPublicationId('textmock', '0.1.1', fingerprint.toUpperCase())); assert.throws(() => clawhubPublicationId('unknown', '0.1.1', fingerprint)); assert.throws(() => clawhubPublicationUrl('unknown'));
 });

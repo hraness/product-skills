@@ -494,9 +494,9 @@
         "yaptake"
       ],
       "decision": "deferred",
-      "reason": "Every entry must already be published on ClawHub with passing tests, a clean security status and real community usage; brand-new skills are not accepted. No product skill has been published to ClawHub.",
+      "reason": "Every entry must already be published on ClawHub with passing tests, a clean security status and real community usage; brand-new skills are not accepted. Sponge, Textmock and Yaptake have been on ClawHub with clean scans since 15 November 2026 but have no community usage yet. Dawn is not published there.",
       "rulesUrl": "https://github.com/VoltAgent/awesome-openclaw-skills/blob/5492fcd98f7c52c69e1b2fa58790faf4fc90ce13/CONTRIBUTING.md",
-      "reviewedAt": "2026-11-15T15:26:28.000Z",
+      "reviewedAt": "2026-11-15T17:35:05.000Z",
       "sourceCommit": "5492fcd98f7c52c69e1b2fa58790faf4fc90ce13",
       "reach": {
         "stars": 53788,
