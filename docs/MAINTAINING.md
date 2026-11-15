@@ -132,10 +132,13 @@ fails the workflow visibly after other verified updates can be proposed.
 
 The publisher also checks the [official MCP Registry](https://registry.modelcontextprotocol.io/docs)
 daily and after a successful main check. It reads every page for the fixed
-`io.github.hraness/sponge` server, then verifies a new active listing against
-that version's public npm manifest. The package's generated `mcp` fields supply
-the local command, arguments and guide URL. The observer sends no credentials,
-downloads no app code and cannot publish to the registry.
+`io.github.hraness/sponge` and `io.github.hraness/yaptake` servers. A new
+active Sponge listing must match that version's public npm manifest, whose
+generated `mcp` fields supply the local command, arguments and guide URL. A new
+Yaptake listing must name one MCP bundle in an immutable release of this
+repository, with the same file name and SHA-256 that the release reports. The
+observer sends no credentials, downloads no app code and cannot publish to the
+registry.
 
 An observation records the registry's first publication time and the SHA-256 of
 its server JSON with object keys sorted. The listing name and version determine
@@ -194,6 +197,38 @@ latest `Required` result. Only modifications to existing SHA-pinned `uses:` line
 are eligible; changing an action's identity or other workflow code stops the
 automatic merge. A behind branch is updated conditionally and waits for its new
 ordinary checks. No workflow approval or branch protection is bypassed.
+
+## MCP bundles
+
+Sponge and Yaptake also ship as [MCP bundles](https://github.com/modelcontextprotocol/mcpb)
+(`.mcpb`), which Claude Desktop installs in one step. The renderer writes each
+bundle's files under `mcpb/PRODUCT/`, and the publisher attaches
+`PRODUCT-VERSION.mcpb` to the integration release beside the ZIP. A bundle
+holds a small launcher and no copy of the product. The Sponge launcher runs the
+installed `@hraness/sponge` command after the same package and version checks
+as the plugin. The Yaptake launcher runs the MCP server inside an installed
+Yaptake app only after it checks the app's bundle ID, version, build and
+Developer ID signature. The bundle's version is the plugin version, and any
+change to the bundle's files moves it to a new version.
+
+To check a bundle locally, run `npm run package`, then
+`npx @anthropic-ai/mcpb validate mcpb/PRODUCT/manifest.json` and
+`npx @anthropic-ai/mcpb info dist/PRODUCT-VERSION.mcpb`.
+
+The `MCP Registry` workflow lists the Yaptake bundle as
+`io.github.hraness/yaptake`. It runs after each publisher run on main, and
+maintainers can start it with `preflight` or `publish`. It rebuilds the release
+plan, checks that main and its `Required` result are current, signs in with
+this repository's GitHub OIDC identity, and confirms that the registry granted
+only the `io.github.hraness/*` namespace. It then compares the local bundle
+hash with the immutable release and publishes only a version the registry does
+not already hold. A version listed from an earlier release with the same bytes
+counts as published. No stored secret is used. The ledger record comes from the
+registry observation, not from the publishing workflow.
+
+[Smithery](https://smithery.ai) accepts the same bundle file with
+`smithery mcp publish PRODUCT-VERSION.mcpb -n hraness/PRODUCT`. Publishing
+there needs a signed-in Smithery account and namespace, so the owner runs it.
 
 ## Update shared writing guides
 

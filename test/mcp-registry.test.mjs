@@ -23,6 +23,7 @@ function server(records = [record()], { pages = null, exact = new Map(), package
     assert.equal(options.method, 'GET'); assert.equal(options.redirect, 'error'); assert.equal(options.headers.authorization, undefined); assert.equal(options.headers.Authorization, undefined); assert.equal(options.body, undefined);
     if (fail?.(url)) return json({ message: 'Synthetic public dependency failure' }, { status: 503 });
     if (url.origin === MCP_REGISTRY.origin && url.pathname === '/v0.1/servers') {
+      if (url.searchParams.get('search') === 'io.github.hraness/yaptake') return json({ servers: [], metadata: { count: 0 } });
       assert.equal(url.searchParams.get('search'), MCP_REGISTRY.name); assert.equal(url.searchParams.get('limit'), '100'); assert.equal(url.searchParams.get('include_deleted'), 'true');
       const page = url.searchParams.has('cursor') ? Number(url.searchParams.get('cursor').split(':')[1]) : 0;
       const rows = inventory[page] ?? [];

@@ -1,0 +1,67 @@
+{
+  "manifest_version": "0.3",
+  "name": "sponge",
+  "display_name": "Sponge",
+  "version": "0.1.4",
+  "description": "Save articles and PDFs to a reading library captured by a computer you control. Highlight passages, keep notes, and find ideas through search or your coding agent.",
+  "author": {
+    "name": "Hraness",
+    "url": "https://hraness.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hraness/product-skills"
+  },
+  "homepage": "https://sponge.computer",
+  "documentation": "https://sponge.computer/docs/agents",
+  "support": "https://sponge.computer/support",
+  "icon": "assets/icon.png",
+  "server": {
+    "type": "node",
+    "entry_point": "server/index.mjs",
+    "mcp_config": {
+      "command": "node",
+      "args": [
+        "${__dirname}/server/index.mjs"
+      ],
+      "env": {
+        "SPONGE_CLI": "${user_config.sponge_cli}",
+        "SPONGE_MCP_LIBRARY": "${user_config.library}"
+      }
+    }
+  },
+  "user_config": {
+    "library": {
+      "type": "directory",
+      "title": "Library folder",
+      "description": "Optional. Leave empty to use your default Sponge library.",
+      "required": false
+    },
+    "sponge_cli": {
+      "type": "file",
+      "title": "Sponge command",
+      "description": "Optional. The installed sponge command, if your MCP client cannot find it.",
+      "required": false
+    }
+  },
+  "compatibility": {
+    "platforms": [
+      "darwin",
+      "linux"
+    ],
+    "runtimes": {
+      "node": ">=24.20.0"
+    }
+  },
+  "privacy_policies": [
+    "https://sponge.computer/privacy"
+  ],
+  "keywords": [
+    "reading",
+    "library",
+    "articles",
+    "pdf",
+    "notes"
+  ],
+  "license": "MIT"
+}

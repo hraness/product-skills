@@ -7,7 +7,7 @@ export function spongeRequirements(manifest) {
   return { schemaVersion: 1, command: manifest.runtime.command, package: manifest.runtime.install.package, version: manifest.runtime.version, node: manifest.runtime.node, homepage: manifest.product.url };
 }
 export function spongeModule(file) {
-  if (!['cli.mjs', 'mcp.mjs', 'raycast.mjs'].includes(file)) throw new Error('Unknown Sponge integration module');
+  if (!['bundle.mjs', 'cli.mjs', 'mcp.mjs', 'raycast.mjs'].includes(file)) throw new Error('Unknown Sponge integration module');
   return readFileSync(new URL('./sponge/' + file, import.meta.url), 'utf8');
 }
 export function renderSpongeSupport(manifest) {

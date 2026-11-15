@@ -133,8 +133,8 @@ async function publish() {
   process.stdout.write(`${JSON.stringify({ tooling })}\n`);
   if (!plan.products.length) { process.stdout.write('No admitted product package to publish.\n'); return; }
   need(/^integrations-[a-f0-9]{16}$/.test(plan.tag), 'Invalid release plan');
-  await writeFile('/tmp/product-skills-release.md', `Product skills and local integration packages. Read each product README for runtime requirements and the first task.\n\n${plan.products.map((p) => `- ${p.id} ${p.version}: \`${p.file}\``).join('\n')}\n\nVerify archives with the attached SHA256SUMS. Directory approval and native client qualification are separate from this package release.\n`);
-  const files = [...plan.products.map((p) => p.file), 'SHA256SUMS', 'release.json'];
+  await writeFile('/tmp/product-skills-release.md', `Product skills and local integration packages. Read each product README for runtime requirements and the first task.\n\n${plan.products.map((p) => `- ${p.id} ${p.version}: \`${p.file}\`${p.mcpb ? ` and MCP bundle \`${p.mcpb.file}\`` : ''}`).join('\n')}\n\nVerify archives with the attached SHA256SUMS. Directory approval and native client qualification are separate from this package release.\n`);
+  const files = [...plan.products.flatMap((p) => [p.file, ...(p.mcpb ? [p.mcpb.file] : [])]), 'SHA256SUMS', 'release.json'];
   const assets = Object.fromEntries(await Promise.all(files.map(async (file) => [file, await readFile(`dist/${file}`)])));
   await publishReleaseAssets({ tag: plan.tag, target: sha, assets, paths: Object.fromEntries(files.map((file) => [file, `dist/${file}`])), title: 'Hraness product skills', notesPath: '/tmp/product-skills-release.md', read: api, request: gh, allowPublishedTargetReuse: true, beforePublish: async () => { const current = await api(`repos/${REPO}/git/ref/heads/main`); need(current.object.sha === sha && successfulRequired(await api(`repos/${REPO}/commits/${sha}/check-runs?per_page=100`), sha), 'Product publication candidate changed or lost its Required check'); } });
   await distribution(['record-github']);
