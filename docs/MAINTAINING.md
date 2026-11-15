@@ -178,6 +178,16 @@ before writing. Failures preserve both the ledger and cursor. Pending owned PRs
 keep the furthest compatible cursor and reject divergent history. These public
 GET requests send no credentials and download no app archive.
 
+ClawHub skill publications are recorded by a maintainer after public readback.
+The `hraness` publisher page and the public `/api/v1/skills/<slug>` record must
+show the submitted version, and `/api/v1/resolve` must map the submitted
+folder's skill fingerprint to that version. The fingerprint, which the ClawHub
+CLI reports on publish, is the SHA-256 of the files' sorted `path:sha256` lines;
+it becomes the content hash, and the version's `createdAt` becomes the
+publication time. ClawHub holds new versions for review, adds its own skill card
+and distributes every skill under MIT-0. A version still in review, or one that
+resolves to a different fingerprint, adds no record.
+
 Dependabot action updates use the same trusted-main delivery job. It verifies
 the Dependabot author, repository, exact head, canonical check workflow and
 latest `Required` result. Only modifications to existing SHA-pinned `uses:` lines

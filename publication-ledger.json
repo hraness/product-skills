@@ -99,6 +99,33 @@
       "url": "https://github.com/hraness/product-skills/releases/tag/integrations-9d0fff7312b9b8ff",
       "version": "0.1.1",
       "contentHash": "38e94d209f2b7d7354f566f6bd5ef5bf126a14e5b6a28550a7c6389fe2c24d42"
+    },
+    {
+      "id": "sponge-clawhub-0-1-2-3dec5c50",
+      "product": "sponge",
+      "channel": "clawhub",
+      "publishedAt": "2026-11-15T17:16:56.908Z",
+      "url": "https://clawhub.ai/hraness/skills/sponge",
+      "version": "0.1.2",
+      "contentHash": "3dec5c50982b6f1bb4da11cf0df1ac93ab2f6ea4d317fb2a18d7ec42ff8c63d1"
+    },
+    {
+      "id": "textmock-clawhub-0-1-1-a72ab99b",
+      "product": "textmock",
+      "channel": "clawhub",
+      "publishedAt": "2026-11-15T17:17:19.247Z",
+      "url": "https://clawhub.ai/hraness/skills/textmock",
+      "version": "0.1.1",
+      "contentHash": "a72ab99bd5d23fc589a7519b8e063f4c4fcc0fc825513a8a6f260c73fdfd82ca"
+    },
+    {
+      "id": "yaptake-clawhub-0-1-1-16774b00",
+      "product": "yaptake",
+      "channel": "clawhub",
+      "publishedAt": "2026-11-15T17:17:27.468Z",
+      "url": "https://clawhub.ai/hraness/skills/yaptake",
+      "version": "0.1.1",
+      "contentHash": "16774b00eacb1b875f8fa03f007e1675a86dfa8be867c72d526e953b0ee6569a"
     }
   ]
 }
