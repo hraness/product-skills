@@ -3,7 +3,9 @@ import assert from 'node:assert/strict';
 import { readFile, readdir } from 'node:fs/promises';
 import { join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { execFileSync } from 'node:child_process';
 import { CLAUDE_DIRECTORY_PRODUCTS, CLAUDE_DIRECTORY_ROOT, claudeDirectoryFiles } from '../scripts/claude-directory.mjs';
+import { encodeLink } from '../plugins/textmock/skills/textmock/scripts/textmock-link.mjs';
 
 const root = new URL('../', import.meta.url);
 const files = async (dir) => { const base = fileURLToPath(new URL(dir, root)); return (await readdir(base, { recursive: true, withFileTypes: true })).filter((e) => e.isFile()).map((e) => relative(base, join(e.parentPath, e.name))); };
@@ -25,5 +27,16 @@ test('the Dawn directory copy carries its example as Markdown and links to it', 
   assert.match(out['skills/dawn/examples/morning-study.md'], /```ts\nexport default 1;\n```/);
   assert.ok(!out['skills/dawn/SKILL.md'].includes('.ts)') && out['skills/dawn/SKILL.md'].includes('Copy its code to `song.ts`'));
   assert.ok(out['README.md'].includes('examples/morning-study.md'));
-  assert.equal(claudeDirectoryFiles('textmock', {}, { manifest: '{}' }), null);
+});
+test('the Textmock directory copy makes the same links as the bundled helper', async () => {
+  const skill = await readFile(new URL(`${CLAUDE_DIRECTORY_ROOT}/textmock/skills/textmock/SKILL.md`, root), 'utf8');
+  const readme = await readFile(new URL(`${CLAUDE_DIRECTORY_ROOT}/textmock/README.md`, root), 'utf8');
+  assert.ok(!/textmock-link|scripts\//.test(skill + readme) && skill.includes('`textmock render --out`'));
+  const [, command, example] = /```sh\n(node -e '.*') <<'JSON'\n(.*)\nJSON\n```/.exec(skill);
+  const run = (doc) => execFileSync('sh', ['-c', command], { input: doc, encoding: 'utf8' }).trim();
+  const input = { name: 'Mira', messages: [{ from: 'them', text: 'Did you bring the telescope?' }, { from: 'me', text: 'Yes. You bring the clear sky.' }] };
+  assert.equal(run(example), encodeLink(input));
+  const tricky = { name: "Zoë's \"phone\"", dark: true, clock: '23:59', messages: [{ from: 'me', text: "It's 'quoted' — and\nmultiline 🚀" }] };
+  const doc = { v: 6, dark: true, name: tricky.name, clock: '23:59', messages: [{ id: 'm1', from: 'me', text: tricky.messages[0].text }], replies: false };
+  assert.equal(run(JSON.stringify(doc, null, 2)), encodeLink(tricky));
 });

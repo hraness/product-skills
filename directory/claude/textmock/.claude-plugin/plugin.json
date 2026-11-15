@@ -1,0 +1,17 @@
+{
+  "name": "textmock",
+  "version": "0.1.2",
+  "description": "Make iMessage-style conversations and save them as images or videos.",
+  "author": {
+    "name": "Hraness",
+    "url": "https://hraness.com"
+  },
+  "homepage": "https://textmock.com/docs/agents",
+  "repository": "https://github.com/hraness/product-skills",
+  "license": "MIT",
+  "displayName": "Textmock",
+  "privacyPolicyUrl": "https://textmock.com/privacy",
+  "termsOfServiceUrl": "https://textmock.com/terms",
+  "skills": "./skills/",
+  "icon": "./assets/icon.png"
+}
