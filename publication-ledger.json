@@ -162,6 +162,42 @@
       "url": "https://github.com/hraness/product-skills/releases/tag/integrations-259528199c5f21fa",
       "version": "0.1.2",
       "contentHash": "2eb965e9f52193765186cf3faa4d9ffee6532012870bdac81e665c48c90f1968"
+    },
+    {
+      "id": "sponge-github-0-1-4-8b331223",
+      "product": "sponge",
+      "channel": "github",
+      "publishedAt": "2026-11-15T19:49:48.000Z",
+      "url": "https://github.com/hraness/product-skills/releases/tag/integrations-55f5d38c3e11e331",
+      "version": "0.1.4",
+      "contentHash": "8b331223a0106922683a6791e6d43c3d69229f21ec0b2360846d90736e49207c"
+    },
+    {
+      "id": "sponge-mcpb-0-1-4-0443e1a7",
+      "product": "sponge",
+      "channel": "github",
+      "publishedAt": "2026-11-15T19:49:48.000Z",
+      "url": "https://github.com/hraness/product-skills/releases/tag/integrations-55f5d38c3e11e331",
+      "version": "0.1.4",
+      "contentHash": "0443e1a70cc5eae526ed5069a6f21183a6f7a95e493372eb096f67aba05f9973"
+    },
+    {
+      "id": "yaptake-github-0-1-3-deb45273",
+      "product": "yaptake",
+      "channel": "github",
+      "publishedAt": "2026-11-15T19:49:48.000Z",
+      "url": "https://github.com/hraness/product-skills/releases/tag/integrations-55f5d38c3e11e331",
+      "version": "0.1.3",
+      "contentHash": "deb45273e3a2fe026bde83788dbbf5b2a94a66d380e67a97d9eef44347dd23ff"
+    },
+    {
+      "id": "yaptake-mcpb-0-1-3-79d2df29",
+      "product": "yaptake",
+      "channel": "github",
+      "publishedAt": "2026-11-15T19:49:48.000Z",
+      "url": "https://github.com/hraness/product-skills/releases/tag/integrations-55f5d38c3e11e331",
+      "version": "0.1.3",
+      "contentHash": "79d2df291b5693f5dd1d5b84b57921226c67a78b99828d428d7a5055e6a57fcd"
     }
   ]
 }
