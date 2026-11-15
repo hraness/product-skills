@@ -119,8 +119,9 @@ updates; a repository import is not a public listing. See the
 Web form acknowledgements are kept in dated records, starting with
 [15 November](../catalog/form-submissions-2026-11-15.json). A form
 acknowledgement or a submission page in review isn't a listing. On 15 November,
-Claude reviewers held the Dawn, Sponge and Yaptake directory copies, and the
-directory asked for changes to Textmock. Cursor received one publisher
+Claude reviewers held the Dawn, Sponge and Yaptake directory copies. The
+directory refused Textmock's helper, so its directory copy replaced that
+submission. Cursor received one publisher
 application for all four plugins. mcpservers.org received Sponge, and
 awesome.video received Yaptake.
 
