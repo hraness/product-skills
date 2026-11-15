@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "scope": "Directory and marketplace web forms submitted on 2026-11-15",
-  "observedAt": "2026-11-15T18:43:53Z",
+  "observedAt": "2026-11-15T20:20:00Z",
   "limits": "Each row records the acknowledgement the form or management page showed when it was observed. None of these is a published listing; add a publication record only after the public listing can be read back.",
   "submissions": [
     {
@@ -69,6 +69,93 @@
       "reference": "https://awesome.video/submit",
       "source": "https://yaptake.com",
       "observedState": "Submitted as a Media Tools resource by the hraness GitHub sign-in; pending review"
+    },
+    {
+      "products": [
+        "dawn"
+      ],
+      "channel": "mcpmarket",
+      "reference": "https://mcpmarket.com/submit",
+      "source": "https://github.com/hraness/product-skills/tree/main/plugins/dawn/skills/dawn",
+      "observedState": "Submitted as a skill on the free queue; review takes four to six weeks"
+    },
+    {
+      "products": [
+        "sponge"
+      ],
+      "channel": "mcpmarket",
+      "reference": "https://mcpmarket.com/submit",
+      "source": "https://github.com/hraness/product-skills/tree/main/plugins/sponge/skills/sponge",
+      "observedState": "Submitted as a skill on the free queue; review takes four to six weeks"
+    },
+    {
+      "products": [
+        "textmock"
+      ],
+      "channel": "mcpmarket",
+      "reference": "https://mcpmarket.com/submit",
+      "source": "https://github.com/hraness/product-skills/tree/main/plugins/textmock/skills/textmock",
+      "observedState": "Submitted as a skill on the free queue; review takes four to six weeks"
+    },
+    {
+      "products": [
+        "yaptake"
+      ],
+      "channel": "mcpmarket",
+      "reference": "https://mcpmarket.com/submit",
+      "source": "https://github.com/hraness/product-skills/tree/main/plugins/yaptake/skills/yaptake",
+      "observedState": "Submitted as a skill on the free queue; review takes four to six weeks"
+    },
+    {
+      "products": [
+        "dawn",
+        "sponge",
+        "textmock",
+        "yaptake"
+      ],
+      "channel": "claudemarketplaces",
+      "reference": "https://claudemarketplaces.com",
+      "source": "https://github.com/hraness/product-skills",
+      "observedState": "Submitted as a free marketplace listing; pending review"
+    },
+    {
+      "products": [
+        "dawn",
+        "sponge",
+        "textmock",
+        "yaptake"
+      ],
+      "channel": "cursor.directory",
+      "reference": "https://cursor.directory",
+      "source": "https://github.com/hraness/product-skills",
+      "observedState": "Published as Hraness products; hidden until the directory security scan finishes"
+    },
+    {
+      "products": [
+        "sponge"
+      ],
+      "channel": "saashub",
+      "reference": "https://www.saashub.com/sponge-computer",
+      "source": "https://sponge.computer",
+      "observedState": "Submitted on the free plan as Sponge.computer, because the name Sponge was taken; pending approval"
+    },
+    {
+      "products": [
+        "yaptake"
+      ],
+      "channel": "saashub",
+      "reference": "https://www.saashub.com/yaptake",
+      "source": "https://yaptake.com",
+      "observedState": "Submitted on the free plan; pending approval"
+    },
+    {
+      "products": [
+        "sponge"
+      ],
+      "channel": "uneed",
+      "reference": "https://www.uneed.best/tool/sponge",
+      "source": "https://sponge.computer",
+      "observedState": "Joined the free waiting line; launch scheduled for 21 June 2027"
     }
   ]
 }

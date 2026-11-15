@@ -926,6 +926,27 @@
         "pushedAt": "2026-10-25T21:54:45.000Z",
         "archived": false
       }
+    },
+    {
+      "repository": "davila7/claude-code-templates",
+      "products": [
+        "dawn",
+        "sponge",
+        "textmock",
+        "yaptake"
+      ],
+      "decision": "eligible",
+      "reason": "The aitmpl.com catalog lists external skills by repository path and accepts MCP configurations by PR. Each product gets its own PR, pinned to a product-skills commit.",
+      "rulesUrl": "https://github.com/davila7/claude-code-templates/blob/22dd06e16a3ced89e66fb1de7c3f20b2265829eb/CONTRIBUTING.md",
+      "reviewedAt": "2026-11-15T19:38:00.000Z",
+      "sourceCommit": "22dd06e16a3ced89e66fb1de7c3f20b2265829eb",
+      "reach": {
+        "stars": 33750,
+        "forks": 3982,
+        "watchers": 194,
+        "pushedAt": "2026-11-15T18:33:54.000Z",
+        "archived": false
+      }
     }
   ],
   "submissions": [
@@ -1186,6 +1207,90 @@
       "github": {
         "state": "open",
         "updatedAt": "2026-11-15T19:11:00.000Z",
+        "mergedAt": null
+      }
+    },
+    {
+      "id": "sponge-claude-code-templates-1571",
+      "products": [
+        "sponge"
+      ],
+      "channel": "github-collection",
+      "repository": "davila7/claude-code-templates",
+      "repositoryId": 1013480284,
+      "number": 1571,
+      "url": "https://github.com/davila7/claude-code-templates/pull/1571",
+      "author": {
+        "login": "0thernet",
+        "id": 894119
+      },
+      "submittedAt": "2026-11-15T19:38:53.000Z",
+      "github": {
+        "state": "open",
+        "updatedAt": "2026-11-15T19:40:24.000Z",
+        "mergedAt": null
+      }
+    },
+    {
+      "id": "dawn-claude-code-templates-1572",
+      "products": [
+        "dawn"
+      ],
+      "channel": "github-collection",
+      "repository": "davila7/claude-code-templates",
+      "repositoryId": 1013480284,
+      "number": 1572,
+      "url": "https://github.com/davila7/claude-code-templates/pull/1572",
+      "author": {
+        "login": "0thernet",
+        "id": 894119
+      },
+      "submittedAt": "2026-11-15T19:38:55.000Z",
+      "github": {
+        "state": "open",
+        "updatedAt": "2026-11-15T19:40:29.000Z",
+        "mergedAt": null
+      }
+    },
+    {
+      "id": "textmock-claude-code-templates-1573",
+      "products": [
+        "textmock"
+      ],
+      "channel": "github-collection",
+      "repository": "davila7/claude-code-templates",
+      "repositoryId": 1013480284,
+      "number": 1573,
+      "url": "https://github.com/davila7/claude-code-templates/pull/1573",
+      "author": {
+        "login": "0thernet",
+        "id": 894119
+      },
+      "submittedAt": "2026-11-15T19:38:57.000Z",
+      "github": {
+        "state": "open",
+        "updatedAt": "2026-11-15T19:40:22.000Z",
+        "mergedAt": null
+      }
+    },
+    {
+      "id": "yaptake-claude-code-templates-1574",
+      "products": [
+        "yaptake"
+      ],
+      "channel": "github-collection",
+      "repository": "davila7/claude-code-templates",
+      "repositoryId": 1013480284,
+      "number": 1574,
+      "url": "https://github.com/davila7/claude-code-templates/pull/1574",
+      "author": {
+        "login": "0thernet",
+        "id": 894119
+      },
+      "submittedAt": "2026-11-15T19:38:59.000Z",
+      "github": {
+        "state": "open",
+        "updatedAt": "2026-11-15T19:40:46.000Z",
         "mergedAt": null
       }
     }

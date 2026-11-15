@@ -123,7 +123,12 @@ Claude reviewers held the Dawn, Sponge and Yaptake directory copies. The
 directory refused Textmock's helper, so its directory copy replaced that
 submission. Cursor received one publisher
 application for all four plugins. mcpservers.org received Sponge, and
-awesome.video received Yaptake.
+awesome.video received Yaptake. Later that day, mcpmarket received each
+product's skill and claudemarketplaces received the marketplace, both in free
+queues. cursor.directory published the marketplace pending its security scan.
+SaaSHub received Sponge, listed as Sponge.computer because the name Sponge was
+taken, and Yaptake. It accepts no further submission from the account until it
+approves one. Uneed scheduled Sponge's free launch for 21 June 2027.
 
 ## Demonstration cases
 
