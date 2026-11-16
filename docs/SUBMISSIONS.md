@@ -24,6 +24,9 @@ The [submission catalog](../catalog/submissions.json) owns saved searches, revie
 | Dawn | [davila7/claude-code-templates #1572](https://github.com/davila7/claude-code-templates/pull/1572) | 2026-11-15 | Submitted; open |
 | Textmock | [davila7/claude-code-templates #1573](https://github.com/davila7/claude-code-templates/pull/1573) | 2026-11-15 | Submitted; open |
 | Yaptake | [davila7/claude-code-templates #1574](https://github.com/davila7/claude-code-templates/pull/1574) | 2026-11-15 | Submitted; open |
+| Sponge | [davepoon/buildwithclaude #743](https://github.com/davepoon/buildwithclaude/pull/743) | 2026-11-16 | Submitted; open |
+| Yaptake | [davepoon/buildwithclaude #744](https://github.com/davepoon/buildwithclaude/pull/744) | 2026-11-16 | Submitted; open |
+| Textmock | [davepoon/buildwithclaude #745](https://github.com/davepoon/buildwithclaude/pull/745) | 2026-11-16 | Submitted; open |
 
 ## Published packages and verified listings
 
@@ -164,6 +167,7 @@ Stars are dated public popularity counts, not traffic measurements. Review decis
 | [iCHAIT/awesome-macOS](https://github.com/iCHAIT/awesome-macOS) | Yaptake | 19,493 | deferred: Only collaborators can open PRs, and a PR from a fork was refused on 2026-11-15. Issue suggestions were closed as not planned on 2026-10-27. | [Rules; 2026-11-15](https://github.com/iCHAIT/awesome-macOS/blob/651d7ab32fff14590571399c04721146b1851d7d/.github/contributing.md) |
 | [krzemienski/awesome-video](https://github.com/krzemienski/awesome-video) | Yaptake | 1,951 | deferred: The guide recommends the submission form on awesome.video, and its media tools category lists commercial subtitle tools. Apart from a guide fix on 2026-10-25, no PR has been merged since 2025-03-14. | [Rules; 2026-11-15](https://github.com/krzemienski/awesome-video/blob/392e8fefaea9badf60bb5c7e29b878d673248552/CONTRIBUTING.md) |
 | [davila7/claude-code-templates](https://github.com/davila7/claude-code-templates) | Dawn, Sponge, Textmock, Yaptake | 33,750 | eligible: The aitmpl.com catalog lists external skills by repository path and accepts MCP configurations by PR. Each product gets its own PR, pinned to a product-skills commit. | [Rules; 2026-11-15](https://github.com/davila7/claude-code-templates/blob/22dd06e16a3ced89e66fb1de7c3f20b2265829eb/CONTRIBUTING.md) |
+| [davepoon/buildwithclaude](https://github.com/davepoon/buildwithclaude) | Sponge, Textmock, Yaptake | 3,752 | eligible: The buildwithclaude.com marketplace accepts external plugins by PR, one pinned entry each, with self-submissions disclosed. Dawn waits until its runtime is available outside the private preview, so a reviewer can install it. | [Rules; 2026-11-16](https://github.com/davepoon/buildwithclaude/blob/59ad2b06b60e82fda7c4ac031cbacab2145b33cd/CONTRIBUTING.md) |
 
 ## Maintain the records
 
