@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "scope": "Directory and marketplace web forms submitted on 2026-11-15",
-  "observedAt": "2026-11-16T01:10:00Z",
+  "observedAt": "2026-11-16T01:20:00Z",
   "limits": "Each row records the acknowledgement the form or management page showed when it was observed. None of these is a published listing; add a publication record only after the public listing can be read back.",
   "submissions": [
     {
@@ -59,7 +59,7 @@
       "channel": "mcpservers.org",
       "reference": "https://mcpservers.org/submit",
       "source": "https://sponge.computer/docs/agents",
-      "observedState": "Submitted on the free plan; review within two weeks"
+      "observedState": "Approved and listed at https://mcpservers.org/servers/sponge-computer-docs-agents in the Memory category (read back 2026-11-16)"
     },
     {
       "products": [
