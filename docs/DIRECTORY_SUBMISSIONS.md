@@ -130,6 +130,10 @@ SaaSHub received Sponge, listed as Sponge.computer because the name Sponge was
 taken, and Yaptake. It accepts no further submission from the account until it
 approves one. Uneed scheduled Sponge's free launch for 21 June 2027. MacUpdate received the Yaptake and Textmock Mac apps.
 
+On [16 November](../catalog/form-submissions-2026-11-16.json), AlternativeTo
+received Yaptake, Textmock and Sponge in its free review queue. Sponge is listed
+as Hraness Sponge because the name Sponge was taken.
+
 ## Demonstration cases
 
 Run cases in a fresh, disposable project or library using fictional data. Verify
