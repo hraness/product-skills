@@ -19,7 +19,7 @@ The [submission catalog](../catalog/submissions.json) owns saved searches, revie
 | Yaptake | [xai-org/plugin-marketplace #2083](https://github.com/xai-org/plugin-marketplace/pull/2083) | 2026-11-15 | Submitted; open |
 | Yaptake | [gendotnew/macos-apps #262](https://github.com/gendotnew/macos-apps/pull/262) | 2026-11-15 | Submitted; open |
 | Sponge | [brettkromkamp/awesome-knowledge-management #143](https://github.com/brettkromkamp/awesome-knowledge-management/pull/143) | 2026-11-15 | Submitted; open |
-| Dawn, Sponge, Textmock, Yaptake | [hashgraph-online/awesome-codex-plugins #726](https://github.com/hashgraph-online/awesome-codex-plugins/pull/726) | 2026-11-15 | Submitted; open |
+| Dawn, Sponge, Textmock, Yaptake | [hashgraph-online/awesome-codex-plugins #726](https://github.com/hashgraph-online/awesome-codex-plugins/pull/726) | 2026-11-15 | Merged 2026-11-16 |
 | Sponge | [davila7/claude-code-templates #1571](https://github.com/davila7/claude-code-templates/pull/1571) | 2026-11-15 | Submitted; open |
 | Dawn | [davila7/claude-code-templates #1572](https://github.com/davila7/claude-code-templates/pull/1572) | 2026-11-15 | Submitted; open |
 | Textmock | [davila7/claude-code-templates #1573](https://github.com/davila7/claude-code-templates/pull/1573) | 2026-11-15 | Submitted; open |
@@ -29,7 +29,7 @@ The [submission catalog](../catalog/submissions.json) owns saved searches, revie
 | Textmock | [davepoon/buildwithclaude #745](https://github.com/davepoon/buildwithclaude/pull/745) | 2026-11-16 | Submitted; open |
 | Sponge | [VoltAgent/official-mcp-servers #102](https://github.com/VoltAgent/official-mcp-servers/pull/102) | 2026-11-16 | Submitted; open |
 | Yaptake | [VoltAgent/official-mcp-servers #103](https://github.com/VoltAgent/official-mcp-servers/pull/103) | 2026-11-16 | Submitted; open |
-| Yaptake | [juancarlospaco/awesome-streaming-tools #85](https://github.com/juancarlospaco/awesome-streaming-tools/pull/85) | 2026-11-16 | Submitted; open |
+| Yaptake | [juancarlospaco/awesome-streaming-tools #85](https://github.com/juancarlospaco/awesome-streaming-tools/pull/85) | 2026-11-16 | Merged 2026-11-16 |
 
 ## Published packages and verified listings
 
