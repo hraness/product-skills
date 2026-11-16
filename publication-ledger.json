@@ -216,6 +216,15 @@
       "url": "https://registry.modelcontextprotocol.io/v0.1/servers/io.github.hraness%2Fsponge/versions/0.42.0",
       "version": "0.42.0",
       "contentHash": "9913e8a54ade0af8716cbc563613d27125d5faac4a18a2f457548c7a89d95e33"
+    },
+    {
+      "id": "sponge-mcp-registry-0-43-0",
+      "product": "sponge",
+      "channel": "mcp-registry",
+      "publishedAt": "2026-11-15T21:37:55.899Z",
+      "url": "https://registry.modelcontextprotocol.io/v0.1/servers/io.github.hraness%2Fsponge/versions/0.43.0",
+      "version": "0.43.0",
+      "contentHash": "a93c9a5c5babaeea56743e47034b7a11eb3b62c42d0dc017249013a300b87e46"
     }
   ]
 }
