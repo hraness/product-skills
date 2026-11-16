@@ -128,7 +128,7 @@ product's skill and claudemarketplaces received the marketplace, both in free
 queues. cursor.directory published the marketplace pending its security scan.
 SaaSHub received Sponge, listed as Sponge.computer because the name Sponge was
 taken, and Yaptake. It accepts no further submission from the account until it
-approves one. Uneed scheduled Sponge's free launch for 21 June 2027.
+approves one. Uneed scheduled Sponge's free launch for 21 June 2027. MacUpdate received the Yaptake and Textmock Mac apps.
 
 ## Demonstration cases
 
