@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "scope": "Directory and marketplace web forms submitted on 2026-11-15",
-  "observedAt": "2026-11-15T20:20:00Z",
+  "observedAt": "2026-11-16T01:10:00Z",
   "limits": "Each row records the acknowledgement the form or management page showed when it was observed. None of these is a published listing; add a publication record only after the public listing can be read back.",
   "submissions": [
     {
@@ -156,6 +156,24 @@
       "reference": "https://www.uneed.best/tool/sponge",
       "source": "https://sponge.computer",
       "observedState": "Joined the free waiting line; launch scheduled for 21 June 2027"
+    },
+    {
+      "products": [
+        "yaptake"
+      ],
+      "channel": "macupdate",
+      "reference": "https://member.macupdate.com/content/submit",
+      "source": "https://yaptake.com",
+      "observedState": "Submitted as a free download with a subscription; MacUpdate replies by email within ten days"
+    },
+    {
+      "products": [
+        "textmock"
+      ],
+      "channel": "macupdate",
+      "reference": "https://member.macupdate.com/content/submit",
+      "source": "https://textmock.com/mac",
+      "observedState": "Submitted as a free download with a subscription; MacUpdate replies by email within ten days"
     }
   ]
 }
