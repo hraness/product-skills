@@ -967,6 +967,61 @@
         "pushedAt": "2026-11-16T00:26:16.000Z",
         "archived": false
       }
+    },
+    {
+      "repository": "VoltAgent/official-mcp-servers",
+      "products": [
+        "sponge",
+        "yaptake"
+      ],
+      "decision": "eligible",
+      "reason": "The list links official vendor MCP servers, with new products under Emerging and Independent. One PR per server, with a description of 10 words or fewer.",
+      "rulesUrl": "https://github.com/VoltAgent/official-mcp-servers/blob/b34404d7fc9284118309b0df65d8015a43ed138b/CONTRIBUTING.md",
+      "reviewedAt": "2026-11-16T02:05:00.000Z",
+      "sourceCommit": "b34404d7fc9284118309b0df65d8015a43ed138b",
+      "reach": {
+        "stars": 425,
+        "forks": 130,
+        "watchers": 1,
+        "pushedAt": "2026-11-15T18:19:58.000Z",
+        "archived": false
+      }
+    },
+    {
+      "repository": "juancarlospaco/awesome-streaming-tools",
+      "products": [
+        "yaptake"
+      ],
+      "decision": "eligible",
+      "reason": "Desktop Apps lists paid clip and editing tools with disclosed pricing; resources must carry no ads or watermarks, and Yaptake exports carry none.",
+      "rulesUrl": "https://github.com/juancarlospaco/awesome-streaming-tools/blob/261dfa82347e49c06a1ed6376756ea6b85f7f007/README.md",
+      "reviewedAt": "2026-11-16T02:07:00.000Z",
+      "sourceCommit": "261dfa82347e49c06a1ed6376756ea6b85f7f007",
+      "reach": {
+        "stars": 397,
+        "forks": 88,
+        "watchers": 6,
+        "pushedAt": "2026-11-15T19:04:34.000Z",
+        "archived": false
+      }
+    },
+    {
+      "repository": "raycast/script-commands",
+      "products": [
+        "sponge"
+      ],
+      "decision": "deferred",
+      "reason": "About one PR has merged every month or two since April 2026, and the Sponge Raycast extension already covers Raycast.",
+      "rulesUrl": "https://github.com/raycast/script-commands/blob/cf612c22a8ddea40f6d717f513bbb5619a73ad33/CONTRIBUTING.md",
+      "reviewedAt": "2026-11-16T02:10:00.000Z",
+      "sourceCommit": "cf612c22a8ddea40f6d717f513bbb5619a73ad33",
+      "reach": {
+        "stars": 6812,
+        "forks": 949,
+        "watchers": 50,
+        "pushedAt": "2026-09-21T09:21:43.000Z",
+        "archived": false
+      }
     }
   ],
   "submissions": [
@@ -1374,6 +1429,69 @@
       "github": {
         "state": "open",
         "updatedAt": "2026-11-16T02:04:21.000Z",
+        "mergedAt": null
+      }
+    },
+    {
+      "id": "sponge-official-mcp-servers-102",
+      "products": [
+        "sponge"
+      ],
+      "channel": "github-collection",
+      "repository": "VoltAgent/official-mcp-servers",
+      "repositoryId": 1399413068,
+      "number": 102,
+      "url": "https://github.com/VoltAgent/official-mcp-servers/pull/102",
+      "author": {
+        "login": "0thernet",
+        "id": 894119
+      },
+      "submittedAt": "2026-11-16T02:06:19.000Z",
+      "github": {
+        "state": "open",
+        "updatedAt": "2026-11-16T02:06:19.000Z",
+        "mergedAt": null
+      }
+    },
+    {
+      "id": "yaptake-official-mcp-servers-103",
+      "products": [
+        "yaptake"
+      ],
+      "channel": "github-collection",
+      "repository": "VoltAgent/official-mcp-servers",
+      "repositoryId": 1399413068,
+      "number": 103,
+      "url": "https://github.com/VoltAgent/official-mcp-servers/pull/103",
+      "author": {
+        "login": "0thernet",
+        "id": 894119
+      },
+      "submittedAt": "2026-11-16T02:06:23.000Z",
+      "github": {
+        "state": "open",
+        "updatedAt": "2026-11-16T02:06:23.000Z",
+        "mergedAt": null
+      }
+    },
+    {
+      "id": "yaptake-awesome-streaming-tools-85",
+      "products": [
+        "yaptake"
+      ],
+      "channel": "github-collection",
+      "repository": "juancarlospaco/awesome-streaming-tools",
+      "repositoryId": 221719179,
+      "number": 85,
+      "url": "https://github.com/juancarlospaco/awesome-streaming-tools/pull/85",
+      "author": {
+        "login": "0thernet",
+        "id": 894119
+      },
+      "submittedAt": "2026-11-16T02:07:40.000Z",
+      "github": {
+        "state": "open",
+        "updatedAt": "2026-11-16T02:07:40.000Z",
         "mergedAt": null
       }
     }
