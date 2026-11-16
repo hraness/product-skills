@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "scope": "Directory and marketplace web forms submitted on 2026-11-16",
+  "observedAt": "2026-11-16T07:30:00Z",
+  "limits": "Each row records the acknowledgement the form or management page showed when it was observed. None of these is a published listing; add a publication record only after the public listing can be read back.",
+  "submissions": [
+    {
+      "products": [
+        "yaptake"
+      ],
+      "channel": "alternativeto",
+      "reference": "https://alternativeto.net/software/yaptake/",
+      "source": "https://yaptake.com",
+      "observedState": "Submitted on the free queue as a Mac app with Descript and Kapwing as alternatives; waiting for review"
+    },
+    {
+      "products": [
+        "sponge"
+      ],
+      "channel": "alternativeto",
+      "reference": "https://alternativeto.net/software/hraness-sponge/",
+      "source": "https://sponge.computer",
+      "observedState": "Submitted on the free queue as Hraness Sponge, because the name Sponge was taken, with Readwise Reader, Instapaper and Raindrop.io as alternatives; waiting for review"
+    },
+    {
+      "products": [
+        "textmock"
+      ],
+      "channel": "alternativeto",
+      "reference": "https://alternativeto.net/software/textmock/",
+      "source": "https://textmock.com",
+      "observedState": "Submitted on the free queue for the web and Mac with Crayo.ai, FakeMessenger, Fake Chat Generator and MockClip as alternatives; waiting for review"
+    }
+  ]
+}
