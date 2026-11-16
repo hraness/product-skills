@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "scope": "Directory and marketplace web forms submitted on 2026-11-16",
-  "observedAt": "2026-11-16T07:30:00Z",
+  "observedAt": "2026-11-16T02:20:00Z",
   "limits": "Each row records the acknowledgement the form or management page showed when it was observed. None of these is a published listing; add a publication record only after the public listing can be read back.",
   "submissions": [
     {
@@ -30,6 +30,51 @@
       "reference": "https://alternativeto.net/software/textmock/",
       "source": "https://textmock.com",
       "observedState": "Submitted on the free queue for the web and Mac with Crayo.ai, FakeMessenger, Fake Chat Generator and MockClip as alternatives; waiting for review"
+    },
+    {
+      "products": [
+        "sponge"
+      ],
+      "channel": "awesome-copilot",
+      "reference": "https://github.com/github/awesome-copilot/issues/6444",
+      "source": "plugins/sponge at 45f1689",
+      "observedState": "External plugin issue passed automated intake and quality gates; ready for maintainer review"
+    },
+    {
+      "products": [
+        "yaptake"
+      ],
+      "channel": "awesome-copilot",
+      "reference": "https://github.com/github/awesome-copilot/issues/6445",
+      "source": "plugins/yaptake at 45f1689",
+      "observedState": "External plugin issue passed automated intake and quality gates; ready for maintainer review"
+    },
+    {
+      "products": [
+        "textmock"
+      ],
+      "channel": "awesome-copilot",
+      "reference": "https://github.com/github/awesome-copilot/issues/6446",
+      "source": "plugins/textmock at 45f1689",
+      "observedState": "External plugin issue passed automated intake and quality gates; ready for maintainer review"
+    },
+    {
+      "products": [
+        "sponge"
+      ],
+      "channel": "mcp.so",
+      "reference": "https://github.com/chatmcp/mcpso/issues/7417",
+      "source": "io.github.hraness/sponge",
+      "observedState": "Free submission issue opened; the web form now offers only a $39 listing"
+    },
+    {
+      "products": [
+        "yaptake"
+      ],
+      "channel": "mcp.so",
+      "reference": "https://github.com/chatmcp/mcpso/issues/7418",
+      "source": "io.github.hraness/yaptake",
+      "observedState": "Free submission issue opened; the web form now offers only a $39 listing"
     }
   ]
 }

@@ -27,6 +27,9 @@ The [submission catalog](../catalog/submissions.json) owns saved searches, revie
 | Sponge | [davepoon/buildwithclaude #743](https://github.com/davepoon/buildwithclaude/pull/743) | 2026-11-16 | Submitted; open |
 | Yaptake | [davepoon/buildwithclaude #744](https://github.com/davepoon/buildwithclaude/pull/744) | 2026-11-16 | Submitted; open |
 | Textmock | [davepoon/buildwithclaude #745](https://github.com/davepoon/buildwithclaude/pull/745) | 2026-11-16 | Submitted; open |
+| Sponge | [VoltAgent/official-mcp-servers #102](https://github.com/VoltAgent/official-mcp-servers/pull/102) | 2026-11-16 | Submitted; open |
+| Yaptake | [VoltAgent/official-mcp-servers #103](https://github.com/VoltAgent/official-mcp-servers/pull/103) | 2026-11-16 | Submitted; open |
+| Yaptake | [juancarlospaco/awesome-streaming-tools #85](https://github.com/juancarlospaco/awesome-streaming-tools/pull/85) | 2026-11-16 | Submitted; open |
 
 ## Published packages and verified listings
 
@@ -168,6 +171,9 @@ Stars are dated public popularity counts, not traffic measurements. Review decis
 | [krzemienski/awesome-video](https://github.com/krzemienski/awesome-video) | Yaptake | 1,951 | deferred: The guide recommends the submission form on awesome.video, and its media tools category lists commercial subtitle tools. Apart from a guide fix on 2026-10-25, no PR has been merged since 2025-03-14. | [Rules; 2026-11-15](https://github.com/krzemienski/awesome-video/blob/392e8fefaea9badf60bb5c7e29b878d673248552/CONTRIBUTING.md) |
 | [davila7/claude-code-templates](https://github.com/davila7/claude-code-templates) | Dawn, Sponge, Textmock, Yaptake | 33,750 | eligible: The aitmpl.com catalog lists external skills by repository path and accepts MCP configurations by PR. Each product gets its own PR, pinned to a product-skills commit. | [Rules; 2026-11-15](https://github.com/davila7/claude-code-templates/blob/22dd06e16a3ced89e66fb1de7c3f20b2265829eb/CONTRIBUTING.md) |
 | [davepoon/buildwithclaude](https://github.com/davepoon/buildwithclaude) | Sponge, Textmock, Yaptake | 3,752 | eligible: The buildwithclaude.com marketplace accepts external plugins by PR, one pinned entry each, with self-submissions disclosed. Dawn waits until its runtime is available outside the private preview, so a reviewer can install it. | [Rules; 2026-11-16](https://github.com/davepoon/buildwithclaude/blob/59ad2b06b60e82fda7c4ac031cbacab2145b33cd/CONTRIBUTING.md) |
+| [VoltAgent/official-mcp-servers](https://github.com/VoltAgent/official-mcp-servers) | Sponge, Yaptake | 425 | eligible: The list links official vendor MCP servers, with new products under Emerging and Independent. One PR per server, with a description of 10 words or fewer. | [Rules; 2026-11-16](https://github.com/VoltAgent/official-mcp-servers/blob/b34404d7fc9284118309b0df65d8015a43ed138b/CONTRIBUTING.md) |
+| [juancarlospaco/awesome-streaming-tools](https://github.com/juancarlospaco/awesome-streaming-tools) | Yaptake | 397 | eligible: Desktop Apps lists paid clip and editing tools with disclosed pricing; resources must carry no ads or watermarks, and Yaptake exports carry none. | [Rules; 2026-11-16](https://github.com/juancarlospaco/awesome-streaming-tools/blob/261dfa82347e49c06a1ed6376756ea6b85f7f007/README.md) |
+| [raycast/script-commands](https://github.com/raycast/script-commands) | Sponge | 6,812 | deferred: About one PR has merged every month or two since April 2026, and the Sponge Raycast extension already covers Raycast. | [Rules; 2026-11-16](https://github.com/raycast/script-commands/blob/cf612c22a8ddea40f6d717f513bbb5619a73ad33/CONTRIBUTING.md) |
 
 ## Maintain the records
 

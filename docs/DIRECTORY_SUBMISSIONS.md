@@ -132,7 +132,10 @@ approves one. Uneed scheduled Sponge's free launch for 21 June 2027. MacUpdate r
 
 On [16 November](../catalog/form-submissions-2026-11-16.json), AlternativeTo
 received Yaptake, Textmock and Sponge in its free review queue. Sponge is listed
-as Hraness Sponge because the name Sponge was taken.
+as Hraness Sponge because the name Sponge was taken. The Awesome Copilot
+marketplace received Sponge, Yaptake and Textmock as external plugin issues,
+and all three passed its automated checks. The mcp.so web form now offers only
+a paid listing, so Sponge and Yaptake went to its free GitHub issue queue.
 
 ## Demonstration cases
 
