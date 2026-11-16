@@ -122,7 +122,7 @@ acknowledgement or a submission page in review isn't a listing. On 15 November,
 Claude reviewers held the Dawn, Sponge and Yaptake directory copies. The
 directory refused Textmock's helper, so its directory copy replaced that
 submission. Cursor received one publisher
-application for all four plugins. mcpservers.org received Sponge, and
+application for all four plugins. mcpservers.org listed Sponge in its Memory category, and
 awesome.video received Yaptake. Later that day, mcpmarket received each
 product's skill and claudemarketplaces received the marketplace, both in free
 queues. cursor.directory published the marketplace pending its security scan.
