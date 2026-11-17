@@ -105,7 +105,7 @@ test('discovery uses each saved public query, labels limited results and points 
     return new Response(JSON.stringify({ total_count: 21, incomplete_results: false, items: [{ id: known.repositoryId, full_name: known.repository, html_url: `https://github.com/${known.repository}`, private: false, archived: false, fork: false, stargazers_count: 12, forks_count: 3, watchers_count: 12, pushed_at: later }] }), { headers: { 'content-type': 'application/json' } });
   } });
   assert.equal(calls.length, catalog.searches.find((row) => row.product === 'sponge').queries.length);
-  for (const row of result.results) { assert(row.limited); assert(!row.incomplete); assert(!row.query.includes('{recent}')); assert.deepEqual(row.items[0].priorSubmissions, [known.url]); }
+  for (const row of result.results) { assert(row.limited); assert(!row.incomplete); assert(!row.query.includes('{recent}')); assert.deepEqual(row.items[0].priorSubmissions, catalog.submissions.filter((item) => item.repository === known.repository).map((item) => item.url)); assert(row.items[0].priorSubmissions.includes(known.url)); }
   await assert.rejects(searchCollections(catalog, 'private', { fetchImpl: async () => assert.fail() }));
 });
 

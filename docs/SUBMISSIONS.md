@@ -33,6 +33,16 @@ The [submission catalog](../catalog/submissions.json) owns saved searches, revie
 | Yaptake | [ThatGuySam/doesitarm #1149](https://github.com/ThatGuySam/doesitarm/pull/1149) | 2026-11-17 | Submitted; open |
 | Yaptake | [steven2358/awesome-generative-ai #2218](https://github.com/steven2358/awesome-generative-ai/pull/2218) | 2026-11-17 | Submitted; open |
 | Textmock | [darelova/Awesome-Design-Resources-List #102](https://github.com/darelova/Awesome-Design-Resources-List/pull/102) | 2026-11-17 | Submitted; open |
+| Sponge | [jaywcjlove/awesome-mac #4708](https://github.com/jaywcjlove/awesome-mac/pull/4708) | 2026-11-17 | Submitted; open |
+| Sponge | [gendotnew/macos-apps #270](https://github.com/gendotnew/macos-apps/pull/270) | 2026-11-17 | Submitted; open |
+| Sponge | [ThatGuySam/doesitarm #1150](https://github.com/ThatGuySam/doesitarm/pull/1150) | 2026-11-17 | Submitted; open |
+| Sponge | [hraness/homebrew-tap #13](https://github.com/hraness/homebrew-tap/pull/13) | 2026-11-17 | Merged 2026-11-17 |
+| Sponge | [jaywcjlove/awesome-mac #4709](https://github.com/jaywcjlove/awesome-mac/pull/4709) | 2026-11-17 | Submitted; open |
+| Sponge | [alantriesagain/awesome-local-first #56](https://github.com/alantriesagain/awesome-local-first/pull/56) | 2026-11-17 | Submitted; open |
+| Sponge | [doanhthong/awesome-pkm #54](https://github.com/doanhthong/awesome-pkm/pull/54) | 2026-11-17 | Submitted; open |
+| Sponge | [Mindola-ai/awesome-second-brain #19](https://github.com/Mindola-ai/awesome-second-brain/pull/19) | 2026-11-17 | Submitted; open |
+| Sponge | [Axorax/awesome-free-apps #532](https://github.com/Axorax/awesome-free-apps/pull/532) | 2026-11-17 | Submitted; open |
+| Sponge | [ai-boost/awesome-harness-engineering #439](https://github.com/ai-boost/awesome-harness-engineering/pull/439) | 2026-11-17 | Submitted; open |
 
 ## Published packages and verified listings
 
