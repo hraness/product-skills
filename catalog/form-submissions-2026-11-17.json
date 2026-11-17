@@ -1,0 +1,43 @@
+{
+ "schemaVersion": 1,
+ "scope": "Directory and launch-site web forms submitted on 2026-11-17",
+ "observedAt": "2026-11-17T20:00:00Z",
+ "limits": "Each row records the acknowledgement the form or management page showed when it was observed. None of these is a published listing; add a publication record only after the public listing can be read back.",
+ "submissions": [
+  {
+   "products": ["yaptake"],
+   "channel": "macbase",
+   "reference": "https://macbase.app/apps/yaptake",
+   "source": "https://yaptake.com",
+   "observedState": "Submitted on the free plan (nofollow) through GitHub sign-in; in review"
+  },
+  {
+   "products": ["yaptake"],
+   "channel": "devhunt",
+   "reference": "https://devhunt.org/account/tools",
+   "source": "https://yaptake.com",
+   "observedState": "Listed on the free launch queue for 2031-11-11 (nofollow); pre-written maker comment cleared and AI auto-replies off; paid launch not bought"
+  },
+  {
+   "products": ["yaptake"],
+   "channel": "macpip",
+   "reference": "https://macpip.com/submit",
+   "source": "https://yaptake.com",
+   "observedState": "Filled in with icon, four screenshots, price and category; the owner completed the email code and sent it"
+  },
+  {
+   "products": ["yaptake"],
+   "channel": "peerlist",
+   "reference": "https://peerlist.io/benzguo/project/yaptake",
+   "source": "https://yaptake.com",
+   "observedState": "Project saved at 100% completion; Launchpad requires government-ID profile verification, which only the owner can do, so no launch is scheduled"
+  }
+ ],
+ "notAttempted": [
+  { "channel": "macnative", "products": ["yaptake"], "reason": "Free listing requires a badge on yaptake.com" },
+  { "channel": "toolradar", "products": ["yaptake"], "reason": "Sign-in code never arrived and the site requires domain verification; abandoned by the owner" },
+  { "channel": "softonic", "products": ["yaptake"], "reason": "Requires uploading the app executable and keeping it current; abandoned by the owner with an unsubmitted draft left in the account" },
+  { "channel": "edtech-impact", "products": ["textmock"], "reason": "Account verified by the owner; onboarding form wedges the browser extension (password-manager inline menu), so the evidence profile is not created yet" },
+  { "channel": "iste-edtech-index", "products": ["textmock"], "reason": "Account created by the owner; session signed out and sign-in needs the owner's password, so the company and product setup is not done yet" }
+ ]
+}
