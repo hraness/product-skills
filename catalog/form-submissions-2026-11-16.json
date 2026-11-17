@@ -75,6 +75,42 @@
       "reference": "https://github.com/chatmcp/mcpso/issues/7418",
       "source": "io.github.hraness/yaptake",
       "observedState": "Free submission issue opened; the web form now offers only a $39 listing"
+    },
+    {
+      "products": [
+        "textmock"
+      ],
+      "channel": "toools.design",
+      "reference": "https://www.toools.design/submission",
+      "source": "https://textmock.com",
+      "observedState": "Suggested as Freemium; the form said it may take several weeks to review"
+    },
+    {
+      "products": [
+        "yaptake"
+      ],
+      "channel": "mcpservers",
+      "reference": "https://mcpservers.org/submit",
+      "source": "https://yaptake.com",
+      "observedState": "Submitted on the free plan (review within 2 weeks) with registry name io.github.hraness/yaptake"
+    },
+    {
+      "products": [
+        "yaptake"
+      ],
+      "channel": "localalternative",
+      "reference": "https://www.localalternative.io/submit",
+      "source": "https://yaptake.com",
+      "observedState": "Submitted for review; the form said review within 48 hours"
+    },
+    {
+      "products": [
+        "yaptake"
+      ],
+      "channel": "futuretools",
+      "reference": "https://futuretools.io/submit-a-tool",
+      "source": "https://yaptake.com",
+      "observedState": "Submitted as Freemium in Generative Video; waiting for review"
     }
   ]
 }
