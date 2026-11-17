@@ -1,7 +1,7 @@
 {
  "schemaVersion": 1,
  "scope": "Directory and launch-site web forms submitted on 2026-11-17, plus one directory request by email",
- "observedAt": "2026-11-17T14:28:00Z",
+ "observedAt": "2026-11-17T15:11:00Z",
  "limits": "Each row records the acknowledgement the form or management page showed when it was observed. None of these is a published listing; add a publication record only after the public listing can be read back.",
  "submissions": [
   {
@@ -30,7 +30,7 @@
    "channel": "peerlist",
    "reference": "https://peerlist.io/benzguo/project/yaptake",
    "source": "https://yaptake.com",
-   "observedState": "Project saved at 100% completion; the owner verified their profile and scheduled the Launchpad launch on 2026-11-17"
+   "observedState": "Project saved at 100% completion on the owner's verified profile; a recheck found the Launchpad launch unscheduled, so week 48 (23 to 29 November) was booked on 2026-11-17 and can be cancelled before launch"
   },
   {
    "products": ["textmock"],
@@ -77,9 +77,23 @@
   {
    "products": ["sponge"],
    "channel": "peerpush",
-   "reference": "https://peerpush.com/submit",
+   "reference": "https://peerpush.com/p/sponge-joup",
    "source": "https://sponge.computer",
-   "observedState": "Listing drafted and saved; claiming it needs a new PeerPush account through Google sign-in or a six-digit email code, left to the owner"
+   "observedState": "In PeerPush's free launch queue at #12869 on the owner's account, an estimated four-month wait; the paid launch was not bought"
+  },
+  {
+   "products": ["textmock"],
+   "channel": "peerpush",
+   "reference": "https://peerpush.com/p/textmock",
+   "source": "https://textmock.com",
+   "observedState": "In PeerPush's free launch queue at #12875 on the owner's account, an estimated four-month wait; the paid launch was not bought"
+  },
+  {
+   "products": ["yaptake"],
+   "channel": "peerpush",
+   "reference": "https://peerpush.com/p/yaptake",
+   "source": "https://yaptake.com",
+   "observedState": "In PeerPush's free launch queue at #12878 on the owner's account, an estimated four-month wait; the paid launch was not bought"
   },
   {
    "products": ["sponge"],
@@ -93,7 +107,14 @@
    "channel": "peerlist",
    "reference": "https://peerlist.io/benzguo/project/sponge",
    "source": "https://sponge.computer",
-   "observedState": "Project saved at 100% completion on the owner's verified profile; Launchpad launch not scheduled because only week 48, Yaptake's launch week, was offered"
+   "observedState": "Project saved at 100% completion on the owner's verified profile; the owner chose Launchpad week 49 (30 November to 6 December), which Peerlist only books from 23 November, so scheduling is a follow-up"
+  },
+  {
+   "products": ["textmock"],
+   "channel": "peerlist",
+   "reference": "https://peerlist.io/benzguo/project/textmock",
+   "source": "https://textmock.com",
+   "observedState": "Project saved at 100% completion with the icon, four screenshots and a description; Launchpad week 50 (7 to 13 December) is planned after Yaptake and Sponge, and Peerlist only books it from 30 November"
   },
   {
    "products": ["sponge"],
@@ -144,7 +165,7 @@
   {
    "channel": "alternative-me",
    "products": ["sponge"],
-   "reason": "Sign-up still needs a password when rechecked on 2026-11-17; left to the owner"
+   "reason": "The owner chose to skip it on 2026-11-17"
   }
  ]
 }
