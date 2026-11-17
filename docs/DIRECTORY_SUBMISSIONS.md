@@ -137,6 +137,15 @@ marketplace received Sponge, Yaptake and Textmock as external plugin issues,
 and all three passed its automated checks. The mcp.so web form now offers only
 a paid listing, so Sponge and Yaptake went to its free GitHub issue queue.
 
+On [17 November](../catalog/form-submissions-2026-11-17.json), MacBase received
+Yaptake and Sponge, and LocalAlternative, Future Tools and MacUpdate received
+Sponge, all in review. MacPip listed Sponge and received Yaptake from the owner.
+DevHunt queued both for its free launch on 11 November 2031. EdTech Impact saved
+an unpublished Textmock profile pending review. On Peerlist the owner verified
+their profile and scheduled Yaptake's Launchpad launch, and a Sponge project was
+saved without a launch. PeerPush drafted a Sponge listing that needs an owner
+account to claim. Glama was asked by email to index Sponge's MCP Registry entry.
+
 ## Demonstration cases
 
 Run cases in a fresh, disposable project or library using fictional data. Verify
