@@ -423,6 +423,24 @@
       "url": "https://registry.modelcontextprotocol.io/v0.1/servers/io.github.hraness%2Fsponge/versions/0.62.0",
       "version": "0.62.0",
       "contentHash": "b144b14113dd85456690b152e620d5f23e92387ad97f153ef42d2fd3f0808037"
+    },
+    {
+      "id": "sponge-mcp-registry-0-63-0",
+      "product": "sponge",
+      "channel": "mcp-registry",
+      "publishedAt": "2026-11-17T15:17:07.242Z",
+      "url": "https://registry.modelcontextprotocol.io/v0.1/servers/io.github.hraness%2Fsponge/versions/0.63.0",
+      "version": "0.63.0",
+      "contentHash": "82feb4f1e4751371a9131260f9a15ef460eb239d1e45d2d9a0666a2128afc284"
+    },
+    {
+      "id": "sponge-mcp-registry-0-64-0",
+      "product": "sponge",
+      "channel": "mcp-registry",
+      "publishedAt": "2026-11-17T21:06:41.022Z",
+      "url": "https://registry.modelcontextprotocol.io/v0.1/servers/io.github.hraness%2Fsponge/versions/0.64.0",
+      "version": "0.64.0",
+      "contentHash": "72bbada29a2e31d70257e5772fe7194b220eb387ef3bca3eae594aa5b2a6e1a3"
     }
   ]
 }
