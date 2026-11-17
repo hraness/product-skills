@@ -30,6 +30,9 @@ The [submission catalog](../catalog/submissions.json) owns saved searches, revie
 | Sponge | [VoltAgent/official-mcp-servers #102](https://github.com/VoltAgent/official-mcp-servers/pull/102) | 2026-11-16 | Submitted; open |
 | Yaptake | [VoltAgent/official-mcp-servers #103](https://github.com/VoltAgent/official-mcp-servers/pull/103) | 2026-11-16 | Submitted; open |
 | Yaptake | [juancarlospaco/awesome-streaming-tools #85](https://github.com/juancarlospaco/awesome-streaming-tools/pull/85) | 2026-11-16 | Merged 2026-11-16 |
+| Yaptake | [ThatGuySam/doesitarm #1149](https://github.com/ThatGuySam/doesitarm/pull/1149) | 2026-11-17 | Submitted; open |
+| Yaptake | [steven2358/awesome-generative-ai #2218](https://github.com/steven2358/awesome-generative-ai/pull/2218) | 2026-11-17 | Submitted; open |
+| Textmock | [darelova/Awesome-Design-Resources-List #102](https://github.com/darelova/Awesome-Design-Resources-List/pull/102) | 2026-11-17 | Submitted; open |
 
 ## Published packages and verified listings
 

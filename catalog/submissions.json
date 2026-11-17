@@ -1494,6 +1494,69 @@
         "updatedAt": "2026-11-16T10:25:28.000Z",
         "mergedAt": "2026-11-16T10:25:28.000Z"
       }
+    },
+    {
+      "id": "yaptake-doesitarm-1149",
+      "products": [
+        "yaptake"
+      ],
+      "channel": "github-collection",
+      "repository": "ThatGuySam/doesitarm",
+      "repositoryId": 295892018,
+      "number": 1149,
+      "url": "https://github.com/ThatGuySam/doesitarm/pull/1149",
+      "author": {
+        "login": "0thernet",
+        "id": 894119
+      },
+      "submittedAt": "2026-11-17T00:02:32.000Z",
+      "github": {
+        "state": "open",
+        "updatedAt": "2026-11-17T00:02:36.000Z",
+        "mergedAt": null
+      }
+    },
+    {
+      "id": "yaptake-awesome-generative-ai-2218",
+      "products": [
+        "yaptake"
+      ],
+      "channel": "github-collection",
+      "repository": "steven2358/awesome-generative-ai",
+      "repositoryId": 554771302,
+      "number": 2218,
+      "url": "https://github.com/steven2358/awesome-generative-ai/pull/2218",
+      "author": {
+        "login": "0thernet",
+        "id": 894119
+      },
+      "submittedAt": "2026-11-17T00:04:09.000Z",
+      "github": {
+        "state": "open",
+        "updatedAt": "2026-11-17T00:04:09.000Z",
+        "mergedAt": null
+      }
+    },
+    {
+      "id": "textmock-awesome-design-resources-list-102",
+      "products": [
+        "textmock"
+      ],
+      "channel": "github-collection",
+      "repository": "darelova/Awesome-Design-Resources-List",
+      "repositoryId": 914309056,
+      "number": 102,
+      "url": "https://github.com/darelova/Awesome-Design-Resources-List/pull/102",
+      "author": {
+        "login": "0thernet",
+        "id": 894119
+      },
+      "submittedAt": "2026-11-17T00:05:02.000Z",
+      "github": {
+        "state": "open",
+        "updatedAt": "2026-11-17T00:05:02.000Z",
+        "mergedAt": null
+      }
     }
   ]
 }
