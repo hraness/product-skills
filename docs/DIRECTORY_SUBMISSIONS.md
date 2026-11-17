@@ -142,10 +142,13 @@ Yaptake and Sponge, and LocalAlternative, Future Tools and MacUpdate received
 Sponge, all in review. MacPip listed Sponge and received Yaptake from the owner.
 DevHunt queued both for its free launch on 11 November 2031. EdTech Impact saved
 an unpublished Textmock profile pending review. On Peerlist the owner verified
-their profile and scheduled Yaptake's Launchpad launch, and a Sponge project was
-saved without a launch. PeerPush drafted a Sponge listing that needs an owner
-account to claim. Glama was asked by email to index Sponge's MCP Registry entry.
-Kext received an Indie Spotlight application for Sponge.
+their profile, Yaptake's Launchpad launch was booked for week 48, and Sponge and
+Textmock projects were saved. The owner chose week 49 for Sponge and Textmock is
+planned for week 50, but Peerlist books only the coming week, so those wait for
+23 and 30 November. PeerPush queued Sponge, Textmock and Yaptake for free
+launches on the owner's account, about four months out. Glama was asked by email
+to index Sponge's MCP Registry entry. Kext received an Indie Spotlight
+application for Sponge. The owner chose to skip Alternative.me.
 
 ## Demonstration cases
 
