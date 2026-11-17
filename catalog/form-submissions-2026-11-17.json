@@ -1,7 +1,7 @@
 {
  "schemaVersion": 1,
  "scope": "Directory and launch-site web forms submitted on 2026-11-17, plus one directory request by email",
- "observedAt": "2026-11-17T13:46:00Z",
+ "observedAt": "2026-11-17T14:28:00Z",
  "limits": "Each row records the acknowledgement the form or management page showed when it was observed. None of these is a published listing; add a publication record only after the public listing can be read back.",
  "submissions": [
   {
@@ -101,6 +101,13 @@
    "reference": "mailto:hello@glama.ai",
    "source": "https://registry.modelcontextprotocol.io/v0.1/servers?search=io.github.hraness/sponge",
    "observedState": "Emailed from ops@xte.industries asking Glama to index the MCP Registry entry io.github.hraness/sponge, which its server directory lacked; no reply yet"
+  },
+  {
+   "products": ["sponge"],
+   "channel": "kext",
+   "reference": "https://tally.so/r/nGqJ2L",
+   "source": "https://apps.apple.com/us/app/id6832334929",
+   "observedState": "Indie Spotlight application submitted with the owner's approved answers, the map screenshot and a yes to a short interview; Tally showed \"Form submitted\""
   }
  ],
  "notAttempted": [
@@ -138,11 +145,6 @@
    "channel": "alternative-me",
    "products": ["sponge"],
    "reason": "Sign-up still needs a password when rechecked on 2026-11-17; left to the owner"
-  },
-  {
-   "channel": "kext",
-   "products": ["sponge"],
-   "reason": "Indie Spotlight asks for the maker's name, background and an interview; answers drafted for the owner's review, not submitted"
   }
  ]
 }

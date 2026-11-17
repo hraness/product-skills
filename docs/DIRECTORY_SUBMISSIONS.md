@@ -145,6 +145,7 @@ an unpublished Textmock profile pending review. On Peerlist the owner verified
 their profile and scheduled Yaptake's Launchpad launch, and a Sponge project was
 saved without a launch. PeerPush drafted a Sponge listing that needs an owner
 account to claim. Glama was asked by email to index Sponge's MCP Registry entry.
+Kext received an Indie Spotlight application for Sponge.
 
 ## Demonstration cases
 
