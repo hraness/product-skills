@@ -31,13 +31,35 @@
    "reference": "https://peerlist.io/benzguo/project/yaptake",
    "source": "https://yaptake.com",
    "observedState": "Project saved at 100% completion; Launchpad requires government-ID profile verification, which only the owner can do, so no launch is scheduled"
+  },
+  {
+   "products": ["textmock"],
+   "channel": "edtech-impact",
+   "reference": "https://my.edtechimpact.com/products/textmock/profile",
+   "source": "https://textmock.com",
+   "observedState": "Free product profile saved (Saved!); unpublished pending review by the EdTech Impact team"
   }
  ],
  "notAttempted": [
-  { "channel": "macnative", "products": ["yaptake"], "reason": "Free listing requires a badge on yaptake.com" },
-  { "channel": "toolradar", "products": ["yaptake"], "reason": "Sign-in code never arrived and the site requires domain verification; abandoned by the owner" },
-  { "channel": "softonic", "products": ["yaptake"], "reason": "Requires uploading the app executable and keeping it current; abandoned by the owner with an unsubmitted draft left in the account" },
-  { "channel": "edtech-impact", "products": ["textmock"], "reason": "Account verified by the owner; onboarding form wedges the browser extension (password-manager inline menu), so the evidence profile is not created yet" },
-  { "channel": "iste-edtech-index", "products": ["textmock"], "reason": "Account created by the owner; session signed out and sign-in needs the owner's password, so the company and product setup is not done yet" }
+  {
+   "channel": "macnative",
+   "products": ["yaptake"],
+   "reason": "Free listing requires a badge on yaptake.com"
+  },
+  {
+   "channel": "toolradar",
+   "products": ["yaptake"],
+   "reason": "Sign-in code never arrived and the site requires domain verification; abandoned by the owner"
+  },
+  {
+   "channel": "softonic",
+   "products": ["yaptake"],
+   "reason": "Requires uploading the app executable and keeping it current; abandoned by the owner with an unsubmitted draft left in the account"
+  },
+  {
+   "channel": "iste-edtech-index",
+   "products": ["textmock"],
+   "reason": "Account created by the owner; setup dropped by the owner on 2026-11-17"
+  }
  ]
 }
