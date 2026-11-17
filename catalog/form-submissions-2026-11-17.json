@@ -1,7 +1,7 @@
 {
  "schemaVersion": 1,
  "scope": "Directory and launch-site web forms submitted on 2026-11-17",
- "observedAt": "2026-11-17T20:00:00Z",
+ "observedAt": "2026-11-17T23:30:00Z",
  "limits": "Each row records the acknowledgement the form or management page showed when it was observed. None of these is a published listing; add a publication record only after the public listing can be read back.",
  "submissions": [
   {
@@ -38,6 +38,48 @@
    "reference": "https://my.edtechimpact.com/products/textmock/profile",
    "source": "https://textmock.com",
    "observedState": "Free product profile saved (Saved!); unpublished pending review by the EdTech Impact team"
+  },
+  {
+   "products": ["sponge"],
+   "channel": "localalternative",
+   "reference": "https://localalternative.com",
+   "source": "https://sponge.computer",
+   "observedState": "Submitted for review; the form said review takes up to 48 hours with replies to ops@xte.industries"
+  },
+  {
+   "products": ["sponge"],
+   "channel": "macpip",
+   "reference": "https://macpip.com/apps/sponge",
+   "source": "https://sponge.computer",
+   "observedState": "Listed on the free plan with the 512 px icon, four desktop screenshots, price Free with Plus $5/mo, categories Reading and RSS plus Productivity"
+  },
+  {
+   "products": ["sponge"],
+   "channel": "macbase",
+   "reference": "https://macbase.app",
+   "source": "https://sponge.computer",
+   "observedState": "Submitted on the free plan; in review, with a reply promised within a day"
+  },
+  {
+   "products": ["sponge"],
+   "channel": "future-tools",
+   "reference": "https://www.futuretools.io/submit-a-tool",
+   "source": "https://sponge.computer",
+   "observedState": "Submitted in Productivity as Freemium (Tool Submitted!); awaiting the editor's review"
+  },
+  {
+   "products": ["sponge"],
+   "channel": "devhunt",
+   "reference": "https://devhunt.org/tool/sponge",
+   "source": "https://sponge.computer",
+   "observedState": "Listed on the free launch queue for 2031-11-11 (nofollow) with a rewritten CLI and MCP description; pre-written maker comment cleared and AI auto-replies off; paid launch not bought"
+  },
+  {
+   "products": ["sponge"],
+   "channel": "peerpush",
+   "reference": "https://peerpush.com/submit",
+   "source": "https://sponge.computer",
+   "observedState": "Listing drafted and saved; claiming it needs a new PeerPush account, left to the owner"
   }
  ],
  "notAttempted": [
@@ -60,6 +102,26 @@
    "channel": "iste-edtech-index",
    "products": ["textmock"],
    "reason": "Account created by the owner; setup dropped by the owner on 2026-11-17"
+  },
+  {
+   "channel": "indie-apps",
+   "products": ["sponge"],
+   "reason": "The listing shows the App Store seller name, the owner's personal name; left to the owner to decide"
+  },
+  {
+   "channel": "indie-app-catalog",
+   "products": ["sponge"],
+   "reason": "Needs an account and shows the App Store seller name; left to the owner"
+  },
+  {
+   "channel": "alternative-me",
+   "products": ["sponge"],
+   "reason": "Needs a new account with a password; left to the owner"
+  },
+  {
+   "channel": "kext",
+   "products": ["sponge"],
+   "reason": "Indie Spotlight asks for the maker's name, background and an interview; owner-only"
   }
  ]
 }

@@ -1557,6 +1557,216 @@
         "updatedAt": "2026-11-17T00:05:02.000Z",
         "mergedAt": null
       }
+    },
+    {
+      "id": "sponge-awesome-mac-4708",
+      "products": [
+        "sponge"
+      ],
+      "channel": "github-collection",
+      "repository": "jaywcjlove/awesome-mac",
+      "repositoryId": 63539055,
+      "number": 4708,
+      "url": "https://github.com/jaywcjlove/awesome-mac/pull/4708",
+      "author": {
+        "login": "0thernet",
+        "id": 894119
+      },
+      "submittedAt": "2026-11-17T12:31:41.000Z",
+      "github": {
+        "state": "open",
+        "updatedAt": "2026-11-17T12:45:54.000Z",
+        "mergedAt": null
+      }
+    },
+    {
+      "id": "sponge-macos-apps-270",
+      "products": [
+        "sponge"
+      ],
+      "channel": "github-collection",
+      "repository": "gendotnew/macos-apps",
+      "repositoryId": 93969351,
+      "number": 270,
+      "url": "https://github.com/gendotnew/macos-apps/pull/270",
+      "author": {
+        "login": "0thernet",
+        "id": 894119
+      },
+      "submittedAt": "2026-11-17T12:32:04.000Z",
+      "github": {
+        "state": "open",
+        "updatedAt": "2026-11-17T12:45:55.000Z",
+        "mergedAt": null
+      }
+    },
+    {
+      "id": "sponge-doesitarm-1150",
+      "products": [
+        "sponge"
+      ],
+      "channel": "github-collection",
+      "repository": "ThatGuySam/doesitarm",
+      "repositoryId": 295892018,
+      "number": 1150,
+      "url": "https://github.com/ThatGuySam/doesitarm/pull/1150",
+      "author": {
+        "login": "0thernet",
+        "id": 894119
+      },
+      "submittedAt": "2026-11-17T12:32:49.000Z",
+      "github": {
+        "state": "open",
+        "updatedAt": "2026-11-17T12:32:53.000Z",
+        "mergedAt": null
+      }
+    },
+    {
+      "id": "sponge-homebrew-tap-13",
+      "products": [
+        "sponge"
+      ],
+      "channel": "homebrew",
+      "repository": "hraness/homebrew-tap",
+      "repositoryId": 1382935233,
+      "number": 13,
+      "url": "https://github.com/hraness/homebrew-tap/pull/13",
+      "author": {
+        "login": "0thernet",
+        "id": 894119
+      },
+      "submittedAt": "2026-11-17T12:33:46.000Z",
+      "github": {
+        "state": "closed",
+        "updatedAt": "2026-11-17T12:45:13.000Z",
+        "mergedAt": "2026-11-17T12:45:11.000Z"
+      }
+    },
+    {
+      "id": "sponge-awesome-mac-4709",
+      "products": [
+        "sponge"
+      ],
+      "channel": "github-collection",
+      "repository": "jaywcjlove/awesome-mac",
+      "repositoryId": 63539055,
+      "number": 4709,
+      "url": "https://github.com/jaywcjlove/awesome-mac/pull/4709",
+      "author": {
+        "login": "0thernet",
+        "id": 894119
+      },
+      "submittedAt": "2026-11-17T12:40:57.000Z",
+      "github": {
+        "state": "open",
+        "updatedAt": "2026-11-17T12:40:57.000Z",
+        "mergedAt": null
+      }
+    },
+    {
+      "id": "sponge-awesome-local-first-56",
+      "products": [
+        "sponge"
+      ],
+      "channel": "github-collection",
+      "repository": "alantriesagain/awesome-local-first",
+      "repositoryId": 825024161,
+      "number": 56,
+      "url": "https://github.com/alantriesagain/awesome-local-first/pull/56",
+      "author": {
+        "login": "0thernet",
+        "id": 894119
+      },
+      "submittedAt": "2026-11-17T12:41:39.000Z",
+      "github": {
+        "state": "open",
+        "updatedAt": "2026-11-17T12:41:39.000Z",
+        "mergedAt": null
+      }
+    },
+    {
+      "id": "sponge-awesome-pkm-54",
+      "products": [
+        "sponge"
+      ],
+      "channel": "github-collection",
+      "repository": "doanhthong/awesome-pkm",
+      "repositoryId": 474838157,
+      "number": 54,
+      "url": "https://github.com/doanhthong/awesome-pkm/pull/54",
+      "author": {
+        "login": "0thernet",
+        "id": 894119
+      },
+      "submittedAt": "2026-11-17T12:42:19.000Z",
+      "github": {
+        "state": "open",
+        "updatedAt": "2026-11-17T12:42:19.000Z",
+        "mergedAt": null
+      }
+    },
+    {
+      "id": "sponge-awesome-second-brain-19",
+      "products": [
+        "sponge"
+      ],
+      "channel": "github-collection",
+      "repository": "Mindola-ai/awesome-second-brain",
+      "repositoryId": 1322259166,
+      "number": 19,
+      "url": "https://github.com/Mindola-ai/awesome-second-brain/pull/19",
+      "author": {
+        "login": "0thernet",
+        "id": 894119
+      },
+      "submittedAt": "2026-11-17T12:43:04.000Z",
+      "github": {
+        "state": "open",
+        "updatedAt": "2026-11-17T12:43:04.000Z",
+        "mergedAt": null
+      }
+    },
+    {
+      "id": "sponge-awesome-free-apps-532",
+      "products": [
+        "sponge"
+      ],
+      "channel": "github-collection",
+      "repository": "Axorax/awesome-free-apps",
+      "repositoryId": 877675290,
+      "number": 532,
+      "url": "https://github.com/Axorax/awesome-free-apps/pull/532",
+      "author": {
+        "login": "0thernet",
+        "id": 894119
+      },
+      "submittedAt": "2026-11-17T12:43:51.000Z",
+      "github": {
+        "state": "open",
+        "updatedAt": "2026-11-17T12:43:51.000Z",
+        "mergedAt": null
+      }
+    },
+    {
+      "id": "sponge-awesome-harness-engineering-439",
+      "products": [
+        "sponge"
+      ],
+      "channel": "github-collection",
+      "repository": "ai-boost/awesome-harness-engineering",
+      "repositoryId": 1195371847,
+      "number": 439,
+      "url": "https://github.com/ai-boost/awesome-harness-engineering/pull/439",
+      "author": {
+        "login": "0thernet",
+        "id": 894119
+      },
+      "submittedAt": "2026-11-17T12:44:42.000Z",
+      "github": {
+        "state": "open",
+        "updatedAt": "2026-11-17T12:44:42.000Z",
+        "mergedAt": null
+      }
     }
   ]
 }
