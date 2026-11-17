@@ -1,7 +1,7 @@
 {
  "schemaVersion": 1,
- "scope": "Directory and launch-site web forms submitted on 2026-11-17",
- "observedAt": "2026-11-17T23:30:00Z",
+ "scope": "Directory and launch-site web forms submitted on 2026-11-17, plus one directory request by email",
+ "observedAt": "2026-11-17T13:46:00Z",
  "limits": "Each row records the acknowledgement the form or management page showed when it was observed. None of these is a published listing; add a publication record only after the public listing can be read back.",
  "submissions": [
   {
@@ -79,7 +79,28 @@
    "channel": "peerpush",
    "reference": "https://peerpush.com/submit",
    "source": "https://sponge.computer",
-   "observedState": "Listing drafted and saved; claiming it needs a new PeerPush account, left to the owner"
+   "observedState": "Listing drafted and saved; claiming it needs a new PeerPush account through Google sign-in or a six-digit email code, left to the owner"
+  },
+  {
+   "products": ["sponge"],
+   "channel": "macupdate",
+   "reference": "https://member.macupdate.com/content/submit",
+   "source": "https://sponge.computer/mac",
+   "observedState": "Submitted as a free download (the 1.0.1 zip) with the app icon and three screenshots; the form said MacUpdate replies by email within 10 days"
+  },
+  {
+   "products": ["sponge"],
+   "channel": "peerlist",
+   "reference": "https://peerlist.io/benzguo/project/sponge",
+   "source": "https://sponge.computer",
+   "observedState": "Project saved at 100% completion on the owner's verified profile; Launchpad launch not scheduled because only week 48, Yaptake's launch week, was offered"
+  },
+  {
+   "products": ["sponge"],
+   "channel": "glama",
+   "reference": "mailto:hello@glama.ai",
+   "source": "https://registry.modelcontextprotocol.io/v0.1/servers?search=io.github.hraness/sponge",
+   "observedState": "Emailed from ops@xte.industries asking Glama to index the MCP Registry entry io.github.hraness/sponge, which its server directory lacked; no reply yet"
   }
  ],
  "notAttempted": [
@@ -116,12 +137,12 @@
   {
    "channel": "alternative-me",
    "products": ["sponge"],
-   "reason": "Needs a new account with a password; left to the owner"
+   "reason": "Sign-up still needs a password when rechecked on 2026-11-17; left to the owner"
   },
   {
    "channel": "kext",
    "products": ["sponge"],
-   "reason": "Indie Spotlight asks for the maker's name, background and an interview; owner-only"
+   "reason": "Indie Spotlight asks for the maker's name, background and an interview; answers drafted for the owner's review, not submitted"
   }
  ]
 }
