@@ -1040,6 +1040,173 @@
         "pushedAt": "2026-11-18T09:21:34.000Z",
         "archived": false
       }
+    },
+    {
+      "repository": "cheeaun/awesome-hacker-news",
+      "products": [
+        "sponge"
+      ],
+      "decision": "eligible",
+      "reason": "Lists Hacker News reader web apps and accepts one suggestion per PR; four PRs merged in the 90 days to 18 November, most adding a single app. The free Sponge thread reader opens a Hacker News thread as one page, which fits the Web section under Apps.",
+      "rulesUrl": "https://github.com/cheeaun/awesome-hacker-news/blob/3024b22d18ca8a6913422baa017b52457114b32a/CONTRIBUTING.md",
+      "reviewedAt": "2026-11-18T13:24:23.928Z",
+      "sourceCommit": "3024b22d18ca8a6913422baa017b52457114b32a",
+      "reach": {
+        "stars": 1438,
+        "forks": 141,
+        "watchers": 23,
+        "pushedAt": "2026-10-24T04:35:22.000Z",
+        "archived": false
+      }
+    },
+    {
+      "repository": "hridaydutta123/awesome-twitter-tools",
+      "products": [
+        "sponge"
+      ],
+      "decision": "eligible",
+      "reason": "Lists free X tools, including thread readers, and merged 35 PRs in the 90 days to 18 November, mostly one tool each. There is no contribution guide, so entries follow the README format. The free Sponge thread reader unrolls X threads.",
+      "rulesUrl": "https://github.com/hridaydutta123/awesome-twitter-tools/blob/34dac8fe7fb2e9e2f40cc3d2ab7d1f0a9c06d536/README.md",
+      "reviewedAt": "2026-11-18T13:24:23.928Z",
+      "sourceCommit": "34dac8fe7fb2e9e2f40cc3d2ab7d1f0a9c06d536",
+      "reach": {
+        "stars": 263,
+        "forks": 71,
+        "watchers": 12,
+        "pushedAt": "2026-11-12T15:07:45.000Z",
+        "archived": false
+      }
+    },
+    {
+      "repository": "SecretiveShell/Awesome-llms-txt",
+      "products": [
+        "dawn",
+        "sponge",
+        "textmock",
+        "yaptake"
+      ],
+      "decision": "eligible",
+      "reason": "An alphabetical index of public llms.txt files, added by PR. The maintainer merges in batches: 32 PRs in the 90 days to 18 November, the latest on 18 October, with 211 open. Each product site publishes an llms.txt.",
+      "rulesUrl": "https://github.com/SecretiveShell/Awesome-llms-txt/blob/271f7f5218ae956b262638c35b8d22d4d6529eeb/README.md",
+      "reviewedAt": "2026-11-18T13:24:23.928Z",
+      "sourceCommit": "271f7f5218ae956b262638c35b8d22d4d6529eeb",
+      "reach": {
+        "stars": 111,
+        "forks": 292,
+        "watchers": 1,
+        "pushedAt": "2026-10-18T09:46:58.000Z",
+        "archived": false
+      }
+    },
+    {
+      "repository": "ikaijua/Awesome-AITools",
+      "products": [
+        "sponge",
+        "yaptake"
+      ],
+      "decision": "deferred",
+      "reason": "The guide requires disclosed affiliation and evidence of uniqueness and traction, such as user counts or downloads, and entries go in both the English and Chinese READMEs. The Sponge summarizers and Yaptake are new and have no published usage figures.",
+      "rulesUrl": "https://github.com/ikaijua/Awesome-AITools/blob/44ab95b702e21736e6b8dcef004dafdf833d193f/CONTRIBUTING.md",
+      "reviewedAt": "2026-11-18T13:24:23.928Z",
+      "sourceCommit": "44ab95b702e21736e6b8dcef004dafdf833d193f",
+      "reach": {
+        "stars": 6352,
+        "forks": 1044,
+        "watchers": 47,
+        "pushedAt": "2026-11-15T11:15:23.000Z",
+        "archived": false
+      }
+    },
+    {
+      "repository": "sindresorhus/awesome-chatgpt",
+      "products": [
+        "sponge"
+      ],
+      "decision": "deferred",
+      "reason": "Its Web apps section lists ChatGPT export tools, which fits the free Sponge ChatGPT export converter, but the latest merged PR is from 15 February 2026, with four PRs open.",
+      "rulesUrl": "https://github.com/sindresorhus/awesome-chatgpt/blob/ee8894c260a9d1501ad240462056be752cb89c50/contributing.md",
+      "reviewedAt": "2026-11-18T13:24:23.928Z",
+      "sourceCommit": "ee8894c260a9d1501ad240462056be752cb89c50",
+      "reach": {
+        "stars": 6500,
+        "forks": 490,
+        "watchers": 68,
+        "pushedAt": "2026-11-15T18:41:25.000Z",
+        "archived": false
+      }
+    },
+    {
+      "repository": "mundimark/awesome-markdown",
+      "products": [
+        "sponge"
+      ],
+      "decision": "deferred",
+      "reason": "Its Convert to Markdown Tools section has PDF and HTML subsections, which fit the free Sponge PDF to Markdown and website text tools, but one PR merged in the 90 days to 18 November, with 93 open.",
+      "rulesUrl": "https://github.com/mundimark/awesome-markdown/blob/a33cd19ba2c5ca218c9132a11753d7e9bfc5ceac/README.md",
+      "reviewedAt": "2026-11-18T13:24:23.928Z",
+      "sourceCommit": "a33cd19ba2c5ca218c9132a11753d7e9bfc5ceac",
+      "reach": {
+        "stars": 1936,
+        "forks": 394,
+        "watchers": 53,
+        "pushedAt": "2026-09-29T09:46:47.000Z",
+        "archived": false
+      }
+    },
+    {
+      "repository": "cline/mcp-marketplace",
+      "products": [
+        "sponge",
+        "yaptake"
+      ],
+      "decision": "deferred",
+      "reason": "Servers are proposed in issues, and the submitter confirms that Cline can set one up from its README alone. The repository has 3,505 open issues, and 98 were closed in the 90 days to 18 November. The Sponge and Yaptake servers need their separately installed Mac apps.",
+      "rulesUrl": "https://github.com/cline/mcp-marketplace/blob/87390ab75e299afefc031b1fe2c03e26dc32b7da/README.md",
+      "reviewedAt": "2026-11-18T13:24:23.928Z",
+      "sourceCommit": "87390ab75e299afefc031b1fe2c03e26dc32b7da",
+      "reach": {
+        "stars": 799,
+        "forks": 135,
+        "watchers": 9,
+        "pushedAt": "2025-06-24T22:35:47.000Z",
+        "archived": false
+      }
+    },
+    {
+      "repository": "fishttp/awesome-bluesky",
+      "products": [
+        "sponge"
+      ],
+      "decision": "deferred",
+      "reason": "Lists Bluesky tools, which fits the free Sponge thread reader, but no PR merged in the six months to 18 November, with 25 open, and the last push was on 16 September 2025.",
+      "rulesUrl": "https://github.com/fishttp/awesome-bluesky/blob/a67e3284ea0d80956b6199ad62d3e3187a464d15/readme.md",
+      "reviewedAt": "2026-11-18T13:24:23.928Z",
+      "sourceCommit": "a67e3284ea0d80956b6199ad62d3e3187a464d15",
+      "reach": {
+        "stars": 1114,
+        "forks": 78,
+        "watchers": 16,
+        "pushedAt": "2025-09-16T19:53:49.000Z",
+        "archived": false
+      }
+    },
+    {
+      "repository": "alexanderop/awesome-local-first",
+      "products": [
+        "sponge"
+      ],
+      "decision": "ineligible",
+      "reason": "The README says contributions are closed and that it no longer accepts pull requests or project submissions.",
+      "rulesUrl": "https://github.com/alexanderop/awesome-local-first/blob/3c8eb621aa56f72e32fcd0ba03db31b5fc7c236b/README.md",
+      "reviewedAt": "2026-11-18T13:24:23.928Z",
+      "sourceCommit": "3c8eb621aa56f72e32fcd0ba03db31b5fc7c236b",
+      "reach": {
+        "stars": 246,
+        "forks": 91,
+        "watchers": 8,
+        "pushedAt": "2026-10-03T05:18:53.000Z",
+        "archived": false
+      }
     }
   ],
   "submissions": [
