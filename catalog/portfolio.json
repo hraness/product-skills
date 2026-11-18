@@ -28,6 +28,13 @@
       "url": "https://sponge.computer",
       "short": "Reading and notes.",
       "icon": "/products/sponge/icon.png"
+    },
+    {
+      "id": "yiii",
+      "name": "yiii",
+      "url": "https://yiii.io",
+      "short": "Learn languages faster (ZH + EN).",
+      "icon": "/products/yiii/icon.png"
     }
   ]
 }

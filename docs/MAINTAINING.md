@@ -342,8 +342,9 @@ against the caller's checkout and `GITHUB_REPOSITORY` identity.
 It supports exactly `hraness/.github` → `profile/README.md` and
 `0thernet/0thernet` → `README.md`. Each target needs one ordered, own-line pair
 of `<!-- hraness-products:start -->` and `<!-- hraness-products:end -->` markers.
-The action preserves every byte outside them and reads the four product facts
-from `https://hraness.com/portfolio.json`. Newly introduced destinations must
+The action preserves every byte outside them and reads the portfolio facts
+from `https://hraness.com/portfolio.json`: the four products and the
+profile-only entries in `PROFILE_ONLY`. Newly introduced destinations must
 answer before it proposes a README change.
 
 The caller pins the action to the source SHA of its verified immutable SemVer

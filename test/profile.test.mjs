@@ -4,8 +4,10 @@ import { readFile, mkdtemp, mkdir, symlink, rm, writeFile } from 'node:fs/promis
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { END, START, assertProfileChange, checkProfile, profileIdentity, renderProfile, refreshProfile } from '../scripts/profile.mjs';
-import { writeRendered } from '../scripts/distribution.mjs';
-const portfolio = JSON.parse(await readFile(new URL('../catalog/portfolio.json', import.meta.url), 'utf8'));
+import { PRODUCTS, writeRendered } from '../scripts/distribution.mjs';
+// The four products' facts. The committed catalog may also list profile-only entries.
+const catalogPortfolio = JSON.parse(await readFile(new URL('../catalog/portfolio.json', import.meta.url), 'utf8'));
+const portfolio = { ...catalogPortfolio, projects: catalogPortfolio.projects.filter((p) => Object.hasOwn(PRODUCTS, p.id)) };
 test('profile sync preserves every byte outside unique own-line markers', () => {
   const before = `An introduction, preserved.\n\n${START}\nOld product list.\n${END}\n\nPersonal notes, preserved.\n`;
   const after = renderProfile(before, portfolio);

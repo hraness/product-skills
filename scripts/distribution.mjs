@@ -69,7 +69,7 @@ export function clawhubPublicationUrl(product) { need(Object.hasOwn(PRODUCTS, pr
 function publicUrl(value, allowedOrigins) {
   need(typeof value === 'string' && value.length <= 500, 'Invalid URL');
   const u = new URL(value);
-  const productOrigin = Object.values(PRODUCTS).some((p) => p.url === u.origin);
+  const productOrigin = [...Object.values(PRODUCTS), ...Object.values(PROFILE_ONLY)].some((p) => p.url === u.origin);
   need(u.protocol === 'https:' && !u.username && !u.password && !u.port && !u.search && allowedOrigins.includes(u.origin) && !(productOrigin && (u.pathname.includes('%') || /\/(?:api|account|library|s|@[^/]+)(?:\/|$)/.test(u.pathname))), 'URL is outside the public allowlist');
   return u;
 }
@@ -128,7 +128,7 @@ export function validatePortfolio(portfolio) {
   const seen = new Set();
   for (const p of portfolio.projects) {
     keys(p, ['id', 'name', 'url', 'short', 'icon']); const known = Object.hasOwn(PRODUCTS, p.id) ? PRODUCTS[p.id] : Object.hasOwn(PROFILE_ONLY, p.id) ? PROFILE_ONLY[p.id] : null;
-    need(known && !seen.has(p.id) && p.name === known.name && p.url === known.url && p.icon === `/products/${p.id}/icon.png`, 'Portfolio identity mismatch'); text(p.short, 100); need(!/[\r\n]/.test(p.short), 'Product summary must be one line'); inspectText(p.short, p.id); seen.add(p.id);
+    need(typeof p.id === 'string' && known && !seen.has(p.id) && p.name === known.name && p.url === known.url && p.icon === `/products/${p.id}/icon.png`, 'Portfolio identity mismatch'); text(p.short, 100); need(!/[\r\n]/.test(p.short), 'Product summary must be one line'); inspectText(p.short, p.id); seen.add(p.id);
   }
   need(Object.keys(PRODUCTS).every((id) => seen.has(id)), 'Invalid portfolio');
   return portfolio;
