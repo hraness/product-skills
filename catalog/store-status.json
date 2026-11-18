@@ -13,10 +13,10 @@
       "cursor": "review_required"
     },
     "sponge": {
-      "version": "0.1.4",
-      "contentHash": "b1aeb68c6a03b0760df9ce3ab1456ba76cf358132623e01a719ca9e63d859c8f",
-      "artifactHash": "8b331223a0106922683a6791e6d43c3d69229f21ec0b2360846d90736e49207c",
-      "github": "published",
+      "version": "0.1.5",
+      "contentHash": "6d6802d60f48aaed7bed7fc37be4c9d46e7f44e654cfa98b022f6d50cc0837d1",
+      "artifactHash": "00f3985325424bd9df1cbdae944f12d4e73e8735c68f8cabaabf33bf3d6c1748",
+      "github": "release_required",
       "skillsSh": "listed",
       "skillsShFirstVerifiedAt": "2026-11-14T23:54:16.409Z",
       "chatgpt": "eligibility_and_review_required",
