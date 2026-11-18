@@ -2,7 +2,7 @@
  "schemaVersion": 1,
  "scope": "Directory and launch-site web forms submitted or filled in, GitHub Discussions posts made, and list pull requests the submission catalog has no room for, on 2026-11-18",
  "observedAt": "2026-11-18T15:43:49Z",
- "limits": "Each row records the acknowledgement the form showed when it was observed. None of these is a published listing; add a publication record only after the public listing can be read back. The Launching Next forms were filled in but not sent at 14:40 UTC; whether the owner sent them later is unchecked. The llms.txt directory rows record a place in each review queue, and directory.llmstxt.cloud publishes accepted sites in batches over one to three months. The llms.txt hub and GitHub Discussions rows were observed later, at 18:03 UTC, after the owner signed in to the hub. The Black Friday rows were observed after 19:00 UTC, and Yaptake's after yaptake.com showed its code at 19:33 UTC. The submission catalog holds at most 50 pull requests, and Yaptake's row in trungdq88/Awesome-Black-Friday-Cyber-Monday took the last place, so the Black Friday list pull requests with the least reach and Yaptake's Rare Big Deal pull request are recorded here instead.",
+ "limits": "Each row records the acknowledgement the form showed when it was observed. None of these is a published listing; add a publication record only after the public listing can be read back. The owner answered the Launching Next forms' human checks and sent all three at 14:58 UTC; those rows were observed at 20:58 UTC. The IndieMarkdowns rows were observed at 20:47 UTC. The llms.txt directory rows record a place in each review queue, and directory.llmstxt.cloud publishes accepted sites in batches over one to three months. The llms.txt hub and GitHub Discussions rows were observed later, at 18:03 UTC, after the owner signed in to the hub. The Black Friday rows were observed after 19:00 UTC, and Yaptake's after yaptake.com showed its code at 19:33 UTC. The submission catalog holds at most 50 pull requests, and Yaptake's row in trungdq88/Awesome-Black-Friday-Cyber-Monday took the last place, so the Black Friday list pull requests with the least reach and Yaptake's Rare Big Deal pull request are recorded here instead.",
  "submissions": [
   {
    "products": ["sponge"],
@@ -185,14 +185,51 @@
    "reference": "https://zplatform.ai/submit-black-friday-ai-tool/",
    "source": "https://yaptake.com/#pricing",
    "observedState": "Yaptake, with half off the first year and code YAPTAKEBF26, submitted through the free deal form with Hraness as the name, ops@xte.industries as the contact and AI video as the category; the form said the deal was received and goes in the tracker once it matches the vendor's page"
+  },
+  {
+   "products": ["sponge"],
+   "channel": "launching-next",
+   "reference": "https://www.launchingnext.com/submit/",
+   "source": "https://sponge.computer",
+   "observedState": "Sponge sent through the free form at 14:58 UTC with ops@xte.industries as the unpublished contact, after the owner answered its human check; the site showed Submission Received. Not listed yet"
+  },
+  {
+   "products": ["textmock"],
+   "channel": "launching-next",
+   "reference": "https://www.launchingnext.com/submit/",
+   "source": "https://textmock.com",
+   "observedState": "Textmock sent through the free form at 14:58 UTC with ops@xte.industries as the unpublished contact, after the owner answered its human check; the site showed Submission Received. Not listed yet"
+  },
+  {
+   "products": ["yaptake"],
+   "channel": "launching-next",
+   "reference": "https://www.launchingnext.com/submit/",
+   "source": "https://yaptake.com",
+   "observedState": "Yaptake sent through the free form at 14:58 UTC with ops@xte.industries as the unpublished contact, after the owner answered its human check; the site showed Submission Received. Not listed yet"
+  },
+  {
+   "products": ["sponge"],
+   "channel": "indiemarkdowns",
+   "reference": "https://indiemarkdowns.com/submit/",
+   "source": "https://sponge.computer/pricing",
+   "observedState": "Black Friday deal (Sponge Plus at half price for the first 12 months with SPONGEBF26, 18 November to 2 December 2026) entered in the free form with Hraness as the maker and ops@xte.industries as the contact; the site's check accepted it and said it is pending review, not listed. The email the form prepares for the editors, with the app icon attached, is not sent yet: it has to come from ops@xte.industries"
+  },
+  {
+   "products": ["textmock"],
+   "channel": "indiemarkdowns",
+   "reference": "https://indiemarkdowns.com/submit/",
+   "source": "https://textmock.com/pricing",
+   "observedState": "Black Friday deal (Textmock Pro at half price for the first year with TEXTMOCKBF26, 18 November to 2 December 2026) entered in the free form with Hraness as the maker and ops@xte.industries as the contact; the site's check accepted it and said it is pending review, not listed. The email the form prepares for the editors, with the app icon attached, is not sent yet: it has to come from ops@xte.industries"
+  },
+  {
+   "products": ["yaptake"],
+   "channel": "indiemarkdowns",
+   "reference": "https://indiemarkdowns.com/submit/",
+   "source": "https://yaptake.com/#pricing",
+   "observedState": "Black Friday deal (Yaptake at half price for the first year with YAPTAKEBF26, 18 November to 2 December 2026) entered in the free form with Hraness as the maker and ops@xte.industries as the contact; the site's check accepted it and said it is pending review, not listed. The email the form prepares for the editors, with the app icon attached, is not sent yet: it has to come from ops@xte.industries"
   }
  ],
  "notAttempted": [
-  {
-   "channel": "launching-next",
-   "products": ["sponge", "textmock", "yaptake"],
-   "reason": "Three free forms filled in in the owner's browser with ops@xte.industries as the unpublished contact, the newsletter box cleared and the optional funding and marketing questions left blank; not sent, because each form's arithmetic human check is for the owner to answer. The $99 upgrade is not wanted"
-  },
   {
    "channel": "smithery",
    "products": ["sponge", "yaptake"],
@@ -207,11 +244,6 @@
    "channel": "llmstxt-com",
    "products": ["sponge", "textmock", "yaptake"],
    "reason": "llmstxt.com is an llms.txt generator with a waiting list, not a directory of sites"
-  },
-  {
-   "channel": "indiemarkdowns",
-   "products": ["sponge", "textmock", "yaptake"],
-   "reason": "IndieMarkdowns takes Black Friday deals on indie Mac apps through a form that only opens a pre-filled email to its editors, so the submission has to be sent from the owner's mail; not sent"
   }
  ]
 }
