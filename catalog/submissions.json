@@ -2526,7 +2526,7 @@
       "submittedAt": "2026-11-17T12:40:57.000Z",
       "github": {
         "state": "open",
-        "updatedAt": "2026-11-17T12:40:57.000Z",
+        "updatedAt": "2026-11-18T13:08:49.000Z",
         "mergedAt": null
       }
     },
@@ -2956,9 +2956,9 @@
       },
       "submittedAt": "2026-11-18T19:39:03.000Z",
       "github": {
-        "state": "open",
-        "updatedAt": "2026-11-18T19:39:03.000Z",
-        "mergedAt": null
+        "state": "closed",
+        "updatedAt": "2026-11-18T19:53:21.000Z",
+        "mergedAt": "2026-11-18T19:53:21.000Z"
       }
     }
   ]

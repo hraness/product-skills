@@ -57,7 +57,7 @@ The [submission catalog](../catalog/submissions.json) owns saved searches, revie
 | Sponge, Textmock, Yaptake | [twf-nikhila/Awesome-Black-Friday-Cyber-Monday-deals #679](https://github.com/twf-nikhila/Awesome-Black-Friday-Cyber-Monday-deals/pull/679) | 2026-11-18 | Submitted; open |
 | Sponge, Textmock, Yaptake | [s1ntoneli/Awesome-Black-Friday-Cyber-Monday-for-Mac-Apps #200](https://github.com/s1ntoneli/Awesome-Black-Friday-Cyber-Monday-for-Mac-Apps/pull/200) | 2026-11-18 | Submitted; open |
 | Sponge, Textmock | [danmindru/rare-big-deal #1008](https://github.com/danmindru/rare-big-deal/pull/1008) | 2026-11-18 | Merged 2026-11-18 |
-| Yaptake | [trungdq88/Awesome-Black-Friday-Cyber-Monday #2843](https://github.com/trungdq88/Awesome-Black-Friday-Cyber-Monday/pull/2843) | 2026-11-18 | Submitted; open |
+| Yaptake | [trungdq88/Awesome-Black-Friday-Cyber-Monday #2843](https://github.com/trungdq88/Awesome-Black-Friday-Cyber-Monday/pull/2843) | 2026-11-18 | Merged 2026-11-18 |
 
 ## Published packages and verified listings
 
