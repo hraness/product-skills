@@ -2,7 +2,7 @@
  "schemaVersion": 1,
  "scope": "Directory and launch-site web forms submitted or filled in, GitHub Discussions posts made, and list pull requests the submission catalog has no room for, on 2026-11-18",
  "observedAt": "2026-11-18T15:43:49Z",
- "limits": "Each row records the acknowledgement the form showed when it was observed. None of these is a published listing; add a publication record only after the public listing can be read back. The Launching Next forms were filled in but not sent at 14:40 UTC; whether the owner sent them later is unchecked. The llms.txt directory rows record a place in each review queue, and directory.llmstxt.cloud publishes accepted sites in batches over one to three months. The llms.txt hub and GitHub Discussions rows were observed later, at 18:03 UTC, after the owner signed in to the hub. The Black Friday rows were observed after 19:00 UTC. The submission catalog holds at most 50 pull requests and keeps one place for Yaptake's row in trungdq88/Awesome-Black-Friday-Cyber-Monday, so the three Black Friday list pull requests with the least reach are recorded here instead.",
+ "limits": "Each row records the acknowledgement the form showed when it was observed. None of these is a published listing; add a publication record only after the public listing can be read back. The Launching Next forms were filled in but not sent at 14:40 UTC; whether the owner sent them later is unchecked. The llms.txt directory rows record a place in each review queue, and directory.llmstxt.cloud publishes accepted sites in batches over one to three months. The llms.txt hub and GitHub Discussions rows were observed later, at 18:03 UTC, after the owner signed in to the hub. The Black Friday rows were observed after 19:00 UTC, and Yaptake's after yaptake.com showed its code at 19:33 UTC. The submission catalog holds at most 50 pull requests, and Yaptake's row in trungdq88/Awesome-Black-Friday-Cyber-Monday took the last place, so the Black Friday list pull requests with the least reach and Yaptake's Rare Big Deal pull request are recorded here instead.",
  "submissions": [
   {
    "products": ["sponge"],
@@ -166,11 +166,25 @@
    "observedState": "Pull request opened at 19:03 UTC with three rows at the end of the Deals table for Sponge, Yaptake and Textmock and their Black Friday codes; open, and the list runs no checks"
   },
   {
-   "products": ["sponge", "textmock"],
+   "products": ["sponge", "textmock", "yaptake"],
    "channel": "github-collection",
    "reference": "https://github.com/longseespace/mac-black-friday/pull/123",
-   "source": "https://github.com/0thernet/mac-black-friday/commit/a4c9ea51c5936bd219bf057bfc8c850ae8ed74c7",
-   "observedState": "Pull request opened at 19:04 UTC with one deal file each for Sponge and Textmock; the list's review bot passed both and said a maintainer will merge it"
+   "source": "https://github.com/0thernet/mac-black-friday/commit/7c14ad4bc2d0cd74bf4e4092e2c53a5cc47f2719",
+   "observedState": "Pull request opened at 19:04 UTC with one deal file each for Sponge and Textmock; Yaptake's file was added at 19:40 UTC once yaptake.com showed its code, and the list's review bot passed all three and said a maintainer will merge it"
+  },
+  {
+   "products": ["yaptake"],
+   "channel": "github-collection",
+   "reference": "https://github.com/danmindru/rare-big-deal/pull/1011",
+   "source": "https://github.com/0thernet/rare-big-deal/commit/e63efc9d60449f48b96ef1b84d1321e51885520e",
+   "observedState": "Pull request opened at 19:41 UTC with Yaptake's row at the bottom of Productivity, Image, Video and Audio Editing Tools, once yaptake.com showed its code; open, and the list's checks passed"
+  },
+  {
+   "products": ["yaptake"],
+   "channel": "zplatform",
+   "reference": "https://zplatform.ai/submit-black-friday-ai-tool/",
+   "source": "https://yaptake.com/#pricing",
+   "observedState": "Yaptake, with half off the first year and code YAPTAKEBF26, submitted through the free deal form with Hraness as the name, ops@xte.industries as the contact and AI video as the category; the form said the deal was received and goes in the tracker once it matches the vendor's page"
   }
  ],
  "notAttempted": [
@@ -193,16 +207,6 @@
    "channel": "llmstxt-com",
    "products": ["sponge", "textmock", "yaptake"],
    "reason": "llmstxt.com is an llms.txt generator with a waiting list, not a directory of sites"
-  },
-  {
-   "channel": "github-collection",
-   "products": ["yaptake"],
-   "reason": "Yaptake's Black Friday rows for trungdq88/Awesome-Black-Friday-Cyber-Monday, danmindru/rare-big-deal and longseespace/mac-black-friday wait until yaptake.com shows its code after the site's next deploy, because each list checks the offer on the product's own page"
-  },
-  {
-   "channel": "zplatform",
-   "products": ["yaptake"],
-   "reason": "zPlatform's Black Friday tracker for AI tools lists a deal only after matching it on the vendor's own page, so Yaptake waits for the same deploy"
   },
   {
    "channel": "indiemarkdowns",

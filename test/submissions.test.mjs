@@ -12,6 +12,8 @@ import { validateUpdateFiles } from '../scripts/github.mjs';
 const read = async (path) => JSON.parse(await readFile(new URL(`../${path}`, import.meta.url), 'utf8'));
 const catalog = await read(SUBMISSIONS_FILE);
 const copy = () => structuredClone(catalog);
+// A test that adds a row needs a place under the catalog's 50-record limit, which the real catalog may fill.
+const withRoom = () => { const value = copy(); value.submissions.length = Math.min(value.submissions.length, 49); return value; };
 const json = (value) => `${JSON.stringify(value, null, 2)}\n`;
 const later = '2026-11-15T09:00:00.000Z';
 function pull(row, changes = {}) {
@@ -28,7 +30,7 @@ function network(values, failure = {}) {
 
 test('one PR can cover several products while duplicate identities and unsafe searches fail', () => {
   assert.ok(validateSubmissions(copy()).submissions.some((row) => row.products.length === 4));
-  const duplicate = copy(); duplicate.submissions.push({ ...duplicate.submissions[0], id: 'different-id' }); assert.throws(() => validateSubmissions(duplicate), /duplicate pull request/);
+  const duplicate = withRoom(); duplicate.submissions.push({ ...duplicate.submissions[0], id: 'different-id' }); assert.throws(() => validateSubmissions(duplicate), /duplicate pull request/);
   for (const mutate of [
     (value) => { value.submissions[0].url += '?token=secret'; },
     (value) => { value.submissions[0].repository = '../private'; },
@@ -75,7 +77,7 @@ test('pending updates retain newer verified states and current-main strategy wit
   desired.targets[0].reason = 'Current main has clarified the target fit.';
   const result = mergePendingSubmissions(pending, desired, baseline);
   assert.equal(result.targets[0].reason, desired.targets[0].reason); assert.equal(result.submissions[index].github.mergedAt, later);
-  const invented = copy(); invented.submissions.push({ ...invented.submissions[0], id: 'invented-entry', number: 123, url: `https://github.com/${invented.submissions[0].repository}/pull/123` });
+  const invented = withRoom(); invented.submissions.push({ ...invented.submissions[0], id: 'invented-entry', number: 123, url: `https://github.com/${invented.submissions[0].repository}/pull/123` });
   assert.throws(() => mergePendingSubmissions(invented, desired, baseline), /Pending automation changed/);
   const conflict = copy(); conflict.submissions[index].github = { state: 'closed', updatedAt: pending.submissions[index].github.updatedAt, mergedAt: null };
   assert.throws(() => mergePendingSubmissions(pending, conflict, baseline), /merge time|Conflicting/);
