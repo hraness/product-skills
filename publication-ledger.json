@@ -450,6 +450,42 @@
       "url": "https://registry.modelcontextprotocol.io/v0.1/servers/io.github.hraness%2Fsponge/versions/0.65.0",
       "version": "0.65.0",
       "contentHash": "1251d4673ede3f49af16fc4b627f92c66ad393453d01b1474490725a8d44ecad"
+    },
+    {
+      "id": "sponge-mcp-registry-0-66-0",
+      "product": "sponge",
+      "channel": "mcp-registry",
+      "publishedAt": "2026-11-18T02:14:20.070Z",
+      "url": "https://registry.modelcontextprotocol.io/v0.1/servers/io.github.hraness%2Fsponge/versions/0.66.0",
+      "version": "0.66.0",
+      "contentHash": "8038babbf9bfff22c4d0896788536c3a3cf9e245d0e60478622ae76824591d86"
+    },
+    {
+      "id": "sponge-mcp-registry-0-67-1",
+      "product": "sponge",
+      "channel": "mcp-registry",
+      "publishedAt": "2026-11-18T03:34:24.485Z",
+      "url": "https://registry.modelcontextprotocol.io/v0.1/servers/io.github.hraness%2Fsponge/versions/0.67.1",
+      "version": "0.67.1",
+      "contentHash": "09077bbc45bbc89520a4d7284e0ecaca3c7a7d5e386382a468c969699b765563"
+    },
+    {
+      "id": "sponge-mcp-registry-0-68-0",
+      "product": "sponge",
+      "channel": "mcp-registry",
+      "publishedAt": "2026-11-18T10:29:54.372Z",
+      "url": "https://registry.modelcontextprotocol.io/v0.1/servers/io.github.hraness%2Fsponge/versions/0.68.0",
+      "version": "0.68.0",
+      "contentHash": "0f876bd4c5718e47a546ba40c8bc7bc2a6a12fb3fd7e636facb407cce072d6c0"
+    },
+    {
+      "id": "sponge-mcp-registry-0-69-0",
+      "product": "sponge",
+      "channel": "mcp-registry",
+      "publishedAt": "2026-11-18T12:00:50.401Z",
+      "url": "https://registry.modelcontextprotocol.io/v0.1/servers/io.github.hraness%2Fsponge/versions/0.69.0",
+      "version": "0.69.0",
+      "contentHash": "a75e123baa215b605a22a344b3a4ab329eb8deba8e2a7af4afee04a03ad04b69"
     }
   ]
 }
