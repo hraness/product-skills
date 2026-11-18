@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "repository": "hraness/.github",
-  "sourceCommit": "dbbfa387287e45930c61a934f9e475dde0fc0058",
+  "sourceCommit": "cd17786be0579c0241409cd84411424de4685217",
   "files": {
     "DOCUMENTATION_GUIDELINES.md": {
       "bytes": 16129,
@@ -20,8 +20,8 @@
       "sha256": "3c1267d5443767fdb6e82a1f0cfb095812c1530302bf37e05be16b28a199338b"
     },
     "STYLE.md": {
-      "bytes": 31794,
-      "sha256": "0c03d50b3cff9a700c28cbeb8b28574d3bdb4496418fc93e7e470008fcb11ff6"
+      "bytes": 31680,
+      "sha256": "beb674bacd357d300d24ef63cab328a568ce434ab856ed43e5a54a767f9cb717"
     },
     "WRITING.md": {
       "bytes": 5510,
