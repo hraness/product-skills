@@ -127,7 +127,7 @@ async function deliver() {
   process.stdout.write('The checked App profile update merged; ordinary main checks follow.\n');
 }
 if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1])).href) {
-  const mode = process.argv[2]; const action = mode === 'check' ? async () => { await checkProfile(); process.stdout.write('Checked the four current product links.\n'); } : mode === 'refresh' ? refresh : mode === 'deliver' ? deliver : null;
+  const mode = process.argv[2]; const action = mode === 'check' ? async () => { await checkProfile(); process.stdout.write('Checked the current product links.\n'); } : mode === 'refresh' ? refresh : mode === 'deliver' ? deliver : null;
   if (!action) { process.stderr.write('Use check, refresh or deliver.\n'); process.exitCode = 1; }
   else action().catch(() => { process.stderr.write(mode === 'check' ? 'Profile validation stopped. Inspect the README, product markers and current public portfolio.\n' : 'Profile synchronization stopped; preserve the README and inspect the source, marker or protected-check failure before retrying.\n'); process.exitCode = 1; });
 }

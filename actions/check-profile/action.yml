@@ -1,5 +1,5 @@
 name: Check Hraness product links
-description: Validate the four marked product links in the checked-out organization or personal README.
+description: Validate the marked product links in the checked-out organization or personal README.
 runs:
   using: composite
   steps:

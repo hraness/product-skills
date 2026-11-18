@@ -8,6 +8,7 @@ const reconcile = (options) => reconcileSources({ ...options, fetchImpl: withOri
 
 const license = await readFile(new URL('../LICENSE', import.meta.url), 'utf8');
 const portfolio = JSON.parse(await readFile(new URL('../catalog/portfolio.json', import.meta.url), 'utf8'));
+const withYiii = (facts) => ({ ...facts, projects: [...structuredClone(facts.projects), { id: 'yiii', name: 'yiii', url: 'https://yiii.io', short: 'Learn languages faster (ZH + EN).', icon: '/products/yiii/icon.png' }] });
 const empty = () => ({ schemaVersion: 1, products: {} });
 const json = (value, options) => new Response(JSON.stringify(value), options);
 function bundle(id = 'sponge', revision = 1) {
@@ -60,6 +61,22 @@ test('manifest identity, exact versions, executable and source paths are closed'
 test('portfolio facts require each exact product identity once', () => {
   assert.doesNotThrow(() => validatePortfolio(portfolio));
   const p = structuredClone(portfolio); p.projects[0].url = 'https://wrong.test'; assert.throws(() => validatePortfolio(p));
+});
+test('a profile-only portfolio entry needs its exact identity and changes no package', async () => {
+  const listed = withYiii(portfolio); assert.doesNotThrow(() => validatePortfolio(listed));
+  for (const mutate of [
+    (q) => { q.projects.at(-1).url = 'https://yiii.example'; },
+    (q) => { q.projects.at(-1).name = 'Yiii'; },
+    (q) => { q.projects.at(-1).icon = '/products/yiii/icon.svg'; },
+    (q) => { Object.assign(q.projects.at(-1), { id: 'lunar', icon: '/products/lunar/icon.png' }); },
+    (q) => { q.projects.push(structuredClone(q.projects.at(-1))); },
+    (q) => { q.projects.shift(); },
+    (q) => { q.projects.at(-1).short = 'Practice at https://example.test/'; },
+  ]) { const q = structuredClone(listed); mutate(q); assert.throws(() => validatePortfolio(q)); }
+  const first = await reconcile({ portfolio, state: empty(), bundles: {}, selected: ['sponge'], ...server() });
+  const again = await reconcile({ portfolio: listed, state: first.state, bundles: first.bundles, selected: ['sponge'], fetchImpl: async () => new Response(null, { status: 304 }) });
+  assert.deepEqual(again.state, first.state);
+  assert.deepEqual(render(first.state, first.bundles, listed), render(first.state, first.bundles, portfolio));
 });
 test('an empty admitted catalog needs no fingerprint migration or product version', () => {
   assert.doesNotThrow(() => checkPackageFingerprints(empty(), {}, portfolio));

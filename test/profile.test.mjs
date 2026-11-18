@@ -28,6 +28,19 @@ test('new profile destinations require successful reads and unchanged lists do n
   await refreshProfile(first.readme, portfolio, { fetchImpl }); assert.equal(calls, 4);
   await assert.rejects(refreshProfile(before, portfolio, { fetchImpl: async () => new Response(null, { status: 404 }) }));
 });
+test('profiles link a profile-only portfolio entry after reading its new destination', async () => {
+  const listed = { ...portfolio, projects: [...portfolio.projects, { id: 'yiii', name: 'yiii', url: 'https://yiii.io', short: 'Learn languages faster (ZH + EN).', icon: '/products/yiii/icon.png' }] };
+  const before = renderProfile(`${START}\n${END}\n`, portfolio); const after = renderProfile(before, listed);
+  assert.equal((after.match(/^- \[/gm) ?? []).length, 5); assert.ok(after.includes('\n- [yiii](https://yiii.io): Learn languages faster (ZH + EN).\n'));
+  let calls = 0; const fetchImpl = async (url, options) => { assert.equal(url, 'https://yiii.io'); assert.equal(options.method, 'HEAD'); assert.equal(options.redirect, 'error'); calls++; return new Response(null, { status: 200 }); };
+  assert.deepEqual(await refreshProfile(before, listed, { fetchImpl }), { changed: true, readme: after }); assert.equal(calls, 1);
+  const root = await mkdtemp(join(tmpdir(), 'product-profile-listed-')); const serve = async () => new Response(JSON.stringify(listed));
+  try {
+    await writeFile(join(root, 'README.md'), before); await assert.rejects(checkProfile({ repository: '0thernet/0thernet', root, fetchImpl: serve }), /differs/);
+    await writeFile(join(root, 'README.md'), after);
+    assert.deepEqual((await checkProfile({ repository: '0thernet/0thernet', root, fetchImpl: serve })).products, [...portfolio.projects.map((p) => p.id), 'yiii']);
+  } finally { await rm(root, { recursive: true, force: true }); }
+});
 test('generated writes reject symlink escapes', async () => {
   const root = await mkdtemp(join(tmpdir(), 'product-write-')); const outside = await mkdtemp(join(tmpdir(), 'product-outside-'));
   try { await symlink(outside, join(root, 'plugins')); await assert.rejects(writeRendered(root, { 'plugins/sponge/README.md': 'Do not write outside the repository.' })); }
