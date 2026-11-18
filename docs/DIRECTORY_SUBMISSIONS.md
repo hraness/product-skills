@@ -177,9 +177,20 @@ over one to three months, and llmstxt.site received the same three sites. Three
 more lists received pull requests. awesome-no-login-web-apps got Yaptake's
 silence remover and LUFS meter and Sponge's PDF to Markdown converter,
 Awesome-llms-txt got the llms.txt files of all three sites, and ALL about RSS
-got Sponge, which follows a site's feed. The llms.txt hub waits for the owner,
-because its form needs their sign-in. HeyClaude lists commercial tools only as
-editorial picks or paid sponsorships, so nothing was sent there.
+got Sponge, which follows a site's feed. HeyClaude lists commercial tools only
+as editorial picks or paid sponsorships, so nothing was sent there.
+
+After the owner signed in, the llms.txt hub's form opened a pull request for
+each of the three sites, and the hub's review bot holds them for its
+maintainer. The owner approved a Black Friday discount: half off the first 12
+months of Sponge Plus and Yaptake for new subscribers, with codes that expire at
+the end of 2 December 2026, Pacific time. Sponge's pricing page shows its code,
+and its entry in Awesome Black Friday Cyber Monday merged the same day. The
+change that adds Yaptake's code to its pricing section merged and reaches the
+site with its next deploy. FluidAudio's showcase received Yaptake, which
+transcribes through FluidAudio. Show and tell posts introduced the three
+product skills in the Anthropic skills Discussions and the Yaptake plugin in the
+Codex Discussions.
 
 ## Demonstration cases
 

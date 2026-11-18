@@ -1,8 +1,8 @@
 {
  "schemaVersion": 1,
- "scope": "Directory and launch-site web forms submitted or filled in on 2026-11-18",
+ "scope": "Directory and launch-site web forms submitted or filled in, and GitHub Discussions posts made, on 2026-11-18",
  "observedAt": "2026-11-18T15:43:49Z",
- "limits": "Each row records the acknowledgement the form showed when it was observed. None of these is a published listing; add a publication record only after the public listing can be read back. The Launching Next forms were filled in but not sent at 14:40 UTC; whether the owner sent them later is unchecked. The llms.txt directory rows record a place in each review queue, and directory.llmstxt.cloud publishes accepted sites in batches over one to three months.",
+ "limits": "Each row records the acknowledgement the form showed when it was observed. None of these is a published listing; add a publication record only after the public listing can be read back. The Launching Next forms were filled in but not sent at 14:40 UTC; whether the owner sent them later is unchecked. The llms.txt directory rows record a place in each review queue, and directory.llmstxt.cloud publishes accepted sites in batches over one to three months. The llms.txt hub and GitHub Discussions rows were observed later, at 18:03 UTC, after the owner signed in to the hub.",
  "submissions": [
   {
    "products": ["sponge"],
@@ -94,6 +94,41 @@
    "reference": "https://llmstxt.site/submit",
    "source": "https://yaptake.com/llms.txt",
    "observedState": "yaptake.com submitted with its llms.txt and llms-full.txt addresses, the name Hraness and ops@xte.industries as the contact; the form opened its thank-you page after sending"
+  },
+  {
+   "products": ["sponge"],
+   "channel": "llms-txt-hub",
+   "reference": "https://llmstxthub.com/submit",
+   "source": "https://sponge.computer/llms.txt",
+   "observedState": "sponge.computer submitted through the hub's form after the owner signed in; the form opened pull request 2547 in thedaviddias/llms-txt-hub under the maintainer's account at 17:15 UTC without the site's llms-full.txt address, and the hub's review bot held it for manual review"
+  },
+  {
+   "products": ["textmock"],
+   "channel": "llms-txt-hub",
+   "reference": "https://llmstxthub.com/submit",
+   "source": "https://textmock.com/llms.txt",
+   "observedState": "textmock.com submitted through the hub's form with its llms.txt and llms-full.txt addresses; the form opened pull request 2548 under the maintainer's account at 17:16 UTC, and the hub's review bot held it for manual review"
+  },
+  {
+   "products": ["yaptake"],
+   "channel": "llms-txt-hub",
+   "reference": "https://llmstxthub.com/submit",
+   "source": "https://yaptake.com/llms.txt",
+   "observedState": "yaptake.com submitted through the hub's form with its llms.txt and llms-full.txt addresses; the form opened pull request 2549 under the maintainer's account at 17:17 UTC, and the hub's review bot held it for manual review"
+  },
+  {
+   "products": ["sponge", "textmock", "yaptake"],
+   "channel": "github-discussions",
+   "reference": "https://github.com/anthropics/skills/discussions/2244",
+   "source": "https://github.com/hraness/product-skills",
+   "observedState": "Posted at 17:53 UTC in the Show and tell category of the anthropics/skills Discussions, introducing the Yaptake, Sponge and Textmock skills and saying that the author works on the apps"
+  },
+  {
+   "products": ["yaptake"],
+   "channel": "github-discussions",
+   "reference": "https://github.com/openai/codex/discussions/62324",
+   "source": "https://github.com/hraness/product-skills/tree/main/plugins/yaptake",
+   "observedState": "Posted at 17:54 UTC in the Show and tell category of the openai/codex Discussions, introducing the Yaptake Codex plugin and saying that the author works on Yaptake"
   }
  ],
  "notAttempted": [
@@ -106,11 +141,6 @@
    "channel": "smithery",
    "products": ["sponge", "yaptake"],
    "reason": "Skipped on 2026-11-18: publishing an existing server needs the owner's Smithery sign-in, and the owner recalled deciding that Smithery was defunct"
-  },
-  {
-   "channel": "llms-txt-hub",
-   "products": ["sponge", "textmock", "yaptake"],
-   "reason": "llmstxthub.com adds sites through a form that needs the owner's GitHub or email sign-in, so it waits for the owner; its GitHub repository had 1,087 open pull requests, and two from outside authors merged in the 90 days to 18 November"
   },
   {
    "channel": "heyclaude",
