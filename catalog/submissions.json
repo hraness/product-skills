@@ -1720,9 +1720,9 @@
         "yaptake"
       ],
       "decision": "eligible",
-      "reason": "The list takes Black Friday and Cyber Monday discounts on software: one row per product at the end of its category, at most two products per maker, with the code, the old and new prices and the dates, and the linked page must show the same offer. The owner approved half off the first 12 months of Sponge Plus and Yaptake for new subscribers, with codes that expire at the end of 2 December 2026, Pacific time. The Sponge row merged nine minutes after it was proposed on 18 November.",
+      "reason": "The list takes Black Friday and Cyber Monday discounts on software: one row per product at the end of its category, at most two products per maker, with the code, the old and new prices and the dates, and the linked page must show the same offer. The owner approved half off the first 12 months of Sponge Plus and Yaptake for new subscribers, with codes that expire at the end of 2 December 2026, Pacific time. The Sponge row merged nine minutes after it was proposed on 18 November. Pull request 2843 adds Yaptake, the second of the two products the list allows per maker, now that yaptake.com shows its code.",
       "rulesUrl": "https://github.com/trungdq88/Awesome-Black-Friday-Cyber-Monday/blob/5adf0831026340f91395e2afdcf2aa9af0266780/README.md",
-      "reviewedAt": "2026-11-18T18:03:13.913Z",
+      "reviewedAt": "2026-11-18T19:46:46.300Z",
       "sourceCommit": "5adf0831026340f91395e2afdcf2aa9af0266780",
       "reach": {
         "stars": 7598,
@@ -1858,15 +1858,15 @@
         "yaptake"
       ],
       "decision": "eligible",
-      "reason": "The list takes products that normally cost money and have a genuine discount that is live now, as rows in category tables. The regular price and the offer have to be visible on the product's own site. The owner approved half off the first 12 months of Sponge Plus, Textmock Pro and Yaptake for new subscribers, with codes that expire at the end of 2 December 2026, Pacific time. Pull request 1008 adds Sponge and Textmock, whose pricing pages show their codes, and its checks passed. Yaptake waits until yaptake.com shows its offer after the site's next deploy.",
-      "rulesUrl": "https://github.com/danmindru/rare-big-deal/blob/c7a519aa602e99526511c82cff4191a14f88bf3f/CURATOR.md",
-      "reviewedAt": "2026-11-18T19:17:45.607Z",
-      "sourceCommit": "c7a519aa602e99526511c82cff4191a14f88bf3f",
+      "reason": "The list takes products that normally cost money and have a genuine discount that is live now, as rows in category tables. The regular price and the offer have to be visible on the product's own site. The owner approved half off the first 12 months of Sponge Plus, Textmock Pro and Yaptake for new subscribers, with codes that expire at the end of 2 December 2026, Pacific time. Pull request 1008 added Sponge and Textmock, whose pricing pages show their codes, and merged the same day. Pull request 1011 adds Yaptake now that yaptake.com shows its code.",
+      "rulesUrl": "https://github.com/danmindru/rare-big-deal/blob/7eebb6ed28b77eba192da2363d1549c0aa56d39b/CURATOR.md",
+      "reviewedAt": "2026-11-18T19:46:46.300Z",
+      "sourceCommit": "7eebb6ed28b77eba192da2363d1549c0aa56d39b",
       "reach": {
         "stars": 404,
-        "forks": 621,
+        "forks": 622,
         "watchers": 4,
-        "pushedAt": "2026-11-18T16:31:22.000Z",
+        "pushedAt": "2026-11-18T19:44:18.000Z",
         "archived": false
       }
     },
@@ -1878,9 +1878,9 @@
         "yaptake"
       ],
       "decision": "eligible",
-      "reason": "The BoltAI list takes Black Friday deals on apps for Apple platforms as one JSON file per app, linked to the page that shows the Black Friday price, with at most five apps per developer. A review bot checks each file. The owner approved half off the first 12 months of Sponge Plus, Textmock Pro and Yaptake for new subscribers, with codes that expire at the end of 2 December 2026, Pacific time. Pull request 123 adds Sponge and Textmock, and the review bot passed both. Yaptake waits until yaptake.com shows its offer after the site's next deploy.",
+      "reason": "The BoltAI list takes Black Friday deals on apps for Apple platforms as one JSON file per app, linked to the page that shows the Black Friday price, with at most five apps per developer. A review bot checks each file. The owner approved half off the first 12 months of Sponge Plus, Textmock Pro and Yaptake for new subscribers, with codes that expire at the end of 2 December 2026, Pacific time. Pull request 123 adds Sponge, Textmock and Yaptake, the last once yaptake.com showed its code, and the review bot passed all three.",
       "rulesUrl": "https://github.com/longseespace/mac-black-friday/blob/45b8565bc8cc5a2c109c28db59c558971a98570d/CONTRIBUTING.md",
-      "reviewedAt": "2026-11-18T19:17:45.607Z",
+      "reviewedAt": "2026-11-18T19:46:46.300Z",
       "sourceCommit": "45b8565bc8cc5a2c109c28db59c558971a98570d",
       "reach": {
         "stars": 24,
@@ -2912,9 +2912,9 @@
       },
       "submittedAt": "2026-11-18T19:04:03.000Z",
       "github": {
-        "state": "open",
-        "updatedAt": "2026-11-18T19:04:03.000Z",
-        "mergedAt": null
+        "state": "closed",
+        "updatedAt": "2026-11-18T19:33:36.000Z",
+        "mergedAt": "2026-11-18T19:30:32.000Z"
       }
     },
     {
@@ -2937,6 +2937,27 @@
       "github": {
         "state": "open",
         "updatedAt": "2026-11-18T19:03:50.000Z",
+        "mergedAt": null
+      }
+    },
+    {
+      "id": "yaptake-black-friday-cyber-monday-2843",
+      "products": [
+        "yaptake"
+      ],
+      "channel": "github-collection",
+      "repository": "trungdq88/Awesome-Black-Friday-Cyber-Monday",
+      "repositoryId": 569126902,
+      "number": 2843,
+      "url": "https://github.com/trungdq88/Awesome-Black-Friday-Cyber-Monday/pull/2843",
+      "author": {
+        "login": "0thernet",
+        "id": 894119
+      },
+      "submittedAt": "2026-11-18T19:39:03.000Z",
+      "github": {
+        "state": "open",
+        "updatedAt": "2026-11-18T19:39:03.000Z",
         "mergedAt": null
       }
     }
