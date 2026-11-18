@@ -1207,6 +1207,45 @@
         "pushedAt": "2026-10-03T05:18:53.000Z",
         "archived": false
       }
+    },
+    {
+      "repository": "Homebrew/homebrew-cask",
+      "products": [
+        "dawn",
+        "sponge",
+        "textmock",
+        "yaptake"
+      ],
+      "decision": "deferred",
+      "reason": "Homebrew asks a new package to show public interest beyond its author, and a self-submission without a public code repository must give evidence of notability in the pull request. Its cask rules give a recently released app further consideration only with substantial, independently verifiable public interest and multiple requests for inclusion. The four apps are new, and the hraness tap already installs all of them.",
+      "rulesUrl": "https://github.com/Homebrew/homebrew-cask/blob/42ee51e5b48081af1fa14f213fd2cf3689467b55/.github/PULL_REQUEST_TEMPLATE.md",
+      "reviewedAt": "2026-11-18T14:40:44.424Z",
+      "sourceCommit": "42ee51e5b48081af1fa14f213fd2cf3689467b55",
+      "reach": {
+        "stars": 22308,
+        "forks": 12116,
+        "watchers": 305,
+        "pushedAt": "2026-11-18T14:33:17.000Z",
+        "archived": false
+      }
+    },
+    {
+      "repository": "Homebrew/homebrew-core",
+      "products": [
+        "sponge"
+      ],
+      "decision": "ineligible",
+      "reason": "Homebrew accepts a formula in homebrew/core only for open-source software under a license compatible with the Debian Free Software Guidelines, and sends proprietary or binary-only software to casks. The Sponge CLI is closed source and is published on npm as UNLICENSED.",
+      "rulesUrl": "https://github.com/Homebrew/homebrew-core/blob/df69c4ae50a5c295943b98a727fcc48fd0c8d585/CONTRIBUTING.md",
+      "reviewedAt": "2026-11-18T14:40:44.424Z",
+      "sourceCommit": "df69c4ae50a5c295943b98a727fcc48fd0c8d585",
+      "reach": {
+        "stars": 15678,
+        "forks": 13967,
+        "watchers": 302,
+        "pushedAt": "2026-11-18T14:36:03.000Z",
+        "archived": false
+      }
     }
   ],
   "submissions": [
@@ -2014,6 +2053,48 @@
       "github": {
         "state": "open",
         "updatedAt": "2026-11-18T12:58:25.000Z",
+        "mergedAt": null
+      }
+    },
+    {
+      "id": "sponge-awesome-twitter-tools-81",
+      "products": [
+        "sponge"
+      ],
+      "channel": "github-collection",
+      "repository": "hridaydutta123/awesome-twitter-tools",
+      "repositoryId": 137728070,
+      "number": 81,
+      "url": "https://github.com/hridaydutta123/awesome-twitter-tools/pull/81",
+      "author": {
+        "login": "0thernet",
+        "id": 894119
+      },
+      "submittedAt": "2026-11-18T13:59:05.000Z",
+      "github": {
+        "state": "open",
+        "updatedAt": "2026-11-18T13:59:05.000Z",
+        "mergedAt": null
+      }
+    },
+    {
+      "id": "sponge-awesome-hacker-news-140",
+      "products": [
+        "sponge"
+      ],
+      "channel": "github-collection",
+      "repository": "cheeaun/awesome-hacker-news",
+      "repositoryId": 33075597,
+      "number": 140,
+      "url": "https://github.com/cheeaun/awesome-hacker-news/pull/140",
+      "author": {
+        "login": "0thernet",
+        "id": 894119
+      },
+      "submittedAt": "2026-11-18T13:59:28.000Z",
+      "github": {
+        "state": "open",
+        "updatedAt": "2026-11-18T13:59:28.000Z",
         "mergedAt": null
       }
     }

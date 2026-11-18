@@ -1,0 +1,69 @@
+{
+ "schemaVersion": 1,
+ "scope": "Directory and launch-site web forms submitted or filled in on 2026-11-18",
+ "observedAt": "2026-11-18T14:40:44Z",
+ "limits": "Each row records the acknowledgement the form showed when it was observed. None of these is a published listing; add a publication record only after the public listing can be read back. The Launching Next forms were filled in but not sent when this record was made.",
+ "submissions": [
+  {
+   "products": ["sponge"],
+   "channel": "nosignuptools",
+   "reference": "https://nosignuptools.com/submit",
+   "source": "https://sponge.computer/tools/youtube-transcript",
+   "observedState": "Sponge YouTube Transcript submitted in Media through the free form, which confirmed receipt; pending review"
+  },
+  {
+   "products": ["sponge"],
+   "channel": "nosignuptools",
+   "reference": "https://nosignuptools.com/submit",
+   "source": "https://sponge.computer/tools/pdf-to-markdown",
+   "observedState": "Sponge PDF to Markdown submitted in Files through the free form, which confirmed receipt; pending review"
+  },
+  {
+   "products": ["yaptake"],
+   "channel": "nosignuptools",
+   "reference": "https://nosignuptools.com/submit",
+   "source": "https://yaptake.com/tools/lufs-meter",
+   "observedState": "Yaptake LUFS Meter submitted in Media through the free form, which confirmed receipt; pending review"
+  },
+  {
+   "products": ["yaptake"],
+   "channel": "nosignuptools",
+   "reference": "https://nosignuptools.com/submit",
+   "source": "https://yaptake.com/tools/silence-remover",
+   "observedState": "Yaptake Silence Remover submitted in Media through the free form, which confirmed receipt; pending review"
+  },
+  {
+   "products": ["yaptake"],
+   "channel": "nosignuptools",
+   "reference": "https://nosignuptools.com/submit",
+   "source": "https://yaptake.com/tools/safe-zones",
+   "observedState": "Yaptake Safe Zones submitted in Design through the free form, which confirmed receipt; pending review"
+  },
+  {
+   "products": ["textmock"],
+   "channel": "nosignuptools",
+   "reference": "https://nosignuptools.com/submit",
+   "source": "https://textmock.com/fake-text",
+   "observedState": "Textmock Fake Text Generator submitted in Images through the free form, which confirmed receipt; pending review"
+  },
+  {
+   "products": ["sponge"],
+   "channel": "terminal-trove",
+   "reference": "https://terminaltrove.com/submit/",
+   "source": "https://sponge.computer/docs/cli",
+   "observedState": "Sponge CLI submitted as closed source with npm install steps for macOS and Linux and a preview of real sponge 0.70.0 output (docs/media/terminal-trove-sponge-cli.png); the form showed “Thank you for your submission!” and said the curators try each tool before listing it, with replies to ops@xte.industries; the paid Express Lane was not bought"
+  }
+ ],
+ "notAttempted": [
+  {
+   "channel": "launching-next",
+   "products": ["sponge", "textmock", "yaptake"],
+   "reason": "Three free forms filled in in the owner's browser with ops@xte.industries as the unpublished contact, the newsletter box cleared and the optional funding and marketing questions left blank; not sent, because each form's arithmetic human check is for the owner to answer. The $99 upgrade is not wanted"
+  },
+  {
+   "channel": "smithery",
+   "products": ["sponge", "yaptake"],
+   "reason": "Skipped on 2026-11-18: publishing an existing server needs the owner's Smithery sign-in, and the owner recalled deciding that Smithery was defunct"
+  }
+ ]
+}
