@@ -104,6 +104,7 @@ These rows come from the existing records. The ledger keeps every earlier public
 | Sponge | MCP Registry | [0.67.1](https://registry.modelcontextprotocol.io/v0.1/servers/io.github.hraness%2Fsponge/versions/0.67.1) | Published 2026-11-18 |
 | Sponge | MCP Registry | [0.68.0](https://registry.modelcontextprotocol.io/v0.1/servers/io.github.hraness%2Fsponge/versions/0.68.0) | Published 2026-11-18 |
 | Sponge | MCP Registry | [0.69.0](https://registry.modelcontextprotocol.io/v0.1/servers/io.github.hraness%2Fsponge/versions/0.69.0) | Published 2026-11-18 |
+| Textmock | GitHub package | [0.1.3](https://github.com/hraness/product-skills/releases/tag/integrations-a8b1eab97a166c29) | Published 2026-11-18 |
 | Dawn | skills.sh | [Listed](https://www.skills.sh/hraness/product-skills/dawn) | First verified 2026-11-14 |
 | Sponge | skills.sh | [Listed](https://www.skills.sh/hraness/product-skills/sponge) | First verified 2026-11-14 |
 | Textmock | skills.sh | [Listed](https://www.skills.sh/hraness/product-skills/textmock) | First verified 2026-11-14 |
