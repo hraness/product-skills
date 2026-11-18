@@ -10,6 +10,18 @@ export const CLAUDE_DIRECTORY_ROOT = 'directory/claude';
 export const CLAUDE_DIRECTORY_PRODUCTS = Object.freeze(['dawn', 'sponge', 'textmock', 'yaptake']);
 const ALLOWED = /\.(?:md|txt|json|ya?ml|png)$|(?:^|\/)LICENSE$/;
 
+/** Every file a product's directory copy may contain, relative to its folder. */
+export function claudeDirectoryMembers(id) {
+  if (!CLAUDE_DIRECTORY_PRODUCTS.includes(id)) throw new Error('Unknown Claude directory product');
+  return ['.claude-plugin/plugin.json', 'LICENSE', 'README.md', 'assets/icon.png', `skills/${id}/SKILL.md`, ...(id === 'dawn' ? ['skills/dawn/examples/morning-study.md'] : [])];
+}
+
+/** Whether an automated product update may write this repository path. */
+export function claudeDirectoryPath(path) {
+  const match = /^directory\/claude\/([a-z]+)\/(.+)$/.exec(path);
+  return Boolean(match) && CLAUDE_DIRECTORY_PRODUCTS.includes(match[1]) && claudeDirectoryMembers(match[1]).includes(match[2]);
+}
+
 /** Files for one product's directory copy, keyed relative to its folder. */
 export function claudeDirectoryFiles(id, files, { manifest, icon = null }) {
   if (!CLAUDE_DIRECTORY_PRODUCTS.includes(id)) return null;
@@ -28,7 +40,7 @@ export function claudeDirectoryFiles(id, files, { manifest, icon = null }) {
     out[skill] = textmockSkill(files[skill]);
     out['README.md'] = TEXTMOCK_README;
   }
-  for (const path of Object.keys(out)) if (!ALLOWED.test(path)) throw new Error(`Claude directory copy refuses ${path}`);
+  for (const path of Object.keys(out)) if (!ALLOWED.test(path) || !claudeDirectoryMembers(id).includes(path)) throw new Error(`Claude directory copy refuses ${path}`);
   return out;
 }
 

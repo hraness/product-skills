@@ -1,6 +1,19 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { execFileSync } from 'node:child_process';
+import { fileURLToPath } from 'node:url';
 import { refreshBehindPull, repairMissingCheck, successfulRequired, updateOwnedBranch, validateUpdateFiles } from '../scripts/github.mjs';
+import { CLAUDE_DIRECTORY_ROOT } from '../scripts/claude-directory.mjs';
+import { MCPB_ROOT } from '../scripts/mcpb.mjs';
+test('a product update may change every generated package file', () => {
+  // Reconcile rewrites these folders. A file it can write but an update may not carry stops every product update.
+  const roots = ['plugins', 'skills', 'adapters', CLAUDE_DIRECTORY_ROOT, MCPB_ROOT];
+  const tracked = execFileSync('git', ['ls-files', '-z', '--', ...roots], { cwd: fileURLToPath(new URL('../', import.meta.url)), encoding: 'utf8' }).split('\0').filter(Boolean);
+  for (const root of roots) assert.ok(tracked.some((path) => path.startsWith(`${root}/`)), root);
+  for (const path of tracked) assert.doesNotThrow(() => validateUpdateFiles('products', [path]), path);
+  for (const path of ['directory/claude/textmock/scripts/textmock-link.mjs', 'directory/claude/textmock/.mcp.json', 'directory/claude/textmock/skills/sponge/SKILL.md', 'directory/claude/sponge/skills/dawn/examples/morning-study.md', 'directory/claude/other/README.md', 'directory/claude/textmock/../README.md', 'directory/other/textmock/README.md', 'mcpb/dawn/manifest.json', 'mcpb/yaptake/server/cli.mjs', 'mcpb/sponge/extra.js']) assert.throws(() => validateUpdateFiles('products', [path]), path);
+  for (const path of ['directory/claude/textmock/README.md', 'mcpb/sponge/manifest.json']) assert.throws(() => validateUpdateFiles('publications', [path]), path);
+});
 test('owned update branches contain only their exact generated files', () => {
   assert.doesNotThrow(() => validateUpdateFiles('products', ['catalog/admitted.json', 'plugins/sponge/skills/sponge/SKILL.md', 'plugins/yaptake/.claude-plugin/plugin.json']));
   assert.doesNotThrow(() => validateUpdateFiles('publications', ['publication-ledger.json', 'catalog/store-status.json']));
