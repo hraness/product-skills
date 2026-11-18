@@ -1246,6 +1246,491 @@
         "pushedAt": "2026-11-18T14:36:03.000Z",
         "archived": false
       }
+    },
+    {
+      "repository": "aviaryan/awesome-no-login-web-apps",
+      "products": [
+        "sponge",
+        "yaptake"
+      ],
+      "decision": "eligible",
+      "reason": "The list takes web apps whose core features work without an account, and each description names the main features and the main shortcoming. Outside authors had 32 pull requests merged in the 90 days to 18 November, all on 8, 24 and 25 September. The free Yaptake silence remover and LUFS meter and the Sponge PDF to Markdown converter need no account.",
+      "rulesUrl": "https://github.com/aviaryan/awesome-no-login-web-apps/blob/f19ded57d860fb86bedcd82d2d967fafb2246e83/CONTRIBUTING.md",
+      "reviewedAt": "2026-11-18T15:42:50.073Z",
+      "sourceCommit": "f19ded57d860fb86bedcd82d2d967fafb2246e83",
+      "reach": {
+        "stars": 3433,
+        "forks": 751,
+        "watchers": 38,
+        "pushedAt": "2026-09-25T08:32:52.000Z",
+        "archived": false
+      }
+    },
+    {
+      "repository": "AboutRSS/ALL-about-RSS",
+      "products": [
+        "sponge"
+      ],
+      "decision": "eligible",
+      "reason": "The list takes any working, maintained service or tool that produces, reads or converts feeds, and asks authors to disclose their involvement. A pull request for a new project is held open until the project has a record of updates. Sponge follows a site’s RSS, Atom or JSON Feed and saves each new page. Outside authors had 34 pull requests merged in the 90 days to 18 November, the latest on 7 November.",
+      "rulesUrl": "https://github.com/AboutRSS/ALL-about-RSS/blob/081597145d478cfeed9dfc1bec114b2f2ed457dd/CONTRIBUTING.md",
+      "reviewedAt": "2026-11-18T15:42:50.073Z",
+      "sourceCommit": "081597145d478cfeed9dfc1bec114b2f2ed457dd",
+      "reach": {
+        "stars": 5956,
+        "forks": 284,
+        "watchers": 78,
+        "pushedAt": "2026-11-07T14:40:59.000Z",
+        "archived": false
+      }
+    },
+    {
+      "repository": "thedaviddias/llms-txt-hub",
+      "products": [
+        "sponge",
+        "textmock",
+        "yaptake"
+      ],
+      "decision": "deferred",
+      "reason": "The hub lists sites that publish llms.txt. Sites are added through its website form, which needs a GitHub or email sign-in, or by pull request. Outside authors had two pull requests merged in the 90 days to 18 November, with 1,087 open. The files for sponge.computer, textmock.com and yaptake.com wait for the owner to decide on signing in.",
+      "rulesUrl": "https://github.com/thedaviddias/llms-txt-hub/blob/c62bcba61d1ba5170e1f05733b6884b8ee4483ed/.github/CONTRIBUTING.md",
+      "reviewedAt": "2026-11-18T15:42:50.073Z",
+      "sourceCommit": "c62bcba61d1ba5170e1f05733b6884b8ee4483ed",
+      "reach": {
+        "stars": 929,
+        "forks": 1154,
+        "watchers": 8,
+        "pushedAt": "2026-11-18T15:33:32.000Z",
+        "archived": false
+      }
+    },
+    {
+      "repository": "JSONbored/awesome-claude",
+      "products": [
+        "sponge",
+        "textmock",
+        "yaptake"
+      ],
+      "decision": "ineligible",
+      "reason": "HeyClaude’s free registry turns away product promotions and sends commercial tools to a separate tools form, which needs a GitHub sign-in. Commercial tools appear only as editorial picks or paid sponsorships. The Sponge, Textmock and Yaptake skills exist to operate commercial products.",
+      "rulesUrl": "https://github.com/JSONbored/awesome-claude/blob/2f0919b8be5a79a49cb08312a42fef0e4833cc83/CONTRIBUTING.md",
+      "reviewedAt": "2026-11-18T15:42:50.073Z",
+      "sourceCommit": "2f0919b8be5a79a49cb08312a42fef0e4833cc83",
+      "reach": {
+        "stars": 310,
+        "forks": 190,
+        "watchers": 2,
+        "pushedAt": "2026-11-03T00:45:47.000Z",
+        "archived": false
+      }
+    },
+    {
+      "repository": "lissy93/awesome-privacy",
+      "products": [
+        "sponge",
+        "yaptake"
+      ],
+      "decision": "ineligible",
+      "reason": "The guide requires human-written descriptions and pull request bodies, and says low-effort autonomous self-promotion may be closed without feedback.",
+      "rulesUrl": "https://github.com/lissy93/awesome-privacy/blob/c433dd11679198b8e327ab1cab8831cae9327578/.github/CONTRIBUTING.md",
+      "reviewedAt": "2026-11-18T15:42:50.073Z",
+      "sourceCommit": "c433dd11679198b8e327ab1cab8831cae9327578",
+      "reach": {
+        "stars": 10093,
+        "forks": 707,
+        "watchers": 82,
+        "pushedAt": "2026-11-14T11:59:12.000Z",
+        "archived": false
+      }
+    },
+    {
+      "repository": "pluja/awesome-privacy",
+      "products": [
+        "sponge",
+        "yaptake"
+      ],
+      "decision": "ineligible",
+      "reason": "The list collects free, open-source, privacy-respecting services. The Sponge and Yaptake apps are closed source.",
+      "rulesUrl": "https://github.com/pluja/awesome-privacy/blob/887accc6c2f782409aa26848961dc4618c59618c/README.md",
+      "reviewedAt": "2026-11-18T15:42:50.073Z",
+      "sourceCommit": "887accc6c2f782409aa26848961dc4618c59618c",
+      "reach": {
+        "stars": 20322,
+        "forks": 1306,
+        "watchers": 180,
+        "pushedAt": "2026-11-14T10:34:20.000Z",
+        "archived": false
+      }
+    },
+    {
+      "repository": "MobinX/awesome-mcp-list",
+      "products": [
+        "sponge",
+        "yaptake"
+      ],
+      "decision": "ineligible",
+      "reason": "Each entry needs a public GitHub repository for the MCP server, and hosted or website-only servers without one are not accepted. The Sponge and Yaptake MCP servers ship inside closed-source products.",
+      "rulesUrl": "https://github.com/MobinX/awesome-mcp-list/blob/7c6a496d162548230bb904b0667550c0ec7504d3/CONTRIBUTING.md",
+      "reviewedAt": "2026-11-18T15:42:50.073Z",
+      "sourceCommit": "7c6a496d162548230bb904b0667550c0ec7504d3",
+      "reach": {
+        "stars": 911,
+        "forks": 951,
+        "watchers": 11,
+        "pushedAt": "2026-11-17T15:51:43.000Z",
+        "archived": false
+      }
+    },
+    {
+      "repository": "gdamdam/awesome-decentralized-web",
+      "products": [
+        "sponge"
+      ],
+      "decision": "ineligible",
+      "reason": "The list takes open-source projects whose core design is decentralized, and excludes AI tools and closed-source commercial products. Sponge is a closed-source commercial product.",
+      "rulesUrl": "https://github.com/gdamdam/awesome-decentralized-web/blob/b13c54a0dd4ea7070f2a72baed346497fecaaade/CONTRIBUTING.md",
+      "reviewedAt": "2026-11-18T15:42:50.073Z",
+      "sourceCommit": "b13c54a0dd4ea7070f2a72baed346497fecaaade",
+      "reach": {
+        "stars": 1727,
+        "forks": 181,
+        "watchers": 75,
+        "pushedAt": "2026-10-22T18:01:41.000Z",
+        "archived": false
+      }
+    },
+    {
+      "repository": "BraveOPotato/NoSignups",
+      "products": [
+        "sponge",
+        "textmock",
+        "yaptake"
+      ],
+      "decision": "ineligible",
+      "reason": "The list collects open-source browser tools that work without an account. The free Sponge, Textmock and Yaptake tools are closed source.",
+      "rulesUrl": "https://github.com/BraveOPotato/NoSignups/blob/ee989148cde12b6fd2d707a93f541fc224a1cb3e/README.md",
+      "reviewedAt": "2026-11-18T15:42:50.073Z",
+      "sourceCommit": "ee989148cde12b6fd2d707a93f541fc224a1cb3e",
+      "reach": {
+        "stars": 4592,
+        "forks": 264,
+        "watchers": 16,
+        "pushedAt": "2026-11-17T18:24:38.000Z",
+        "archived": false
+      }
+    },
+    {
+      "repository": "anthropics/claude-plugins-official",
+      "products": [
+        "dawn",
+        "sponge",
+        "textmock",
+        "yaptake"
+      ],
+      "decision": "ineligible",
+      "reason": "The README sends plugin submissions to claude.ai/directory/manage and says pull requests to this repository are not monitored. All four plugins went through that form on 15 November.",
+      "rulesUrl": "https://github.com/anthropics/claude-plugins-official/blob/e6143c9807a001832badb63e89d58ffe25d542ec/README.md",
+      "reviewedAt": "2026-11-18T15:42:50.073Z",
+      "sourceCommit": "e6143c9807a001832badb63e89d58ffe25d542ec",
+      "reach": {
+        "stars": 47633,
+        "forks": 4943,
+        "watchers": 262,
+        "pushedAt": "2026-11-18T10:33:54.000Z",
+        "archived": false
+      }
+    },
+    {
+      "repository": "karanb192/awesome-claude-code-mods",
+      "products": [
+        "sponge",
+        "textmock",
+        "yaptake"
+      ],
+      "decision": "ineligible",
+      "reason": "The catalogue lists Claude Code mods, plugins that change Claude Code’s interface or behavior with JavaScript or TypeScript functions, found by scanning public GitHub repositories. The product skills are not mods.",
+      "rulesUrl": "https://github.com/karanb192/awesome-claude-code-mods/blob/af999bd6b462dd4946e23f87de16031251546169/README.md",
+      "reviewedAt": "2026-11-18T15:42:50.073Z",
+      "sourceCommit": "af999bd6b462dd4946e23f87de16031251546169",
+      "reach": {
+        "stars": 1026,
+        "forks": 209,
+        "watchers": 2,
+        "pushedAt": "2026-11-18T13:45:00.000Z",
+        "archived": false
+      }
+    },
+    {
+      "repository": "wh000wh000/awesome-claude-mods",
+      "products": [
+        "sponge",
+        "textmock",
+        "yaptake"
+      ],
+      "decision": "ineligible",
+      "reason": "The index covers Claude Code mods, takes suggestions as issues and says a skills collection is not a mod.",
+      "rulesUrl": "https://github.com/wh000wh000/awesome-claude-mods/blob/c1853c8dbb3790b6ebe788892ac44ff12c06521a/CONTRIBUTING.md",
+      "reviewedAt": "2026-11-18T15:42:50.073Z",
+      "sourceCommit": "c1853c8dbb3790b6ebe788892ac44ff12c06521a",
+      "reach": {
+        "stars": 373,
+        "forks": 32,
+        "watchers": 18,
+        "pushedAt": "2026-10-17T02:10:20.000Z",
+        "archived": false
+      }
+    },
+    {
+      "repository": "quemsah/awesome-claude-plugins",
+      "products": [
+        "sponge",
+        "textmock",
+        "yaptake"
+      ],
+      "decision": "ineligible",
+      "reason": "The list shows the 100 most-starred of the repositories it indexes automatically, 56,709 on 18 November, so there is nothing to submit.",
+      "rulesUrl": "https://github.com/quemsah/awesome-claude-plugins/blob/1e8c941b5c30a100162a1f8ebeae1a1bf9700411/README.md",
+      "reviewedAt": "2026-11-18T15:42:50.073Z",
+      "sourceCommit": "1e8c941b5c30a100162a1f8ebeae1a1bf9700411",
+      "reach": {
+        "stars": 1635,
+        "forks": 156,
+        "watchers": 12,
+        "pushedAt": "2026-11-18T07:11:47.000Z",
+        "archived": false
+      }
+    },
+    {
+      "repository": "py-pdf/awesome-pdf",
+      "products": [
+        "sponge"
+      ],
+      "decision": "deferred",
+      "reason": "Every entry links an open-source PDF library or application. The free Sponge PDF to Markdown converter is closed source, so an entry would read as promotion.",
+      "rulesUrl": "https://github.com/py-pdf/awesome-pdf/blob/b3d481bb4d661ce7160c3028d40e7edf7d09fbb1/README.md",
+      "reviewedAt": "2026-11-18T15:42:50.073Z",
+      "sourceCommit": "b3d481bb4d661ce7160c3028d40e7edf7d09fbb1",
+      "reach": {
+        "stars": 163,
+        "forks": 60,
+        "watchers": 4,
+        "pushedAt": "2026-11-08T11:49:52.000Z",
+        "archived": false
+      }
+    },
+    {
+      "repository": "best-of-ai/best-of-ai",
+      "products": [
+        "sponge",
+        "textmock",
+        "yaptake"
+      ],
+      "decision": "deferred",
+      "reason": "The latest merge was on 25 June 2026, with 153 pull requests open.",
+      "rulesUrl": "https://github.com/best-of-ai/best-of-ai/blob/f227635a6d89ca2867c72f33b1a61dbdd105f193/CONTRIBUTING.md",
+      "reviewedAt": "2026-11-18T15:42:50.073Z",
+      "sourceCommit": "f227635a6d89ca2867c72f33b1a61dbdd105f193",
+      "reach": {
+        "stars": 768,
+        "forks": 154,
+        "watchers": 20,
+        "pushedAt": "2026-11-17T08:08:56.000Z",
+        "archived": false
+      }
+    },
+    {
+      "repository": "msb-msb/awesome-local-ai",
+      "products": [
+        "sponge"
+      ],
+      "decision": "deferred",
+      "reason": "Four pull requests have merged in total, the latest on 20 July 2026, with 64 open.",
+      "rulesUrl": "https://github.com/msb-msb/awesome-local-ai/blob/44a620755c6ef678193f378f8e9906c06aa44ee6/CONTRIBUTING.md",
+      "reviewedAt": "2026-11-18T15:42:50.073Z",
+      "sourceCommit": "44a620755c6ef678193f378f8e9906c06aa44ee6",
+      "reach": {
+        "stars": 331,
+        "forks": 97,
+        "watchers": 5,
+        "pushedAt": "2026-07-20T20:57:02.000Z",
+        "archived": false
+      }
+    },
+    {
+      "repository": "sasharun/awesome-faceless",
+      "products": [
+        "textmock",
+        "yaptake"
+      ],
+      "decision": "deferred",
+      "reason": "No pull request has ever merged, and 25 are open.",
+      "rulesUrl": "https://github.com/sasharun/awesome-faceless/blob/74f17067dcdaea38052e8ae96e9c2e130c4b8ee0/CONTRIBUTING.md",
+      "reviewedAt": "2026-11-18T15:42:50.073Z",
+      "sourceCommit": "74f17067dcdaea38052e8ae96e9c2e130c4b8ee0",
+      "reach": {
+        "stars": 55,
+        "forks": 31,
+        "watchers": 0,
+        "pushedAt": "2026-07-11T03:51:42.000Z",
+        "archived": false
+      }
+    },
+    {
+      "repository": "eudk/awesome-ai-tools",
+      "products": [
+        "sponge",
+        "textmock",
+        "yaptake"
+      ],
+      "decision": "deferred",
+      "reason": "The latest merge was on 7 June 2026, with 526 pull requests open.",
+      "rulesUrl": "https://github.com/eudk/awesome-ai-tools/blob/626be08c52c330c8aadf000e7ad3046d16481904/CONTRIBUTING.md",
+      "reviewedAt": "2026-11-18T15:42:50.073Z",
+      "sourceCommit": "626be08c52c330c8aadf000e7ad3046d16481904",
+      "reach": {
+        "stars": 614,
+        "forks": 740,
+        "watchers": 15,
+        "pushedAt": "2026-06-07T12:41:28.000Z",
+        "archived": false
+      }
+    },
+    {
+      "repository": "0voice/awesome-ai-tools",
+      "products": [
+        "sponge",
+        "textmock",
+        "yaptake"
+      ],
+      "decision": "deferred",
+      "reason": "No pull request has ever merged, and 161 are open.",
+      "rulesUrl": "https://github.com/0voice/awesome-ai-tools/blob/ddc18004eafc1c11c5c8b043799a773413731f23/README.md",
+      "reviewedAt": "2026-11-18T15:42:50.073Z",
+      "sourceCommit": "ddc18004eafc1c11c5c8b043799a773413731f23",
+      "reach": {
+        "stars": 450,
+        "forks": 177,
+        "watchers": 2,
+        "pushedAt": "2026-04-18T12:29:23.000Z",
+        "archived": false
+      }
+    },
+    {
+      "repository": "tehtbl/awesome-note-taking",
+      "products": [
+        "sponge"
+      ],
+      "decision": "deferred",
+      "reason": "The latest merge was on 20 April 2026, with 105 pull requests open.",
+      "rulesUrl": "https://github.com/tehtbl/awesome-note-taking/blob/073687fe67ccf8e9eac805a1834f358144a05900/README.md",
+      "reviewedAt": "2026-11-18T15:42:50.073Z",
+      "sourceCommit": "073687fe67ccf8e9eac805a1834f358144a05900",
+      "reach": {
+        "stars": 1025,
+        "forks": 181,
+        "watchers": 15,
+        "pushedAt": "2026-04-20T10:32:20.000Z",
+        "archived": false
+      }
+    },
+    {
+      "repository": "atakanaltok/awesome-useful-websites",
+      "products": [
+        "sponge",
+        "textmock",
+        "yaptake"
+      ],
+      "decision": "deferred",
+      "reason": "The latest merge was on 28 May 2026, with 221 pull requests open.",
+      "rulesUrl": "https://github.com/atakanaltok/awesome-useful-websites/blob/f16cab3e26ba1e83210d0dde0ed95d88f8da034a/README.md",
+      "reviewedAt": "2026-11-18T15:42:50.073Z",
+      "sourceCommit": "f16cab3e26ba1e83210d0dde0ed95d88f8da034a",
+      "reach": {
+        "stars": 1321,
+        "forks": 357,
+        "watchers": 6,
+        "pushedAt": "2026-05-28T09:10:24.000Z",
+        "archived": false
+      }
+    },
+    {
+      "repository": "webfuse-com/awesome-claude",
+      "products": [
+        "sponge",
+        "textmock",
+        "yaptake"
+      ],
+      "decision": "deferred",
+      "reason": "The latest outside merge was on 17 February 2026 and the latest of any kind on 12 June 2026, with 276 pull requests open.",
+      "rulesUrl": "https://github.com/webfuse-com/awesome-claude/blob/a1cce8ef81f4d69053e7f0c7e355d4e40499d7ec/README.md",
+      "reviewedAt": "2026-11-18T15:42:50.073Z",
+      "sourceCommit": "a1cce8ef81f4d69053e7f0c7e355d4e40499d7ec",
+      "reach": {
+        "stars": 1724,
+        "forks": 477,
+        "watchers": 11,
+        "pushedAt": "2026-09-30T15:45:23.000Z",
+        "archived": false
+      }
+    },
+    {
+      "repository": "jqueryscript/awesome-claude-code",
+      "products": [
+        "sponge",
+        "textmock",
+        "yaptake"
+      ],
+      "decision": "deferred",
+      "reason": "No pull request has ever merged, and 742 are open.",
+      "rulesUrl": "https://github.com/jqueryscript/awesome-claude-code/blob/eb21de0595a9b55aa22794e9976e7a319992f9df/README.md",
+      "reviewedAt": "2026-11-18T15:42:50.073Z",
+      "sourceCommit": "eb21de0595a9b55aa22794e9976e7a319992f9df",
+      "reach": {
+        "stars": 553,
+        "forks": 829,
+        "watchers": 7,
+        "pushedAt": "2026-11-10T12:16:17.000Z",
+        "archived": false
+      }
+    },
+    {
+      "repository": "ccplugins/awesome-claude-code-plugins",
+      "products": [
+        "sponge",
+        "textmock",
+        "yaptake"
+      ],
+      "decision": "deferred",
+      "reason": "No pull request has ever merged, and the last push was on 12 August 2026.",
+      "rulesUrl": "https://github.com/ccplugins/awesome-claude-code-plugins/blob/5bd4f168edf7c18a8303cbfde20708ff62aabc4d/README.md",
+      "reviewedAt": "2026-11-18T15:42:50.073Z",
+      "sourceCommit": "5bd4f168edf7c18a8303cbfde20708ff62aabc4d",
+      "reach": {
+        "stars": 1013,
+        "forks": 860,
+        "watchers": 9,
+        "pushedAt": "2026-08-12T15:32:27.000Z",
+        "archived": false
+      }
+    },
+    {
+      "repository": "trungdq88/Awesome-Black-Friday-Cyber-Monday",
+      "products": [
+        "sponge",
+        "yaptake"
+      ],
+      "decision": "deferred",
+      "reason": "The list takes Black Friday and Cyber Monday discounts on software, each added at the end of its category with a code and terms. A listing needs a real discount on Sponge or Yaptake, which is the owner’s decision.",
+      "rulesUrl": "https://github.com/trungdq88/Awesome-Black-Friday-Cyber-Monday/blob/f9658c81c00e62e67c38f029ec55cc818de3656b/README.md",
+      "reviewedAt": "2026-11-18T15:42:50.073Z",
+      "sourceCommit": "f9658c81c00e62e67c38f029ec55cc818de3656b",
+      "reach": {
+        "stars": 7596,
+        "forks": 1801,
+        "watchers": 73,
+        "pushedAt": "2026-11-18T14:54:17.000Z",
+        "archived": false
+      }
     }
   ],
   "submissions": [
@@ -2095,6 +2580,72 @@
       "github": {
         "state": "open",
         "updatedAt": "2026-11-18T13:59:28.000Z",
+        "mergedAt": null
+      }
+    },
+    {
+      "id": "sponge-yaptake-awesome-no-login-web-apps-1032",
+      "products": [
+        "sponge",
+        "yaptake"
+      ],
+      "channel": "github-collection",
+      "repository": "aviaryan/awesome-no-login-web-apps",
+      "repositoryId": 75722692,
+      "number": 1032,
+      "url": "https://github.com/aviaryan/awesome-no-login-web-apps/pull/1032",
+      "author": {
+        "login": "0thernet",
+        "id": 894119
+      },
+      "submittedAt": "2026-11-18T15:26:04.000Z",
+      "github": {
+        "state": "open",
+        "updatedAt": "2026-11-18T15:26:04.000Z",
+        "mergedAt": null
+      }
+    },
+    {
+      "id": "three-sites-awesome-llms-txt-481",
+      "products": [
+        "sponge",
+        "textmock",
+        "yaptake"
+      ],
+      "channel": "github-collection",
+      "repository": "SecretiveShell/Awesome-llms-txt",
+      "repositoryId": 927431682,
+      "number": 481,
+      "url": "https://github.com/SecretiveShell/Awesome-llms-txt/pull/481",
+      "author": {
+        "login": "0thernet",
+        "id": 894119
+      },
+      "submittedAt": "2026-11-18T15:27:16.000Z",
+      "github": {
+        "state": "open",
+        "updatedAt": "2026-11-18T15:27:16.000Z",
+        "mergedAt": null
+      }
+    },
+    {
+      "id": "sponge-all-about-rss-182",
+      "products": [
+        "sponge"
+      ],
+      "channel": "github-collection",
+      "repository": "AboutRSS/ALL-about-RSS",
+      "repositoryId": 255616511,
+      "number": 182,
+      "url": "https://github.com/AboutRSS/ALL-about-RSS/pull/182",
+      "author": {
+        "login": "0thernet",
+        "id": 894119
+      },
+      "submittedAt": "2026-11-18T15:28:33.000Z",
+      "github": {
+        "state": "open",
+        "updatedAt": "2026-11-18T15:28:33.000Z",
         "mergedAt": null
       }
     }

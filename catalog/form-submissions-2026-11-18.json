@@ -1,8 +1,8 @@
 {
  "schemaVersion": 1,
  "scope": "Directory and launch-site web forms submitted or filled in on 2026-11-18",
- "observedAt": "2026-11-18T14:40:44Z",
- "limits": "Each row records the acknowledgement the form showed when it was observed. None of these is a published listing; add a publication record only after the public listing can be read back. The Launching Next forms were filled in but not sent when this record was made.",
+ "observedAt": "2026-11-18T15:43:49Z",
+ "limits": "Each row records the acknowledgement the form showed when it was observed. None of these is a published listing; add a publication record only after the public listing can be read back. The Launching Next forms were filled in but not sent at 14:40 UTC; whether the owner sent them later is unchecked. The llms.txt directory rows record a place in each review queue, and directory.llmstxt.cloud publishes accepted sites in batches over one to three months.",
  "submissions": [
   {
    "products": ["sponge"],
@@ -52,6 +52,48 @@
    "reference": "https://terminaltrove.com/submit/",
    "source": "https://sponge.computer/docs/cli",
    "observedState": "Sponge CLI submitted as closed source with npm install steps for macOS and Linux and a preview of real sponge 0.70.0 output (docs/media/terminal-trove-sponge-cli.png); the form showed “Thank you for your submission!” and said the curators try each tool before listing it, with replies to ops@xte.industries; the paid Express Lane was not bought"
+  },
+  {
+   "products": ["sponge"],
+   "channel": "llmstxt-cloud",
+   "reference": "https://directory.llmstxt.cloud/submit",
+   "source": "https://sponge.computer/llms.txt",
+   "observedState": "sponge.computer submitted in Products through the free Standard form with ops@xte.industries as the contact; the form showed “You're on the waitlist!” and said accepted sites are published in batches over one to three months with a nofollow link; the paid fast track was not bought"
+  },
+  {
+   "products": ["textmock"],
+   "channel": "llmstxt-cloud",
+   "reference": "https://directory.llmstxt.cloud/submit",
+   "source": "https://textmock.com/llms.txt",
+   "observedState": "textmock.com submitted in Products through the free Standard form with ops@xte.industries as the contact; the form showed “You're on the waitlist!” and said accepted sites are published in batches over one to three months with a nofollow link; the paid fast track was not bought"
+  },
+  {
+   "products": ["yaptake"],
+   "channel": "llmstxt-cloud",
+   "reference": "https://directory.llmstxt.cloud/submit",
+   "source": "https://yaptake.com/llms.txt",
+   "observedState": "yaptake.com submitted in Products through the free Standard form with ops@xte.industries as the contact; the form showed “You're on the waitlist!” and said accepted sites are published in batches over one to three months with a nofollow link; the paid fast track was not bought"
+  },
+  {
+   "products": ["sponge"],
+   "channel": "llmstxt-site",
+   "reference": "https://llmstxt.site/submit",
+   "source": "https://sponge.computer/llms.txt",
+   "observedState": "sponge.computer submitted with its llms.txt and llms-full.txt addresses, the name Hraness and ops@xte.industries as the contact; the form opened its thank-you page after sending"
+  },
+  {
+   "products": ["textmock"],
+   "channel": "llmstxt-site",
+   "reference": "https://llmstxt.site/submit",
+   "source": "https://textmock.com/llms.txt",
+   "observedState": "textmock.com submitted with its llms.txt and llms-full.txt addresses, the name Hraness and ops@xte.industries as the contact; the form opened its thank-you page after sending"
+  },
+  {
+   "products": ["yaptake"],
+   "channel": "llmstxt-site",
+   "reference": "https://llmstxt.site/submit",
+   "source": "https://yaptake.com/llms.txt",
+   "observedState": "yaptake.com submitted with its llms.txt and llms-full.txt addresses, the name Hraness and ops@xte.industries as the contact; the form opened its thank-you page after sending"
   }
  ],
  "notAttempted": [
@@ -64,6 +106,21 @@
    "channel": "smithery",
    "products": ["sponge", "yaptake"],
    "reason": "Skipped on 2026-11-18: publishing an existing server needs the owner's Smithery sign-in, and the owner recalled deciding that Smithery was defunct"
+  },
+  {
+   "channel": "llms-txt-hub",
+   "products": ["sponge", "textmock", "yaptake"],
+   "reason": "llmstxthub.com adds sites through a form that needs the owner's GitHub or email sign-in, so it waits for the owner; its GitHub repository had 1,087 open pull requests, and two from outside authors merged in the 90 days to 18 November"
+  },
+  {
+   "channel": "heyclaude",
+   "products": ["sponge", "textmock", "yaptake"],
+   "reason": "HeyClaude's free registry turns away product promotions, commercial tools appear only as editorial picks or paid sponsorships, and its tools form needs a GitHub sign-in"
+  },
+  {
+   "channel": "llmstxt-com",
+   "products": ["sponge", "textmock", "yaptake"],
+   "reason": "llmstxt.com is an llms.txt generator with a waiting list, not a directory of sites"
   }
  ]
 }
