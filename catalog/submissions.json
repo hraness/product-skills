@@ -1291,16 +1291,16 @@
         "textmock",
         "yaptake"
       ],
-      "decision": "deferred",
-      "reason": "The hub lists sites that publish llms.txt. Sites are added through its website form, which needs a GitHub or email sign-in, or by pull request. Outside authors had two pull requests merged in the 90 days to 18 November, with 1,087 open. The files for sponge.computer, textmock.com and yaptake.com wait for the owner to decide on signing in.",
+      "decision": "eligible",
+      "reason": "The hub lists sites that publish llms.txt. Sites are added through its website form, which needs a GitHub or email sign-in, or by pull request. After the owner signed in on 18 November, the form opened pull requests 2547, 2548 and 2549 for sponge.computer, textmock.com and yaptake.com under the maintainer’s account, and the hub’s review bot held each one for manual review.",
       "rulesUrl": "https://github.com/thedaviddias/llms-txt-hub/blob/c62bcba61d1ba5170e1f05733b6884b8ee4483ed/.github/CONTRIBUTING.md",
-      "reviewedAt": "2026-11-18T15:42:50.073Z",
+      "reviewedAt": "2026-11-18T18:03:13.913Z",
       "sourceCommit": "c62bcba61d1ba5170e1f05733b6884b8ee4483ed",
       "reach": {
         "stars": 929,
-        "forks": 1154,
+        "forks": 1155,
         "watchers": 8,
-        "pushedAt": "2026-11-18T15:33:32.000Z",
+        "pushedAt": "2026-11-18T17:17:50.000Z",
         "archived": false
       }
     },
@@ -1719,16 +1719,34 @@
         "sponge",
         "yaptake"
       ],
-      "decision": "deferred",
-      "reason": "The list takes Black Friday and Cyber Monday discounts on software, each added at the end of its category with a code and terms. A listing needs a real discount on Sponge or Yaptake, which is the owner’s decision.",
-      "rulesUrl": "https://github.com/trungdq88/Awesome-Black-Friday-Cyber-Monday/blob/f9658c81c00e62e67c38f029ec55cc818de3656b/README.md",
-      "reviewedAt": "2026-11-18T15:42:50.073Z",
-      "sourceCommit": "f9658c81c00e62e67c38f029ec55cc818de3656b",
+      "decision": "eligible",
+      "reason": "The list takes Black Friday and Cyber Monday discounts on software: one row per product at the end of its category, at most two products per maker, with the code, the old and new prices and the dates, and the linked page must show the same offer. The owner approved half off the first 12 months of Sponge Plus and Yaptake for new subscribers, with codes that expire at the end of 2 December 2026, Pacific time. The Sponge row merged nine minutes after it was proposed on 18 November.",
+      "rulesUrl": "https://github.com/trungdq88/Awesome-Black-Friday-Cyber-Monday/blob/5adf0831026340f91395e2afdcf2aa9af0266780/README.md",
+      "reviewedAt": "2026-11-18T18:03:13.913Z",
+      "sourceCommit": "5adf0831026340f91395e2afdcf2aa9af0266780",
       "reach": {
-        "stars": 7596,
-        "forks": 1801,
+        "stars": 7598,
+        "forks": 1804,
         "watchers": 73,
-        "pushedAt": "2026-11-18T14:54:17.000Z",
+        "pushedAt": "2026-11-18T17:54:32.000Z",
+        "archived": false
+      }
+    },
+    {
+      "repository": "FluidInference/FluidAudio",
+      "products": [
+        "yaptake"
+      ],
+      "decision": "eligible",
+      "reason": "The showcase lists apps built on FluidAudio, one table row per app with a link and a short description, added by pull request. At least ten pull requests that added apps merged between 1 October and 7 November 2026, and 182 pull requests merged in the 90 days to 18 November. Yaptake transcribes on the Mac with Parakeet TDT Ultra through FluidAudio.",
+      "rulesUrl": "https://github.com/FluidInference/FluidAudio/blob/16780f04d2ece24f67d0fc00efccd0296491c1a8/Documentation/Showcase.md",
+      "reviewedAt": "2026-11-18T18:03:13.913Z",
+      "sourceCommit": "16780f04d2ece24f67d0fc00efccd0296491c1a8",
+      "reach": {
+        "stars": 3307,
+        "forks": 522,
+        "watchers": 43,
+        "pushedAt": "2026-11-17T21:52:18.000Z",
         "archived": false
       }
     }
@@ -2646,6 +2664,48 @@
       "github": {
         "state": "open",
         "updatedAt": "2026-11-18T15:28:33.000Z",
+        "mergedAt": null
+      }
+    },
+    {
+      "id": "sponge-black-friday-cyber-monday-2841",
+      "products": [
+        "sponge"
+      ],
+      "channel": "github-collection",
+      "repository": "trungdq88/Awesome-Black-Friday-Cyber-Monday",
+      "repositoryId": 569126902,
+      "number": 2841,
+      "url": "https://github.com/trungdq88/Awesome-Black-Friday-Cyber-Monday/pull/2841",
+      "author": {
+        "login": "0thernet",
+        "id": 894119
+      },
+      "submittedAt": "2026-11-18T17:45:16.000Z",
+      "github": {
+        "state": "closed",
+        "updatedAt": "2026-11-18T17:54:32.000Z",
+        "mergedAt": "2026-11-18T17:54:32.000Z"
+      }
+    },
+    {
+      "id": "yaptake-fluidaudio-showcase-1175",
+      "products": [
+        "yaptake"
+      ],
+      "channel": "github-collection",
+      "repository": "FluidInference/FluidAudio",
+      "repositoryId": 1006258471,
+      "number": 1175,
+      "url": "https://github.com/FluidInference/FluidAudio/pull/1175",
+      "author": {
+        "login": "0thernet",
+        "id": 894119
+      },
+      "submittedAt": "2026-11-18T17:50:08.000Z",
+      "github": {
+        "state": "open",
+        "updatedAt": "2026-11-18T17:50:44.000Z",
         "mergedAt": null
       }
     }
