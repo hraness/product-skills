@@ -192,6 +192,17 @@ transcribes through FluidAudio. Show and tell posts introduced the three
 product skills in the Anthropic skills Discussions and the Yaptake plugin in the
 Codex Discussions.
 
+Textmock joined the Black Friday offer with half off the first 12 months of
+Textmock Pro, ending with the other codes. Seven more Black Friday lists
+received pull requests. Black-Friday-Deals, Awesome Black Friday Cyber Monday
+deals, the Mac apps list and the lists from Pimjo and dqhieu got all three
+products. Rare Big Deal and the BoltAI list got Sponge and Textmock, and the
+BoltAI list's review bot passed both. saasblackfriday.online received all three
+through its free review form. The lists that check an offer on the product's own
+page get Yaptake once yaptake.com shows its code after the next deploy, and
+zPlatform's tracker for AI tools waits for the same reason. IndieMarkdowns takes
+deals only as an email from the maker, so nothing was sent there.
+
 ## Demonstration cases
 
 Run cases in a fresh, disposable project or library using fictional data. Verify
