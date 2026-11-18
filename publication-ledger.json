@@ -486,6 +486,15 @@
       "url": "https://registry.modelcontextprotocol.io/v0.1/servers/io.github.hraness%2Fsponge/versions/0.69.0",
       "version": "0.69.0",
       "contentHash": "a75e123baa215b605a22a344b3a4ab329eb8deba8e2a7af4afee04a03ad04b69"
+    },
+    {
+      "id": "textmock-github-0-1-3-6c7596fa",
+      "product": "textmock",
+      "channel": "github",
+      "publishedAt": "2026-11-18T12:31:19.000Z",
+      "url": "https://github.com/hraness/product-skills/releases/tag/integrations-a8b1eab97a166c29",
+      "version": "0.1.3",
+      "contentHash": "6c7596faa6b9e3979d327ec26039505bf2be7278449b0869200b532a6a9ba2ae"
     }
   ]
 }
