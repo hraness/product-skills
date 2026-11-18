@@ -1022,6 +1022,24 @@
         "pushedAt": "2026-09-21T09:21:43.000Z",
         "archived": false
       }
+    },
+    {
+      "repository": "ai-boost/awesome-harness-engineering",
+      "products": [
+        "sponge"
+      ],
+      "decision": "ineligible",
+      "reason": "The maintainer closed #439 because the list links only OSI-licensed open-source references, and Sponge is closed source. Resubmit only if a Sponge MCP server or CLI is published under an OSI license.",
+      "rulesUrl": "https://github.com/ai-boost/awesome-harness-engineering/blob/a0db6f2605fcfa9d79f8f621f1d8cd35f709f8c4/CONTRIBUTING.md",
+      "reviewedAt": "2026-11-18T13:06:40.289Z",
+      "sourceCommit": "a0db6f2605fcfa9d79f8f621f1d8cd35f709f8c4",
+      "reach": {
+        "stars": 5183,
+        "forks": 792,
+        "watchers": 32,
+        "pushedAt": "2026-11-18T09:21:34.000Z",
+        "archived": false
+      }
     }
   ],
   "submissions": [
@@ -1763,8 +1781,72 @@
       },
       "submittedAt": "2026-11-17T12:44:42.000Z",
       "github": {
+        "state": "closed",
+        "updatedAt": "2026-11-18T09:19:05.000Z",
+        "mergedAt": null
+      }
+    },
+    {
+      "id": "sponge-raycast-extensions-33561",
+      "products": [
+        "sponge"
+      ],
+      "channel": "github-collection",
+      "repository": "raycast/extensions",
+      "repositoryId": 408858330,
+      "number": 33561,
+      "url": "https://github.com/raycast/extensions/pull/33561",
+      "author": {
+        "login": "0thernet",
+        "id": 894119
+      },
+      "submittedAt": "2026-11-16T01:40:47.000Z",
+      "github": {
         "state": "open",
-        "updatedAt": "2026-11-17T12:44:42.000Z",
+        "updatedAt": "2026-11-16T02:15:05.000Z",
+        "mergedAt": null
+      }
+    },
+    {
+      "id": "dawn-textmock-homebrew-tap-16",
+      "products": [
+        "dawn",
+        "textmock"
+      ],
+      "channel": "homebrew",
+      "repository": "hraness/homebrew-tap",
+      "repositoryId": 1382935233,
+      "number": 16,
+      "url": "https://github.com/hraness/homebrew-tap/pull/16",
+      "author": {
+        "login": "0thernet",
+        "id": 894119
+      },
+      "submittedAt": "2026-11-18T12:09:34.000Z",
+      "github": {
+        "state": "closed",
+        "updatedAt": "2026-11-18T12:11:15.000Z",
+        "mergedAt": "2026-11-18T12:11:14.000Z"
+      }
+    },
+    {
+      "id": "textmock-buildwithclaude-796",
+      "products": [
+        "textmock"
+      ],
+      "channel": "github-collection",
+      "repository": "davepoon/buildwithclaude",
+      "repositoryId": 1025906681,
+      "number": 796,
+      "url": "https://github.com/davepoon/buildwithclaude/pull/796",
+      "author": {
+        "login": "0thernet",
+        "id": 894119
+      },
+      "submittedAt": "2026-11-18T12:58:25.000Z",
+      "github": {
+        "state": "open",
+        "updatedAt": "2026-11-18T12:58:25.000Z",
         "mergedAt": null
       }
     }

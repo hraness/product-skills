@@ -150,6 +150,15 @@ launches on the owner's account, about four months out. Glama was asked by email
 to index Sponge's MCP Registry entry. Kext received an Indie Spotlight
 application for Sponge. The owner chose to skip Alternative.me.
 
+On 18 November, a [check of every GitHub submission](../catalog/submission-audit-2026-11-18.json)
+recorded these outcomes. Awesome Copilot's maintainer rejected Textmock and
+Yaptake, saying each mainly promotes its app; Sponge still waits for review. FMHY moved its Textmock suggestion to its Discord for testing,
+so Textmock isn't listed there. mcp.so hasn't replied to either issue. The
+awesome-harness-engineering maintainer closed the Sponge PR because the list
+links only open-source projects. The Sponge Raycast Store extension proposed on
+16 November waits for Raycast's review, and Textmock's buildwithclaude entry was
+resubmitted with the safety line its reviewer asked for.
+
 ## Demonstration cases
 
 Run cases in a fresh, disposable project or library using fictional data. Verify
