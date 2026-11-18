@@ -159,6 +159,18 @@ links only open-source projects. The Sponge Raycast Store extension proposed on
 16 November waits for Raycast's review, and Textmock's buildwithclaude entry was
 resubmitted with the safety line its reviewer asked for.
 
+Later on [18 November](../catalog/form-submissions-2026-11-18.json),
+NoSignupTools received six free tools for review: Sponge's YouTube transcript
+and PDF to Markdown tools, Yaptake's LUFS meter, silence remover and safe zones,
+and Textmock's fake text generator. Terminal Trove received the Sponge CLI, and
+its curators try each tool before listing it. Sponge's thread reader was
+proposed to awesome-twitter-tools and awesome-hacker-news. Launching Next forms
+for Sponge, Yaptake and Textmock were filled in, and each waits for the owner to
+answer its human check. Homebrew's main cask collection is deferred until the
+apps show independent public interest, and its formula collection accepts only
+open-source software, so the Sponge CLI isn't eligible there. Smithery was
+skipped because publishing there needs the owner's sign-in.
+
 ## Demonstration cases
 
 Run cases in a fresh, disposable project or library using fictional data. Verify

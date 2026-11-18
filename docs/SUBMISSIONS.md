@@ -46,6 +46,8 @@ The [submission catalog](../catalog/submissions.json) owns saved searches, revie
 | Sponge | [ai-boost/awesome-harness-engineering #439](https://github.com/ai-boost/awesome-harness-engineering/pull/439) | 2026-11-17 | Closed; no merge |
 | Dawn, Textmock | [hraness/homebrew-tap #16](https://github.com/hraness/homebrew-tap/pull/16) | 2026-11-18 | Merged 2026-11-18 |
 | Textmock | [davepoon/buildwithclaude #796](https://github.com/davepoon/buildwithclaude/pull/796) | 2026-11-18 | Submitted; open |
+| Sponge | [hridaydutta123/awesome-twitter-tools #81](https://github.com/hridaydutta123/awesome-twitter-tools/pull/81) | 2026-11-18 | Submitted; open |
+| Sponge | [cheeaun/awesome-hacker-news #140](https://github.com/cheeaun/awesome-hacker-news/pull/140) | 2026-11-18 | Submitted; open |
 
 ## Published packages and verified listings
 
@@ -231,6 +233,8 @@ Stars are dated public popularity counts, not traffic measurements. Review decis
 | [cline/mcp-marketplace](https://github.com/cline/mcp-marketplace) | Sponge, Yaptake | 799 | deferred: Servers are proposed in issues, and the submitter confirms that Cline can set one up from its README alone. The repository has 3,505 open issues, and 98 were closed in the 90 days to 18 November. The Sponge and Yaptake servers need their separately installed Mac apps. | [Rules; 2026-11-18](https://github.com/cline/mcp-marketplace/blob/87390ab75e299afefc031b1fe2c03e26dc32b7da/README.md) |
 | [fishttp/awesome-bluesky](https://github.com/fishttp/awesome-bluesky) | Sponge | 1,114 | deferred: Lists Bluesky tools, which fits the free Sponge thread reader, but no PR merged in the six months to 18 November, with 25 open, and the last push was on 16 September 2025. | [Rules; 2026-11-18](https://github.com/fishttp/awesome-bluesky/blob/a67e3284ea0d80956b6199ad62d3e3187a464d15/readme.md) |
 | [alexanderop/awesome-local-first](https://github.com/alexanderop/awesome-local-first) | Sponge | 246 | ineligible: The README says contributions are closed and that it no longer accepts pull requests or project submissions. | [Rules; 2026-11-18](https://github.com/alexanderop/awesome-local-first/blob/3c8eb621aa56f72e32fcd0ba03db31b5fc7c236b/README.md) |
+| [Homebrew/homebrew-cask](https://github.com/Homebrew/homebrew-cask) | Dawn, Sponge, Textmock, Yaptake | 22,308 | deferred: Homebrew asks a new package to show public interest beyond its author, and a self-submission without a public code repository must give evidence of notability in the pull request. Its cask rules give a recently released app further consideration only with substantial, independently verifiable public interest and multiple requests for inclusion. The four apps are new, and the hraness tap already installs all of them. | [Rules; 2026-11-18](https://github.com/Homebrew/homebrew-cask/blob/42ee51e5b48081af1fa14f213fd2cf3689467b55/.github/PULL_REQUEST_TEMPLATE.md) |
+| [Homebrew/homebrew-core](https://github.com/Homebrew/homebrew-core) | Sponge | 15,678 | ineligible: Homebrew accepts a formula in homebrew/core only for open-source software under a license compatible with the Debian Free Software Guidelines, and sends proprietary or binary-only software to casks. The Sponge CLI is closed source and is published on npm as UNLICENSED. | [Rules; 2026-11-18](https://github.com/Homebrew/homebrew-core/blob/df69c4ae50a5c295943b98a727fcc48fd0c8d585/CONTRIBUTING.md) |
 
 ## Maintain the records
 
