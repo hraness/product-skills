@@ -1749,6 +1749,146 @@
         "pushedAt": "2026-11-17T21:52:18.000Z",
         "archived": false
       }
+    },
+    {
+      "repository": "mRs-/Black-Friday-Deals",
+      "products": [
+        "sponge",
+        "textmock",
+        "yaptake"
+      ],
+      "decision": "eligible",
+      "reason": "The list takes Black Friday and Cyber Monday software deals as one YAML file per deal in a year and category folder. A validator checks every file, and the README tables are generated from the files. The owner approved half off the first 12 months of Sponge Plus, Textmock Pro and Yaptake for new subscribers, with codes that expire at the end of 2 December 2026, Pacific time. Pull request 1331 adds all three deals. Its checks wait for a maintainer to approve the workflow run, and a reading of the validator found no rule the three files break.",
+      "rulesUrl": "https://github.com/mRs-/Black-Friday-Deals/blob/9d3c6876cabe0086c1966e86a00c0eb6e97d5cf2/CONTRIBUTING.md",
+      "reviewedAt": "2026-11-18T19:17:45.607Z",
+      "sourceCommit": "9d3c6876cabe0086c1966e86a00c0eb6e97d5cf2",
+      "reach": {
+        "stars": 2332,
+        "forks": 808,
+        "watchers": 87,
+        "pushedAt": "2026-11-18T08:07:10.000Z",
+        "archived": false
+      }
+    },
+    {
+      "repository": "twf-nikhila/Awesome-Black-Friday-Cyber-Monday-deals",
+      "products": [
+        "sponge",
+        "textmock",
+        "yaptake"
+      ],
+      "decision": "eligible",
+      "reason": "The list takes Black Friday and Cyber Monday deals as one four-column row per product at the end of its category table, with the discount first and the dates in one fixed format. The owner approved half off the first 12 months of Sponge Plus, Textmock Pro and Yaptake for new subscribers, with codes that expire at the end of 2 December 2026, Pacific time. Pull request 679 adds Yaptake to Video, Audio and Podcasting, Textmock to Photo, Image and Screenshot, and Sponge to Productivity, Notes and Focus.",
+      "rulesUrl": "https://github.com/twf-nikhila/Awesome-Black-Friday-Cyber-Monday-deals/blob/ac75eb44986521e9d943c890391bb6fba54b6678/README.md",
+      "reviewedAt": "2026-11-18T19:17:45.607Z",
+      "sourceCommit": "ac75eb44986521e9d943c890391bb6fba54b6678",
+      "reach": {
+        "stars": 595,
+        "forks": 467,
+        "watchers": 23,
+        "pushedAt": "2026-11-18T12:25:31.000Z",
+        "archived": false
+      }
+    },
+    {
+      "repository": "s1ntoneli/Awesome-Black-Friday-Cyber-Monday-for-Mac-Apps",
+      "products": [
+        "sponge",
+        "textmock",
+        "yaptake"
+      ],
+      "decision": "eligible",
+      "reason": "The list takes 2026 Black Friday and Cyber Monday deals on Mac apps and Mac-compatible tools as six-column table rows by category, with the exact savings, who qualifies, the code, the 2026 dates and a disclosure when the maker submits. The owner approved half off the first 12 months of Sponge Plus, Textmock Pro and Yaptake for new subscribers, with codes that expire at the end of 2 December 2026, Pacific time. Pull request 200 adds Sponge under Productivity and Yaptake and Textmock under Content Creation, and says the maker submitted them.",
+      "rulesUrl": "https://github.com/s1ntoneli/Awesome-Black-Friday-Cyber-Monday-for-Mac-Apps/blob/54324e7d76e5a44d3370ce54ab7034521d3518b3/CONTRIBUTING.md",
+      "reviewedAt": "2026-11-18T19:17:45.607Z",
+      "sourceCommit": "54324e7d76e5a44d3370ce54ab7034521d3518b3",
+      "reach": {
+        "stars": 132,
+        "forks": 147,
+        "watchers": 3,
+        "pushedAt": "2026-11-18T17:00:38.000Z",
+        "archived": false
+      }
+    },
+    {
+      "repository": "Pimjo/black-friday-deals",
+      "products": [
+        "sponge",
+        "textmock",
+        "yaptake"
+      ],
+      "decision": "eligible",
+      "reason": "The list takes Black Friday deals as one table row per product at the end of its category, added by pull request under its submission guidelines. The owner approved half off the first 12 months of Sponge Plus, Textmock Pro and Yaptake for new subscribers, with codes that expire at the end of 2 December 2026, Pacific time. Pull request 210 adds Sponge to Productivity Tools, Textmock to Design and Icons and Yaptake to AI Tools and Automation.",
+      "rulesUrl": "https://github.com/Pimjo/black-friday-deals/blob/08ecd421e24d967d6a4362da618d2b26cf15d65c/README.md",
+      "reviewedAt": "2026-11-18T19:17:45.607Z",
+      "sourceCommit": "08ecd421e24d967d6a4362da618d2b26cf15d65c",
+      "reach": {
+        "stars": 56,
+        "forks": 166,
+        "watchers": 4,
+        "pushedAt": "2026-11-18T06:49:33.000Z",
+        "archived": false
+      }
+    },
+    {
+      "repository": "dqhieu/black-friday-deals",
+      "products": [
+        "sponge",
+        "textmock",
+        "yaptake"
+      ],
+      "decision": "eligible",
+      "reason": "The list takes Black Friday and Cyber Monday deals as rows appended to the end of one Deals table in README.md. Its instructions for AI agents ask for the product's own address, the headline discount, the code, the dates and any restrictions, and for no other change to the repository. The owner approved half off the first 12 months of Sponge Plus, Textmock Pro and Yaptake for new subscribers, with codes that expire at the end of 2 December 2026, Pacific time. Pull request 215 adds all three.",
+      "rulesUrl": "https://github.com/dqhieu/black-friday-deals/blob/5db8723e78b71c2ca58686d7938f875a3a3eb62a/AGENTS.md",
+      "reviewedAt": "2026-11-18T19:17:45.607Z",
+      "sourceCommit": "5db8723e78b71c2ca58686d7938f875a3a3eb62a",
+      "reach": {
+        "stars": 40,
+        "forks": 159,
+        "watchers": 1,
+        "pushedAt": "2026-11-18T13:27:24.000Z",
+        "archived": false
+      }
+    },
+    {
+      "repository": "danmindru/rare-big-deal",
+      "products": [
+        "sponge",
+        "textmock",
+        "yaptake"
+      ],
+      "decision": "eligible",
+      "reason": "The list takes products that normally cost money and have a genuine discount that is live now, as rows in category tables. The regular price and the offer have to be visible on the product's own site. The owner approved half off the first 12 months of Sponge Plus, Textmock Pro and Yaptake for new subscribers, with codes that expire at the end of 2 December 2026, Pacific time. Pull request 1008 adds Sponge and Textmock, whose pricing pages show their codes, and its checks passed. Yaptake waits until yaptake.com shows its offer after the site's next deploy.",
+      "rulesUrl": "https://github.com/danmindru/rare-big-deal/blob/c7a519aa602e99526511c82cff4191a14f88bf3f/CURATOR.md",
+      "reviewedAt": "2026-11-18T19:17:45.607Z",
+      "sourceCommit": "c7a519aa602e99526511c82cff4191a14f88bf3f",
+      "reach": {
+        "stars": 404,
+        "forks": 621,
+        "watchers": 4,
+        "pushedAt": "2026-11-18T16:31:22.000Z",
+        "archived": false
+      }
+    },
+    {
+      "repository": "longseespace/mac-black-friday",
+      "products": [
+        "sponge",
+        "textmock",
+        "yaptake"
+      ],
+      "decision": "eligible",
+      "reason": "The BoltAI list takes Black Friday deals on apps for Apple platforms as one JSON file per app, linked to the page that shows the Black Friday price, with at most five apps per developer. A review bot checks each file. The owner approved half off the first 12 months of Sponge Plus, Textmock Pro and Yaptake for new subscribers, with codes that expire at the end of 2 December 2026, Pacific time. Pull request 123 adds Sponge and Textmock, and the review bot passed both. Yaptake waits until yaptake.com shows its offer after the site's next deploy.",
+      "rulesUrl": "https://github.com/longseespace/mac-black-friday/blob/45b8565bc8cc5a2c109c28db59c558971a98570d/CONTRIBUTING.md",
+      "reviewedAt": "2026-11-18T19:17:45.607Z",
+      "sourceCommit": "45b8565bc8cc5a2c109c28db59c558971a98570d",
+      "reach": {
+        "stars": 24,
+        "forks": 63,
+        "watchers": 1,
+        "pushedAt": "2026-11-18T17:14:14.000Z",
+        "archived": false
+      }
     }
   ],
   "submissions": [
@@ -2706,6 +2846,97 @@
       "github": {
         "state": "open",
         "updatedAt": "2026-11-18T17:50:44.000Z",
+        "mergedAt": null
+      }
+    },
+    {
+      "id": "three-deals-black-friday-deals-1331",
+      "products": [
+        "sponge",
+        "textmock",
+        "yaptake"
+      ],
+      "channel": "github-collection",
+      "repository": "mRs-/Black-Friday-Deals",
+      "repositoryId": 111565250,
+      "number": 1331,
+      "url": "https://github.com/mRs-/Black-Friday-Deals/pull/1331",
+      "author": {
+        "login": "0thernet",
+        "id": 894119
+      },
+      "submittedAt": "2026-11-18T19:03:42.000Z",
+      "github": {
+        "state": "open",
+        "updatedAt": "2026-11-18T19:03:42.000Z",
+        "mergedAt": null
+      }
+    },
+    {
+      "id": "three-deals-awesome-black-friday-cyber-monday-deals-679",
+      "products": [
+        "sponge",
+        "textmock",
+        "yaptake"
+      ],
+      "channel": "github-collection",
+      "repository": "twf-nikhila/Awesome-Black-Friday-Cyber-Monday-deals",
+      "repositoryId": 426893779,
+      "number": 679,
+      "url": "https://github.com/twf-nikhila/Awesome-Black-Friday-Cyber-Monday-deals/pull/679",
+      "author": {
+        "login": "0thernet",
+        "id": 894119
+      },
+      "submittedAt": "2026-11-18T19:03:46.000Z",
+      "github": {
+        "state": "open",
+        "updatedAt": "2026-11-18T19:03:46.000Z",
+        "mergedAt": null
+      }
+    },
+    {
+      "id": "sponge-textmock-rare-big-deal-1008",
+      "products": [
+        "sponge",
+        "textmock"
+      ],
+      "channel": "github-collection",
+      "repository": "danmindru/rare-big-deal",
+      "repositoryId": 889054647,
+      "number": 1008,
+      "url": "https://github.com/danmindru/rare-big-deal/pull/1008",
+      "author": {
+        "login": "0thernet",
+        "id": 894119
+      },
+      "submittedAt": "2026-11-18T19:04:03.000Z",
+      "github": {
+        "state": "open",
+        "updatedAt": "2026-11-18T19:04:03.000Z",
+        "mergedAt": null
+      }
+    },
+    {
+      "id": "three-deals-awesome-black-friday-cyber-monday-for-mac-apps-200",
+      "products": [
+        "sponge",
+        "textmock",
+        "yaptake"
+      ],
+      "channel": "github-collection",
+      "repository": "s1ntoneli/Awesome-Black-Friday-Cyber-Monday-for-Mac-Apps",
+      "repositoryId": 891283452,
+      "number": 200,
+      "url": "https://github.com/s1ntoneli/Awesome-Black-Friday-Cyber-Monday-for-Mac-Apps/pull/200",
+      "author": {
+        "login": "0thernet",
+        "id": 894119
+      },
+      "submittedAt": "2026-11-18T19:03:50.000Z",
+      "github": {
+        "state": "open",
+        "updatedAt": "2026-11-18T19:03:50.000Z",
         "mergedAt": null
       }
     }

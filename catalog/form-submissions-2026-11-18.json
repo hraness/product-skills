@@ -1,8 +1,8 @@
 {
  "schemaVersion": 1,
- "scope": "Directory and launch-site web forms submitted or filled in, and GitHub Discussions posts made, on 2026-11-18",
+ "scope": "Directory and launch-site web forms submitted or filled in, GitHub Discussions posts made, and list pull requests the submission catalog has no room for, on 2026-11-18",
  "observedAt": "2026-11-18T15:43:49Z",
- "limits": "Each row records the acknowledgement the form showed when it was observed. None of these is a published listing; add a publication record only after the public listing can be read back. The Launching Next forms were filled in but not sent at 14:40 UTC; whether the owner sent them later is unchecked. The llms.txt directory rows record a place in each review queue, and directory.llmstxt.cloud publishes accepted sites in batches over one to three months. The llms.txt hub and GitHub Discussions rows were observed later, at 18:03 UTC, after the owner signed in to the hub.",
+ "limits": "Each row records the acknowledgement the form showed when it was observed. None of these is a published listing; add a publication record only after the public listing can be read back. The Launching Next forms were filled in but not sent at 14:40 UTC; whether the owner sent them later is unchecked. The llms.txt directory rows record a place in each review queue, and directory.llmstxt.cloud publishes accepted sites in batches over one to three months. The llms.txt hub and GitHub Discussions rows were observed later, at 18:03 UTC, after the owner signed in to the hub. The Black Friday rows were observed after 19:00 UTC. The submission catalog holds at most 50 pull requests and keeps one place for Yaptake's row in trungdq88/Awesome-Black-Friday-Cyber-Monday, so the three Black Friday list pull requests with the least reach are recorded here instead.",
  "submissions": [
   {
    "products": ["sponge"],
@@ -129,6 +129,48 @@
    "reference": "https://github.com/openai/codex/discussions/62324",
    "source": "https://github.com/hraness/product-skills/tree/main/plugins/yaptake",
    "observedState": "Posted at 17:54 UTC in the Show and tell category of the openai/codex Discussions, introducing the Yaptake Codex plugin and saying that the author works on Yaptake"
+  },
+  {
+   "products": ["sponge"],
+   "channel": "saasblackfriday-online",
+   "reference": "https://saasblackfriday.online/submit-a-deal/",
+   "source": "https://sponge.computer/pricing",
+   "observedState": "Sponge, with half off Sponge Plus for the first 12 months and code SPONGEBF26, submitted through the free review and listing form with Hraness as the name and ops@xte.industries as the contact; the form opened its thank-you page. The site lists a deal only after its editors find the offer on the vendor's site."
+  },
+  {
+   "products": ["textmock"],
+   "channel": "saasblackfriday-online",
+   "reference": "https://saasblackfriday.online/submit-a-deal/",
+   "source": "https://textmock.com/pricing",
+   "observedState": "Textmock, with half off Textmock Pro for the first 12 months and code TEXTMOCKBF26, submitted through the free review and listing form with Hraness as the name and ops@xte.industries as the contact; the form opened its thank-you page. The site lists a deal only after its editors find the offer on the vendor's site."
+  },
+  {
+   "products": ["yaptake"],
+   "channel": "saasblackfriday-online",
+   "reference": "https://saasblackfriday.online/submit-a-deal/",
+   "source": "https://yaptake.com/#pricing",
+   "observedState": "Yaptake, with half off the first year and code YAPTAKEBF26, submitted through the free review and listing form with Hraness as the name and ops@xte.industries as the contact; the form opened its thank-you page. The site lists a deal only after its editors find the offer on the vendor's site. Its note says checkout takes the code now and the pricing section shows it after the site's next deploy."
+  },
+  {
+   "products": ["sponge", "textmock", "yaptake"],
+   "channel": "github-collection",
+   "reference": "https://github.com/Pimjo/black-friday-deals/pull/210",
+   "source": "https://github.com/0thernet/black-friday-deals-1/commit/806f78a6ee3ca4e1117876678967a56ec068ae49",
+   "observedState": "Pull request opened at 19:03 UTC with Sponge, Textmock and Yaptake and their Black Friday codes, each at the end of its category; open, and the list runs no checks"
+  },
+  {
+   "products": ["sponge", "textmock", "yaptake"],
+   "channel": "github-collection",
+   "reference": "https://github.com/dqhieu/black-friday-deals/pull/215",
+   "source": "https://github.com/0thernet/black-friday-deals-2/commit/6cb0bd781988256b0b1887e871f7499b82a616c3",
+   "observedState": "Pull request opened at 19:03 UTC with three rows at the end of the Deals table for Sponge, Yaptake and Textmock and their Black Friday codes; open, and the list runs no checks"
+  },
+  {
+   "products": ["sponge", "textmock"],
+   "channel": "github-collection",
+   "reference": "https://github.com/longseespace/mac-black-friday/pull/123",
+   "source": "https://github.com/0thernet/mac-black-friday/commit/a4c9ea51c5936bd219bf057bfc8c850ae8ed74c7",
+   "observedState": "Pull request opened at 19:04 UTC with one deal file each for Sponge and Textmock; the list's review bot passed both and said a maintainer will merge it"
   }
  ],
  "notAttempted": [
@@ -151,6 +193,21 @@
    "channel": "llmstxt-com",
    "products": ["sponge", "textmock", "yaptake"],
    "reason": "llmstxt.com is an llms.txt generator with a waiting list, not a directory of sites"
+  },
+  {
+   "channel": "github-collection",
+   "products": ["yaptake"],
+   "reason": "Yaptake's Black Friday rows for trungdq88/Awesome-Black-Friday-Cyber-Monday, danmindru/rare-big-deal and longseespace/mac-black-friday wait until yaptake.com shows its code after the site's next deploy, because each list checks the offer on the product's own page"
+  },
+  {
+   "channel": "zplatform",
+   "products": ["yaptake"],
+   "reason": "zPlatform's Black Friday tracker for AI tools lists a deal only after matching it on the vendor's own page, so Yaptake waits for the same deploy"
+  },
+  {
+   "channel": "indiemarkdowns",
+   "products": ["sponge", "textmock", "yaptake"],
+   "reason": "IndieMarkdowns takes Black Friday deals on indie Mac apps through a form that only opens a pre-filled email to its editors, so the submission has to be sent from the owner's mail; not sent"
   }
  ]
 }
