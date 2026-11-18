@@ -6,7 +6,7 @@ This bundle connects an MCP client, such as Claude Desktop, to the Sponge tools 
 
 ## Before you install
 
-Install the Sponge command with Node.js 24.20.0 or newer: `npm install --global @hraness/sponge`. The launcher checks that the installed command is the official package at version 0.41.1 or newer before it starts.
+Install the Sponge command with Node.js 24.20.0 or newer: `npm install --global @hraness/sponge`. The launcher checks that the installed command is the official package at version 0.76.0 or newer before it starts.
 
 See the [setup guide](https://sponge.computer/docs/agents) for the supported connections and the first task.
 
