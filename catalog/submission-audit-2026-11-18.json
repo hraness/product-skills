@@ -1,0 +1,118 @@
+{
+  "schemaVersion": 1,
+  "scope": "Check of every GitHub proposal and submission issue from the submitting account, 1 to 18 November 2026",
+  "queriedAt": "2026-11-18T13:07:12.000Z",
+  "author": "0thernet",
+  "query": "is:pr author:0thernet created:>=2026-11-01 -org:hraness -user:0thernet",
+  "incompleteResults": false,
+  "totalMatches": 38,
+  "submissionUrls": [
+    "https://github.com/Axorax/awesome-free-apps/pull/532",
+    "https://github.com/BehiSecc/awesome-claude-skills/pull/1345",
+    "https://github.com/Mindola-ai/awesome-second-brain/pull/19",
+    "https://github.com/ThatGuySam/doesitarm/pull/1149",
+    "https://github.com/ThatGuySam/doesitarm/pull/1150",
+    "https://github.com/VoltAgent/official-mcp-servers/pull/102",
+    "https://github.com/VoltAgent/official-mcp-servers/pull/103",
+    "https://github.com/ZeroPointRepo/awesome-hermes-skills/pull/181",
+    "https://github.com/ai-boost/awesome-harness-engineering/pull/439",
+    "https://github.com/alantriesagain/awesome-local-first/pull/56",
+    "https://github.com/brettkromkamp/awesome-knowledge-management/pull/143",
+    "https://github.com/darelova/Awesome-Design-Resources-List/pull/102",
+    "https://github.com/davepoon/buildwithclaude/pull/743",
+    "https://github.com/davepoon/buildwithclaude/pull/744",
+    "https://github.com/davepoon/buildwithclaude/pull/745",
+    "https://github.com/davepoon/buildwithclaude/pull/796",
+    "https://github.com/davila7/claude-code-templates/pull/1571",
+    "https://github.com/davila7/claude-code-templates/pull/1572",
+    "https://github.com/davila7/claude-code-templates/pull/1573",
+    "https://github.com/davila7/claude-code-templates/pull/1574",
+    "https://github.com/doanhthong/awesome-pkm/pull/54",
+    "https://github.com/emptymalei/awesome-research/pull/149",
+    "https://github.com/gendotnew/macos-apps/pull/262",
+    "https://github.com/gendotnew/macos-apps/pull/270",
+    "https://github.com/hashgraph-online/awesome-codex-plugins/pull/726",
+    "https://github.com/jaywcjlove/awesome-mac/pull/4643",
+    "https://github.com/jaywcjlove/awesome-mac/pull/4708",
+    "https://github.com/jaywcjlove/awesome-mac/pull/4709",
+    "https://github.com/juancarlospaco/awesome-streaming-tools/pull/85",
+    "https://github.com/raycast/extensions/pull/33561",
+    "https://github.com/steven2358/awesome-generative-ai/pull/2218",
+    "https://github.com/toolleeo/awesome-cli-apps-in-a-csv/pull/656",
+    "https://github.com/xai-org/plugin-marketplace/pull/2081",
+    "https://github.com/xai-org/plugin-marketplace/pull/2082",
+    "https://github.com/xai-org/plugin-marketplace/pull/2083"
+  ],
+  "ownedChannelUrls": [
+    "https://github.com/hraness/homebrew-tap/pull/9",
+    "https://github.com/hraness/homebrew-tap/pull/13",
+    "https://github.com/hraness/homebrew-tap/pull/16"
+  ],
+  "issueQuery": "is:issue author:0thernet created:>=2026-11-01 -org:hraness -user:0thernet",
+  "issueMatches": 7,
+  "issueSubmissions": [
+    {
+      "products": [
+        "sponge"
+      ],
+      "channel": "mcp.so",
+      "reference": "https://github.com/chatmcp/mcpso/issues/7417",
+      "state": "open",
+      "observedState": "Open; no reply"
+    },
+    {
+      "products": [
+        "yaptake"
+      ],
+      "channel": "mcp.so",
+      "reference": "https://github.com/chatmcp/mcpso/issues/7418",
+      "state": "open",
+      "observedState": "Open; no reply"
+    },
+    {
+      "products": [
+        "textmock"
+      ],
+      "channel": "fmhy",
+      "reference": "https://github.com/fmhy/edit/issues/7274",
+      "state": "closed",
+      "observedState": "Suggested on 16 November for Image Tools (Fake Text Creator); closed on 17 November when an FMHY editor moved it to the project’s Discord for testing; not listed"
+    },
+    {
+      "products": [
+        "sponge"
+      ],
+      "channel": "awesome-copilot",
+      "reference": "https://github.com/github/awesome-copilot/issues/6444",
+      "state": "open",
+      "observedState": "Open; passed automated intake and waits for maintainer review"
+    },
+    {
+      "products": [
+        "yaptake"
+      ],
+      "channel": "awesome-copilot",
+      "reference": "https://github.com/github/awesome-copilot/issues/6445",
+      "state": "closed",
+      "observedState": "Rejected and closed on 17 November; the maintainer wrote “This is primarily a marketing funnel and not suited for the marketplace.”"
+    },
+    {
+      "products": [
+        "textmock"
+      ],
+      "channel": "awesome-copilot",
+      "reference": "https://github.com/github/awesome-copilot/issues/6446",
+      "state": "closed",
+      "observedState": "Rejected and closed on 16 November; the maintainer wrote “This is primarily a link generator for the submitter’s freemium app; the skill adds little beyond app-specific URL construction, while free exports are branded and Pro is promoted at $5/month.”"
+    }
+  ],
+  "otherChannelSources": [
+    "publication-ledger.json",
+    "catalog/directory-observations.json",
+    "catalog/store-status.json",
+    "catalog/form-submissions-2026-11-15.json",
+    "catalog/form-submissions-2026-11-16.json",
+    "catalog/form-submissions-2026-11-17.json"
+  ],
+  "limits": "Every PR match except three documentation PRs to an unrelated project is a product proposal recorded in catalog/submissions.json. One issue match is an unrelated bug report. Issue submissions are not PRs, so their states are recorded here as observed on this date. A closed issue is a listing only when the provider confirms one."
+}

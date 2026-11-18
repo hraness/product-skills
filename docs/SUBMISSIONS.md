@@ -24,6 +24,7 @@ The [submission catalog](../catalog/submissions.json) owns saved searches, revie
 | Dawn | [davila7/claude-code-templates #1572](https://github.com/davila7/claude-code-templates/pull/1572) | 2026-11-15 | Submitted; open |
 | Textmock | [davila7/claude-code-templates #1573](https://github.com/davila7/claude-code-templates/pull/1573) | 2026-11-15 | Submitted; open |
 | Yaptake | [davila7/claude-code-templates #1574](https://github.com/davila7/claude-code-templates/pull/1574) | 2026-11-15 | Submitted; open |
+| Sponge | [raycast/extensions #33561](https://github.com/raycast/extensions/pull/33561) | 2026-11-16 | Submitted; open |
 | Sponge | [davepoon/buildwithclaude #743](https://github.com/davepoon/buildwithclaude/pull/743) | 2026-11-16 | Merged 2026-11-17 |
 | Yaptake | [davepoon/buildwithclaude #744](https://github.com/davepoon/buildwithclaude/pull/744) | 2026-11-16 | Merged 2026-11-17 |
 | Textmock | [davepoon/buildwithclaude #745](https://github.com/davepoon/buildwithclaude/pull/745) | 2026-11-16 | Closed; no merge |
@@ -42,7 +43,9 @@ The [submission catalog](../catalog/submissions.json) owns saved searches, revie
 | Sponge | [doanhthong/awesome-pkm #54](https://github.com/doanhthong/awesome-pkm/pull/54) | 2026-11-17 | Submitted; open |
 | Sponge | [Mindola-ai/awesome-second-brain #19](https://github.com/Mindola-ai/awesome-second-brain/pull/19) | 2026-11-17 | Submitted; open |
 | Sponge | [Axorax/awesome-free-apps #532](https://github.com/Axorax/awesome-free-apps/pull/532) | 2026-11-17 | Submitted; open |
-| Sponge | [ai-boost/awesome-harness-engineering #439](https://github.com/ai-boost/awesome-harness-engineering/pull/439) | 2026-11-17 | Submitted; open |
+| Sponge | [ai-boost/awesome-harness-engineering #439](https://github.com/ai-boost/awesome-harness-engineering/pull/439) | 2026-11-17 | Closed; no merge |
+| Dawn, Textmock | [hraness/homebrew-tap #16](https://github.com/hraness/homebrew-tap/pull/16) | 2026-11-18 | Merged 2026-11-18 |
+| Textmock | [davepoon/buildwithclaude #796](https://github.com/davepoon/buildwithclaude/pull/796) | 2026-11-18 | Submitted; open |
 
 ## Published packages and verified listings
 
@@ -218,6 +221,7 @@ Stars are dated public popularity counts, not traffic measurements. Review decis
 | [VoltAgent/official-mcp-servers](https://github.com/VoltAgent/official-mcp-servers) | Sponge, Yaptake | 425 | eligible: The list links official vendor MCP servers, with new products under Emerging and Independent. One PR per server, with a description of 10 words or fewer. | [Rules; 2026-11-16](https://github.com/VoltAgent/official-mcp-servers/blob/b34404d7fc9284118309b0df65d8015a43ed138b/CONTRIBUTING.md) |
 | [juancarlospaco/awesome-streaming-tools](https://github.com/juancarlospaco/awesome-streaming-tools) | Yaptake | 397 | eligible: Desktop Apps lists paid clip and editing tools with disclosed pricing; resources must carry no ads or watermarks, and Yaptake exports carry none. | [Rules; 2026-11-16](https://github.com/juancarlospaco/awesome-streaming-tools/blob/261dfa82347e49c06a1ed6376756ea6b85f7f007/README.md) |
 | [raycast/script-commands](https://github.com/raycast/script-commands) | Sponge | 6,812 | deferred: About one PR has merged every month or two since April 2026, and the Sponge Raycast extension already covers Raycast. | [Rules; 2026-11-16](https://github.com/raycast/script-commands/blob/cf612c22a8ddea40f6d717f513bbb5619a73ad33/CONTRIBUTING.md) |
+| [ai-boost/awesome-harness-engineering](https://github.com/ai-boost/awesome-harness-engineering) | Sponge | 5,183 | ineligible: The maintainer closed #439 because the list links only OSI-licensed open-source references, and Sponge is closed source. Resubmit only if a Sponge MCP server or CLI is published under an OSI license. | [Rules; 2026-11-18](https://github.com/ai-boost/awesome-harness-engineering/blob/a0db6f2605fcfa9d79f8f621f1d8cd35f709f8c4/CONTRIBUTING.md) |
 
 ## Maintain the records
 
