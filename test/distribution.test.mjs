@@ -1,13 +1,16 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
-import { appendPublications, checkLedgerAppendOnly, checkPackageFingerprints, clawhubPublicationId, clawhubPublicationUrl, digest, download, packages, parseUnique, reconcile as reconcileSources, recordGithub, render, renderedPackageFingerprint, validateBundle, validateLedger, validatePortfolio, verifyApp, zip } from '../scripts/distribution.mjs';
+import { PRODUCTS, appendPublications, checkLedgerAppendOnly, checkPackageFingerprints, clawhubPublicationId, clawhubPublicationUrl, digest, download, packages, parseUnique, reconcile as reconcileSources, recordGithub, render, renderedPackageFingerprint, validateBundle, validateLedger, validatePortfolio, verifyApp, zip } from '../scripts/distribution.mjs';
 import { withOriginalIcon } from './fixtures/listing-icon.mjs';
 const reconcile = (options) => reconcileSources({ ...options, fetchImpl: withOriginalIcon(options.fetchImpl ?? fetch) });
 
 
 const license = await readFile(new URL('../LICENSE', import.meta.url), 'utf8');
-const portfolio = JSON.parse(await readFile(new URL('../catalog/portfolio.json', import.meta.url), 'utf8'));
+// The four products' facts. The committed catalog may also list profile-only entries.
+const catalogPortfolio = JSON.parse(await readFile(new URL('../catalog/portfolio.json', import.meta.url), 'utf8'));
+const portfolio = { ...catalogPortfolio, projects: catalogPortfolio.projects.filter((p) => Object.hasOwn(PRODUCTS, p.id)) };
+const withYiii = (facts) => ({ ...facts, projects: [...structuredClone(facts.projects), { id: 'yiii', name: 'yiii', url: 'https://yiii.io', short: 'Learn languages faster (ZH + EN).', icon: '/products/yiii/icon.png' }] });
 const empty = () => ({ schemaVersion: 1, products: {} });
 const json = (value, options) => new Response(JSON.stringify(value), options);
 function bundle(id = 'sponge', revision = 1) {
@@ -58,8 +61,27 @@ test('manifest identity, exact versions, executable and source paths are closed'
   ]) { const b = bundle(); mutate(b); assert.throws(() => validateBundle(b, 'sponge')); }
 });
 test('portfolio facts require each exact product identity once', () => {
-  assert.doesNotThrow(() => validatePortfolio(portfolio));
+  assert.doesNotThrow(() => validatePortfolio(portfolio)); assert.doesNotThrow(() => validatePortfolio(catalogPortfolio));
   const p = structuredClone(portfolio); p.projects[0].url = 'https://wrong.test'; assert.throws(() => validatePortfolio(p));
+});
+test('a profile-only portfolio entry needs its exact identity and changes no package', async () => {
+  const listed = withYiii(portfolio); assert.doesNotThrow(() => validatePortfolio(listed));
+  for (const mutate of [
+    (q) => { q.projects.at(-1).url = 'https://yiii.example'; },
+    (q) => { q.projects.at(-1).name = 'Yiii'; },
+    (q) => { q.projects.at(-1).icon = '/products/yiii/icon.svg'; },
+    (q) => { Object.assign(q.projects.at(-1), { id: 'lunar', icon: '/products/lunar/icon.png' }); },
+    (q) => { q.projects.push(structuredClone(q.projects.at(-1))); },
+    (q) => { q.projects.shift(); },
+    (q) => { q.projects.at(-1).short = 'Practice at https://example.test/'; },
+    (q) => { q.projects.at(-1).short = 'Export at https://yiii.io/api/export'; },
+    (q) => { q.projects[q.projects.length - 1] = { ...q.projects[0], id: [q.projects[0].id] }; },
+  ]) { const q = structuredClone(listed); mutate(q); assert.throws(() => validatePortfolio(q)); }
+  { const q = structuredClone(listed); q.projects.at(-1).short = 'Practice at https://yiii.io/'; assert.doesNotThrow(() => validatePortfolio(q)); }
+  const first = await reconcile({ portfolio, state: empty(), bundles: {}, selected: ['sponge'], ...server() });
+  const again = await reconcile({ portfolio: listed, state: first.state, bundles: first.bundles, selected: ['sponge'], fetchImpl: async () => new Response(null, { status: 304 }) });
+  assert.deepEqual(again.state, first.state);
+  assert.deepEqual(render(first.state, first.bundles, listed), render(first.state, first.bundles, portfolio));
 });
 test('an empty admitted catalog needs no fingerprint migration or product version', () => {
   assert.doesNotThrow(() => checkPackageFingerprints(empty(), {}, portfolio));
