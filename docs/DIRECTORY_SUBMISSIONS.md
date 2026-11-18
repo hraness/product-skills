@@ -171,6 +171,16 @@ apps show independent public interest, and its formula collection accepts only
 open-source software, so the Sponge CLI isn't eligible there. Smithery was
 skipped because publishing there needs the owner's sign-in.
 
+After that, directory.llmstxt.cloud put sponge.computer, textmock.com and
+yaptake.com on its free waiting list, which publishes accepted sites in batches
+over one to three months, and llmstxt.site received the same three sites. Three
+more lists received pull requests. awesome-no-login-web-apps got Yaptake's
+silence remover and LUFS meter and Sponge's PDF to Markdown converter,
+Awesome-llms-txt got the llms.txt files of all three sites, and ALL about RSS
+got Sponge, which follows a site's feed. The llms.txt hub waits for the owner,
+because its form needs their sign-in. HeyClaude lists commercial tools only as
+editorial picks or paid sponsorships, so nothing was sent there.
+
 ## Demonstration cases
 
 Run cases in a fresh, disposable project or library using fictional data. Verify
