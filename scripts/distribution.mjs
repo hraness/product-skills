@@ -17,7 +17,7 @@ import { DIRECTORY_FILE, initialDirectoryObservations, mergePendingDirectoryObse
 // never from a copy here, so a renamed product needs no change in this repository.
 export const PRODUCTS = Object.freeze({ dawn: { url: 'https://dawnav.com' }, yaptake: { url: 'https://yaptake.com' }, textmock: { url: 'https://textmock.com' }, sponge: { url: 'https://sponge.computer' } });
 // Portfolio entries that the profile links list without a product package. Packages, listings and publications use PRODUCTS only.
-export const PROFILE_ONLY = Object.freeze({ yiii: { url: 'https://yiii.io' } });
+export const PROFILE_ONLY = Object.freeze({ yiii: { url: 'https://yiii.io' }, aicharts: { url: 'https://aicharts.io' } });
 // Directory listing links. Only pages the product site actually serves; a missing page stays unset rather than pointing somewhere generic.
 export const LISTING_LINKS = Object.freeze({
   dawn: { privacyPolicyUrl: 'https://dawnav.com/privacy' },

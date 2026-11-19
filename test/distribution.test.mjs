@@ -77,6 +77,13 @@ test('a product name is the portfolio\'s own, so a rename needs no change here',
   const b = bundle('dawn'); b.manifest.product.name = 'DAWN'; assert.doesNotThrow(() => validateBundle(b, 'dawn'));
   b.manifest.product.name = 'DAWN\nnext'; assert.throws(() => validateBundle(b, 'dawn'));
 });
+test('the public aicharts explorer is a known portfolio destination', () => {
+  const existing = withYiii(portfolio);
+  const chart = { id: 'aicharts', name: 'aicharts', url: 'https://aicharts.io', short: 'Compare coding models.', icon: '/products/aicharts/icon.png' };
+  assert.doesNotThrow(() => validatePortfolio({ ...existing, projects: [...existing.projects, chart] }));
+  assert.throws(() => validatePortfolio({ ...existing, projects: [...existing.projects, { ...chart, url: 'https://other.example' }] }));
+});
+
 test('a profile-only portfolio entry needs its exact identity and changes no package', async () => {
   const listed = withYiii(portfolio); assert.doesNotThrow(() => validatePortfolio(listed));
   for (const mutate of [
