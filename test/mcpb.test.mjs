@@ -102,7 +102,9 @@ test('a Yaptake listing is recorded only for the exact file in an immutable rele
   const pkg = descriptor.packages[0];
   for (const changes of [{ registryType: 'npm' }, { identifier: identifier.replace('yaptake-0.1.3', 'yaptake-0.1.4') }, { identifier: identifier.replace('hraness/product-skills', 'other/product-skills') }, { fileSha256: 'x' }, { transport: { type: 'streamable-http' } }, { version: '0.1.3' }])
     assert.throws(() => bundlePublication(listing({ ...descriptor, packages: [{ ...pkg, ...changes }] }), release(), { now }), undefined, JSON.stringify(changes));
-  assert.throws(() => bundlePublication(listing({ ...descriptor, title: 'Sponge' }), release(), { now }));
+  // The title is the product's name as it stands; the server name and the bundle pin the listing.
+  assert.doesNotThrow(() => bundlePublication(listing({ ...descriptor, title: 'YAPTAKE' }), release(), { now }));
+  for (const title of ['', 'Yaptake\nnext', 'x'.repeat(81)]) assert.throws(() => bundlePublication(listing({ ...descriptor, title }), release(), { now }), undefined, JSON.stringify(title));
   assert.throws(() => bundlePublication(listing({ ...descriptor, websiteUrl: 'https://example.com' }), release(), { now }));
 });
 
@@ -134,7 +136,7 @@ async function workspace(t) {
   await writeFile(join(root, 'dist', file), bytes);
   await writeFile(join(root, 'dist/release.json'), JSON.stringify({ schemaVersion: 1, tag, products: [{ id: 'yaptake', version: '0.1.3', mcpb: { file, sha256: hash } }] }));
   await writeFile(join(root, 'bundles/yaptake.json'), JSON.stringify({ manifest: { product: { id: 'yaptake', agentGuideUrl: 'https://yaptake.com/docs/agents' } } }));
-  await writeFile(join(root, 'catalog/portfolio.json'), JSON.stringify({ projects: [{ id: 'yaptake', short: 'Video editor for Mac.' }] }));
+  await writeFile(join(root, 'catalog/portfolio.json'), JSON.stringify({ projects: [{ id: 'yaptake', name: 'Yaptake', short: 'Video editor for Mac.' }] }));
   const expected = { ...descriptor, packages: [{ ...descriptor.packages[0], fileSha256: hash }] };
   return { root, hash, expected };
 }

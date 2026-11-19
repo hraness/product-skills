@@ -12,9 +12,12 @@ import { MCPB_PRODUCTS, MCPB_ROOT, mcpbFile, mcpbPath, renderMcpb } from './mcpb
 import { SUBMISSIONS_INDEX, checkSubmissionHistory, readGovernedSubmissions, readSubmissions, renderSubmissions } from './submissions.mjs';
 import { DIRECTORY_FILE, initialDirectoryObservations, mergePendingDirectoryObservations, observeDirectories, readDirectoryObservations, readDirectorySources, sourceSkillIdentity, validateDirectoryObservations } from './skills-sh-observer.mjs';
 
-export const PRODUCTS = Object.freeze({ dawn: { name: 'Dawn', url: 'https://dawnav.com' }, yaptake: { name: 'Yaptake', url: 'https://yaptake.com' }, textmock: { name: 'Textmock', url: 'https://textmock.com' }, sponge: { name: 'Sponge', url: 'https://sponge.computer' } });
+// Each product's id and origin guard where its links and packages point. Its name, like its
+// line and icon, is the product's own: read it from the portfolio (or the product's bundle),
+// never from a copy here, so a renamed product needs no change in this repository.
+export const PRODUCTS = Object.freeze({ dawn: { url: 'https://dawnav.com' }, yaptake: { url: 'https://yaptake.com' }, textmock: { url: 'https://textmock.com' }, sponge: { url: 'https://sponge.computer' } });
 // Portfolio entries that the profile links list without a product package. Packages, listings and publications use PRODUCTS only.
-export const PROFILE_ONLY = Object.freeze({ yiii: { name: 'yiii', url: 'https://yiii.io' } });
+export const PROFILE_ONLY = Object.freeze({ yiii: { url: 'https://yiii.io' } });
 // Directory listing links. Only pages the product site actually serves; a missing page stays unset rather than pointing somewhere generic.
 export const LISTING_LINKS = Object.freeze({
   dawn: { privacyPolicyUrl: 'https://dawnav.com/privacy' },
@@ -83,6 +86,11 @@ function inspectText(value, id, member = null) {
     publicUrl(helperTemplate ? PRODUCTS.textmock.url : url, [(Object.hasOwn(PRODUCTS, id) ? PRODUCTS : PROFILE_ONLY)[id].url, 'https://hraness.com', 'https://www.npmjs.com', 'https://registry.npmjs.org', 'https://skills.sh', 'https://www.skills.sh', 'https://agentskills.io', 'https://agent-plugins.org']);
   }
 }
+// A product name is shown as it stands in Markdown links, tables and listings: one line,
+// no markup characters and nothing private.
+export function productName(value, id) {
+  text(value, 80); need(value.trim() === value && !/[\r\n\t\[\]<>`|*_\\]/.test(value), 'A product name must be one line of plain text'); inspectText(value, id); return value;
+}
 export function validateBundle(input, id) {
   need(Object.hasOwn(PRODUCTS, id), 'Unknown product');
   const raw = typeof input === 'string' ? input : json(input);
@@ -92,7 +100,7 @@ export function validateBundle(input, id) {
   const m = bundle.manifest;
   keys(m, ['schemaVersion', 'product', 'runtime', 'license'], ['mcp']); need(m.schemaVersion === 1 && m.license === 'MIT', 'Unsupported manifest or license');
   keys(m.product, ['id', 'name', 'url', 'description', 'agentGuideUrl']);
-  need(m.product.id === id && m.product.name === PRODUCTS[id].name && m.product.url === PRODUCTS[id].url, 'Product identity mismatch');
+  need(m.product.id === id && m.product.url === PRODUCTS[id].url, 'Product identity mismatch'); productName(m.product.name, id);
   text(m.product.description, 300); need(!/[\r\n]/.test(m.product.description), 'Product description must be one line'); inspectText(m.product.description, id);
   const guide = publicUrl(m.product.agentGuideUrl, [PRODUCTS[id].url]); need(guide.pathname.startsWith('/docs/') && !guide.hash, 'A public product agent guide is required');
   const r = m.runtime; keys(r, ['command', 'version', 'install'], ['node', 'bun', 'build', 'platform', 'versionScope', 'helper']);
@@ -128,7 +136,7 @@ export function validatePortfolio(portfolio) {
   const seen = new Set();
   for (const p of portfolio.projects) {
     keys(p, ['id', 'name', 'url', 'short', 'icon']); const known = Object.hasOwn(PRODUCTS, p.id) ? PRODUCTS[p.id] : Object.hasOwn(PROFILE_ONLY, p.id) ? PROFILE_ONLY[p.id] : null;
-    need(typeof p.id === 'string' && known && !seen.has(p.id) && p.name === known.name && p.url === known.url && p.icon === `/products/${p.id}/icon.png`, 'Portfolio identity mismatch'); text(p.short, 100); need(!/[\r\n]/.test(p.short), 'Product summary must be one line'); inspectText(p.short, p.id); seen.add(p.id);
+    need(typeof p.id === 'string' && known && !seen.has(p.id) && p.url === known.url && p.icon === `/products/${p.id}/icon.png`, 'Portfolio identity mismatch'); productName(p.name, p.id); text(p.short, 100); need(!/[\r\n]/.test(p.short), 'Product summary must be one line'); inspectText(p.short, p.id); seen.add(p.id);
   }
   need(Object.keys(PRODUCTS).every((id) => seen.has(id)), 'Invalid portfolio');
   return portfolio;
@@ -232,7 +240,7 @@ export async function reconcile({ state, bundles, portfolio, selected, fetchImpl
 function pluginVersion(entry) { return `0.1.${entry.revision - 1}`; }
 export function render(state, bundles, portfolio, ledger = { schemaVersion: 1, publications: [] }, directories = initialDirectoryObservations(), submissions = null) {
   stateCheck(state); validatePortfolio(portfolio); validateLedger(ledger); validateDirectoryObservations(directories); const output = {};
-  const ids = Object.keys(state.products).sort();
+  const ids = Object.keys(state.products).sort(); const names = Object.fromEntries(portfolio.projects.map((p) => [p.id, p.name]));
   const openai = []; const claude = []; const cursor = [];
   for (const id of ids) {
     const bundle = validateBundle(bundles[id], id); const e = state.products[id]; need(digest(canonical(bundle)) === e.contentHash, 'Admitted source hash mismatch');
@@ -277,8 +285,8 @@ export function render(state, bundles, portfolio, ledger = { schemaVersion: 1, p
     const source = sourceSkillIdentity(id, skillFiles); const observation = directories.observations.find((row) => row.product === id);
     return [id, { version, contentHash: state.products[id].contentHash, artifactHash, github: published('github') ? 'published' : 'release_required', skillsSh: observation?.sourceSkillHash === source.sourceSkillHash ? 'listed' : 'listing_verification_required', skillsShFirstVerifiedAt: observation?.firstVerifiedAt ?? null, chatgpt: published('chatgpt') ? 'published' : bundles[id].manifest.mcp ? 'eligibility_and_review_required' : 'review_required', claude: published('claude') ? 'published' : 'review_required', cursor: published('cursor') ? 'published' : 'review_required' }];
   })) });
-  output['README.md'] = `# Hraness product skills\n\nSkills for working with [Hraness](https://hraness.com) products from a coding agent. Each package explains its workflow, setup and first task.\n\n${ids.length ? '## Product packages\n\n' + ids.map((id) => `- [${PRODUCTS[id].name}](plugins/${id}/README.md): ${portfolio.projects.find((p) => p.id === id).short}`).join('\n') + '\n\nRead the product package for its app, command and access requirements.\n\n```sh\nnpx skills add hraness/product-skills\n```\n\nChoose the product skill during installation, then follow its setup and first task. ' : 'Product packages are being prepared. ' }${ids.includes('sponge') ? "Use Sponge's [Raycast commands](adapters/raycast/README.md) to queue URLs and search saved text.\n\n" : ''}A package available here may still be awaiting directory review or host testing. See [package status](catalog/store-status.json), [skills.sh listing observations](docs/DIRECTORY_OBSERVATIONS.md) and [verified publications](publication-ledger.json).\n\n## Product pages\n\n${portfolio.projects.filter((p) => Object.hasOwn(PRODUCTS, p.id)).map((p) => `- [${p.name}](${p.url}): ${p.short}`).join('\n')}\n\n## Check a package\n\nUse Node.js 24. Run \`npm run check\` to validate sources, generated copies and package metadata. \`npm run package\` writes deterministic plugin ZIPs and \`SHA256SUMS\` under \`dist/\`. The package license covers these skills and integration files; product applications have their own terms.\n\n[Maintain packages](docs/MAINTAINING.md) · [Prepare a directory submission](docs/DIRECTORY_SUBMISSIONS.md) · [Submission index](docs/SUBMISSIONS.md) · [MIT license](LICENSE)\n`;
-  if (submissions) output[SUBMISSIONS_INDEX] = renderSubmissions(submissions, { ledger, directories, stores: JSON.parse(output['catalog/store-status.json']).products });
+  output['README.md'] = `# Hraness product skills\n\nSkills for working with [Hraness](https://hraness.com) products from a coding agent. Each package explains its workflow, setup and first task.\n\n${ids.length ? '## Product packages\n\n' + ids.map((id) => `- [${names[id]}](plugins/${id}/README.md): ${portfolio.projects.find((p) => p.id === id).short}`).join('\n') + '\n\nRead the product package for its app, command and access requirements.\n\n```sh\nnpx skills add hraness/product-skills\n```\n\nChoose the product skill during installation, then follow its setup and first task. ' : 'Product packages are being prepared. ' }${ids.includes('sponge') ? `Use ${names.sponge}'s [Raycast commands](adapters/raycast/README.md) to queue URLs and search saved text.\n\n` : ''}A package available here may still be awaiting directory review or host testing. See [package status](catalog/store-status.json), [skills.sh listing observations](docs/DIRECTORY_OBSERVATIONS.md) and [verified publications](publication-ledger.json).\n\n## Product pages\n\n${portfolio.projects.filter((p) => Object.hasOwn(PRODUCTS, p.id)).map((p) => `- [${p.name}](${p.url}): ${p.short}`).join('\n')}\n\n## Check a package\n\nUse Node.js 24. Run \`npm run check\` to validate sources, generated copies and package metadata. \`npm run package\` writes deterministic plugin ZIPs and \`SHA256SUMS\` under \`dist/\`. The package license covers these skills and integration files; product applications have their own terms.\n\n[Maintain packages](docs/MAINTAINING.md) · [Prepare a directory submission](docs/DIRECTORY_SUBMISSIONS.md) · [Submission index](docs/SUBMISSIONS.md) · [MIT license](LICENSE)\n`;
+  if (submissions) output[SUBMISSIONS_INDEX] = renderSubmissions(submissions, { ledger, directories, names, stores: JSON.parse(output['catalog/store-status.json']).products });
   return output;
 }
 export function renderedPackageFingerprint(id, entry, bundle, portfolio, { renderer = render, archive = zip } = {}) {

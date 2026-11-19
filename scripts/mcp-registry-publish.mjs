@@ -88,11 +88,12 @@ export async function releasedDescriptor({ root, github }) {
   need(product && stable(product.version) && product.mcpb?.file === `yaptake-${product.version}.mcpb` && /^[a-f0-9]{64}$/.test(product.mcpb.sha256), 'The release plan has no Yaptake MCP bundle');
   const bytes = await readFile(join(root, 'dist', product.mcpb.file));
   need(createHash('sha256').update(bytes).digest('hex') === product.mcpb.sha256, 'The rebuilt MCP bundle differs from its plan');
-  const summary = portfolio.projects?.find((entry) => entry.id === 'yaptake')?.short;
+  const project = portfolio.projects?.find((entry) => entry.id === 'yaptake'); const summary = project?.short; const title = project?.name;
   need(typeof summary === 'string' && summary.length > 0 && summary.length <= 100 && summary.trim() === summary && !/[\x00-\x1f\x7f]/.test(summary), 'Invalid public Yaptake summary');
+  need(typeof title === 'string' && title.length > 0 && title.length <= 80 && title.trim() === title && !/[\x00-\x1f\x7f]/.test(title), 'Invalid public Yaptake name');
   need(bundle?.manifest?.product?.id === 'yaptake' && bundle.manifest.product.agentGuideUrl === 'https://yaptake.com/docs/agents', 'Unexpected Yaptake agent guide');
   const identifier = `${origin}/releases/download/${plan.tag}/${product.mcpb.file}`;
-  const descriptor = { $schema: schema, name, title: 'Yaptake', description: summary, version: product.version, websiteUrl: bundle.manifest.product.agentGuideUrl, packages: [{ registryType: 'mcpb', identifier, fileSha256: product.mcpb.sha256, transport: { type: 'stdio' } }] };
+  const descriptor = { $schema: schema, name, title, description: summary, version: product.version, websiteUrl: bundle.manifest.product.agentGuideUrl, packages: [{ registryType: 'mcpb', identifier, fileSha256: product.mcpb.sha256, transport: { type: 'stdio' } }] };
   const release = await github(`releases/tags/${plan.tag}`);
   // The same check the publication observer applies before it records a listing.
   bundlePublication({ server: descriptor, _meta: { 'io.modelcontextprotocol.registry/official': { status: 'active', statusChangedAt: '1970-01-01T00:00:00Z', publishedAt: '1970-01-01T00:00:00Z', isLatest: true } } }, release);

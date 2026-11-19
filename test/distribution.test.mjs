@@ -64,11 +64,24 @@ test('portfolio facts require each exact product identity once', () => {
   assert.doesNotThrow(() => validatePortfolio(portfolio)); assert.doesNotThrow(() => validatePortfolio(catalogPortfolio));
   const p = structuredClone(portfolio); p.projects[0].url = 'https://wrong.test'; assert.throws(() => validatePortfolio(p));
 });
+test('a product name is the portfolio\'s own, so a rename needs no change here', () => {
+  // hraness.com spelled it Dawn until DAWN's own manifest reached the portfolio; both are accepted.
+  for (const name of ['Dawn', 'DAWN']) {
+    const q = structuredClone(withYiii(portfolio)); q.projects.find((p) => p.id === 'dawn').name = name;
+    assert.doesNotThrow(() => validatePortfolio(q), name);
+  }
+  for (const name of ['', ' DAWN', 'DAWN\nnext', 'DAWN\tnext', 'x'.repeat(81), 'DAWN](https://example.test)', '<b>DAWN</b>', 'DAWN | Sponge', 'DAWN_', '/Users/person/DAWN', 'Get DAWN at https://example.test']) {
+    const q = structuredClone(portfolio); q.projects.find((p) => p.id === 'dawn').name = name;
+    assert.throws(() => validatePortfolio(q), undefined, JSON.stringify(name));
+  }
+  const b = bundle('dawn'); b.manifest.product.name = 'DAWN'; assert.doesNotThrow(() => validateBundle(b, 'dawn'));
+  b.manifest.product.name = 'DAWN\nnext'; assert.throws(() => validateBundle(b, 'dawn'));
+});
 test('a profile-only portfolio entry needs its exact identity and changes no package', async () => {
   const listed = withYiii(portfolio); assert.doesNotThrow(() => validatePortfolio(listed));
   for (const mutate of [
     (q) => { q.projects.at(-1).url = 'https://yiii.example'; },
-    (q) => { q.projects.at(-1).name = 'Yiii'; },
+    (q) => { q.projects.at(-1).name = 'yiii\nnext'; },
     (q) => { q.projects.at(-1).icon = '/products/yiii/icon.svg'; },
     (q) => { Object.assign(q.projects.at(-1), { id: 'lunar', icon: '/products/lunar/icon.png' }); },
     (q) => { q.projects.push(structuredClone(q.projects.at(-1))); },
@@ -78,6 +91,7 @@ test('a profile-only portfolio entry needs its exact identity and changes no pac
     (q) => { q.projects[q.projects.length - 1] = { ...q.projects[0], id: [q.projects[0].id] }; },
   ]) { const q = structuredClone(listed); mutate(q); assert.throws(() => validatePortfolio(q)); }
   { const q = structuredClone(listed); q.projects.at(-1).short = 'Practice at https://yiii.io/'; assert.doesNotThrow(() => validatePortfolio(q)); }
+  { const q = structuredClone(listed); q.projects.at(-1).name = 'Yiii'; assert.doesNotThrow(() => validatePortfolio(q)); }
   const first = await reconcile({ portfolio, state: empty(), bundles: {}, selected: ['sponge'], ...server() });
   const again = await reconcile({ portfolio: listed, state: first.state, bundles: first.bundles, selected: ['sponge'], fetchImpl: async () => new Response(null, { status: 304 }) });
   assert.deepEqual(again.state, first.state);
