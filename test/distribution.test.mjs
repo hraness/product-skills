@@ -30,7 +30,7 @@ function server(b = bundle(), { unpublished = false, mismatched = false } = {}) 
   const fetchImpl = async (url, options) => {
     calls.push({ url, options });
     if (url.endsWith('/integrations/sponge.json')) return json(b, { headers: { etag: '"source-1"' } });
-    if (url.endsWith('/docs/agents')) return new Response('<h1>Sponge agent guide</h1>');
+    if (url.endsWith('/docs/agents')) return new Response(`<h1>${b.manifest.product.name} agent guide</h1>`);
     if (url.startsWith('https://registry.npmjs.org/')) return unpublished ? json({}, { status: 404 }) : json({ name: '@hraness/sponge', version: mismatched ? '0.0.1' : b.manifest.runtime.version, engines: { node: '>=24.20.0' }, bin: { sponge: 'bin/sponge.js' }, dist: { integrity: `sha512-${Buffer.alloc(64).toString('base64')}`, tarball: 'https://registry.npmjs.org/@hraness/sponge/-/sponge-0.1.0.tgz' } });
     throw new Error('Unexpected test network request');
   };
@@ -186,9 +186,10 @@ test('changed product presentation advances its plugin even when the source retu
 test('one product description changes only that product fingerprint and integration version', async () => {
   const first = await reconcile({ portfolio, state: empty(), bundles: {}, selected: ['sponge'], ...server() });
   const dawn = bundle('dawn');
-  const both = await reconcile({ portfolio, state: first.state, bundles: first.bundles, selected: ['dawn'], fetchImpl: async (url) => url.endsWith('/integrations/dawn.json') ? json(dawn) : new Response('Dawn private preview setup guide.') });
+  const both = await reconcile({ portfolio, state: first.state, bundles: first.bundles, selected: ['dawn'], fetchImpl: async (url) => url.endsWith('/integrations/dawn.json') ? json(dawn) : new Response(`${dawn.manifest.product.name} private preview setup guide.`) });
   const changed = structuredClone(portfolio); changed.projects.find((product) => product.id === 'sponge').short = 'Read saved sources and notes.';
   const updated = await reconcile({ portfolio: changed, state: both.state, bundles: both.bundles, selected: ['dawn', 'sponge'], fetchImpl: async () => new Response(null, { status: 304 }) });
+  assert.ok(both.state.products.dawn, 'Dawn is admitted before the comparison');
   assert.deepEqual(updated.state.products.dawn, both.state.products.dawn);
   assert.equal(updated.state.products.sponge.revision, both.state.products.sponge.revision + 1);
   assert.notEqual(updated.state.products.sponge.packageFingerprint, both.state.products.sponge.packageFingerprint);
@@ -199,7 +200,7 @@ test('Textmock accepts only its bounded helper and preserves it in standalone sk
   const fetchImpl = async (url) => {
     calls.push(url);
     if (url.endsWith('/integrations/textmock.json')) return json(b);
-    if (url.endsWith('/docs/agents')) return new Response('Textmock agent guide');
+    if (url.endsWith('/docs/agents')) return new Response(`${b.manifest.product.name} agent guide`);
     if (url.endsWith('/integrations/textmock-link.mjs')) return new Response(helper);
     throw new Error('The web integration must not request a private runtime');
   };
@@ -233,7 +234,7 @@ test('the Textmock encoder URL template is allowed only in its exact selected sc
 });
 test('Dawn publishes only selected skill and original example with private access stated', async () => {
   const b = bundle('dawn'); const calls = [];
-  const fetchImpl = async (url) => { calls.push(url); if (url.endsWith('/integrations/dawn.json')) return json(b); if (url.endsWith('/docs/agents')) return new Response('Dawn agent guide.'); if (url.endsWith('/install')) return new Response('<title>install dawn</title><p>Private preview access is required.</p>'); throw new Error('Private runtime access is not part of selected-file validation'); };
+  const fetchImpl = async (url) => { calls.push(url); if (url.endsWith('/integrations/dawn.json')) return json(b); if (url.endsWith('/docs/agents')) return new Response(`${b.manifest.product.name} agent guide.`); if (url.endsWith('/install')) return new Response('<title>install dawn</title><p>Private preview access is required.</p>'); throw new Error('Private runtime access is not part of selected-file validation'); };
   const result = await reconcile({ portfolio, state: empty(), bundles: {}, selected: ['dawn'], fetchImpl });
   assert.equal(result.outcomes[0].status, 'updated');
   assert.equal(result.state.products.dawn.qualification.scope, 'selected-files-only');
@@ -265,7 +266,7 @@ test('app admission binds version, build, platform, URL, archive hash and Sparkl
 });
 test('an app source ahead of its published build preserves the working plugin', async () => {
   const { b, release, feed } = app(); let next = b;
-  const fetchImpl = async (url) => url.endsWith('/integrations/yaptake.json') ? json(next) : url.endsWith('/docs/agents') ? new Response('Yaptake agent guide') : url.endsWith('/release.json') ? json(release) : new Response(feed);
+  const fetchImpl = async (url) => url.endsWith('/integrations/yaptake.json') ? json(next) : url.endsWith('/docs/agents') ? new Response(`${b.manifest.product.name} agent guide`) : url.endsWith('/release.json') ? json(release) : new Response(feed);
   const first = await reconcile({ portfolio, state: empty(), bundles: {}, selected: ['yaptake'], fetchImpl });
   assert.equal(first.outcomes[0].status, 'updated');
   next = structuredClone(b); next.manifest.runtime.build = '9';
