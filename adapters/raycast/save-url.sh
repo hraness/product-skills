@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Requires Sponge 0.76.0 or later and Node.js 24.20.0 or later.
+# Requires Sponge 0.81.0 or later and Node.js 24.20.0 or later.
 # Follow README.md for setup and keep this folder’s files together.
 
 # @raycast.schemaVersion 1
