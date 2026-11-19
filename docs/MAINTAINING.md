@@ -163,7 +163,10 @@ merged PR's server timestamp. GitHub's merged timeline event identifies that
 commit; REST API 2026-03-10 omits `merge_commit_sha` from PR responses.
 
 The observer verifies the regular cask and catalog blobs, their archive and
-platform facts, and the selected install and update guards. It reads Ruby as
+platform facts, and the selected install and update guards. Each record has one
+accepted archive name. Yaptake archives finalized from 2026-11-16 are named
+`Yaptake-VERSION.zip`, and build 231, the cask's only earlier archive, keeps
+`Yaptake-0.1.0-private.zip`. The observer reads Ruby as
 text and refuses unknown hooks. Comments, whitespace and presentation prose do
 not change the content hash. A changed archive or guard for an existing
 version/build stops observation; formatting changes and reverts preserve the

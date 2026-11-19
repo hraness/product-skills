@@ -13,7 +13,7 @@ const template = await readFile(new URL('./fixtures/yaptake-homebrew.rb', import
 const prefix = `repos/${TAP.repository}`; const now = () => Date.parse('2026-11-14T20:00:00Z');
 const empty = () => ({ schemaVersion: 1, publications: [] });
 const gitHash = (bytes) => createHash('sha1').update(`blob ${bytes.length}\0`).update(bytes).digest('hex');
-function record(build = '17', hash = '1'.repeat(64)) { return { schemaVersion: 1, product: 'yaptake', version: '1.2.3', build, sha256: hash, url: `https://yaptake.com/downloads/${hash}/Yaptake-1.2.3-private.zip`, length: 1000, architecture: 'arm64', minimumMacOS: '26.0', edSignature: 'a'.repeat(86) + '==' }; }
+function record(build = '17', hash = '1'.repeat(64)) { return { schemaVersion: 1, product: 'yaptake', version: '1.2.3', build, sha256: hash, url: `https://yaptake.com/downloads/${hash}/Yaptake-1.2.3.zip`, length: 1000, architecture: 'arm64', minimumMacOS: '26.0', edSignature: 'a'.repeat(86) + '==' }; }
 function cask(value = record()) { return template.replaceAll('__VERSION__', value.version).replaceAll('__BUILD__', value.build).replaceAll('__SHA__', value.sha256); }
 const id = (letter) => letter.repeat(40);
 function server(states = [{}, { record: record() }]) {
@@ -74,6 +74,21 @@ test('oldest-first batches recover missed cask versions, preserve formatting/rev
   const secondBatch = await observeHomebrew(firstBatch.ledger, firstBatch.cursor, current); assert.equal(secondBatch.ledger.publications.length, 2); assert.equal(secondBatch.report.caughtUp, true); assert.deepEqual(secondBatch.ledger.publications[0], introduction);
   current.calls.length = 0; const unchanged = await observeHomebrew(secondBatch.ledger, secondBatch.cursor, current); assert.equal(unchanged.report.status, 'unchanged'); assert.equal(current.calls.length, 2);
   assert(!current.calls.some((path) => path.includes('/releases')));
+});
+
+test('each tap record needs its one archive name across the signing-channel rename', async () => {
+  // The tap's actual catalog records: build 231 predates hraness/yaptake#262; builds 255 and 307 follow it.
+  const tap = (build, sha256, length, edSignature, name) => ({ schemaVersion: 1, product: 'yaptake', version: '0.1.0', build, url: `https://yaptake.com/downloads/${sha256}/${name}`, sha256, length, architecture: 'arm64', minimumMacOS: '26.0', edSignature });
+  const legacy = tap('231', '1f4c00dc124f4574fab2efc67e1b649d7035b73a21ba76744a86e71ef8016288', 30314840, 'pZFqfpMMBnbYbxMpPnfTh0EsQxenPhxx5mnEaqxAvMMQ43xXy9zHKwZEM5fwHmswDCLD0sV7ZEf3QbrpkyT6AA==', 'Yaptake-0.1.0-private.zip');
+  const renamed = tap('255', '761ef17aac5747f782f40f283813003573cf812c27615ab95bb08dce93715b50', 30327276, 'm5IpuSQ4qZa+tut4BlFCubagm3H2xF80JANq7lSQxzMLmI3XTcic5AuJeKTT2G9Svn+GHRwHdGHqR89HtewoBQ==', 'Yaptake-0.1.0.zip');
+  const latest = tap('307', 'a4b1896b84e5f18bfccc8c189835c3b6ef8ff67ef1a18f5b36afdee46ffcda58', 31307994, 'lHBgkWDWMcaixaIhTjFCrgzeh4YiWoa0hwT6Ug4DzAMapWp/+LLUVr4owcjmkc43m9TAynrgjeU0zjc4022YAQ==', 'Yaptake-0.1.0.zip');
+  const legacyCask = cask(legacy).replace('}.zip"', '}-private.zip"'); const recorded = JSON.parse(await readFile(new URL('../publication-ledger.json', import.meta.url), 'utf8'));
+  assert.equal(homebrewContentHash(legacy, legacyCask), recorded.publications.find((entry) => entry.id === 'yaptake-homebrew-0-1-0-231').contentHash);
+  const current = server([{}, { record: legacy, cask: legacyCask }, { record: renamed }, { record: renamed }, { record: latest }, { record: legacy, cask: legacyCask }]);
+  let state = { ledger: empty(), cursor: initialHomebrewCursor() }; const outcomes = [];
+  do { state = await observeHomebrew(state.ledger, state.cursor, current); outcomes.push(...state.report.outcomes); } while (!state.report.caughtUp);
+  assert.deepEqual(outcomes, [['231', 'recorded'], ['255', 'recorded'], ['307', 'recorded'], ['231', 'unchanged']].map(([build, status]) => ({ id: `yaptake-homebrew-0-1-0-${build}`, status })));
+  for (const value of [{ ...renamed, url: renamed.url.replace('.zip', '-private.zip') }, { ...legacy, url: legacy.url.replace('-private', '') }, { ...legacy, build: '232' }, { ...legacy, sha256: latest.sha256, url: legacy.url.replace(legacy.sha256, latest.sha256) }]) assert.throws(() => homebrewContentHash(value, legacyCask), /archive or platform identity/);
 });
 
 test('changed archive/platform/guard identity or conflicting prior records never replace a published version/build', async () => {

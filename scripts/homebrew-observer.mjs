@@ -28,10 +28,14 @@ export async function publicTapJSON(path, { fetchImpl = fetch } = {}) {
   return parseUnique(new TextDecoder('utf-8', { fatal: true }).decode(Buffer.concat(chunks)));
 }
 
+// hraness/yaptake#262 drops the signing channel from archives finalized from
+// 2026-11-16. Build 231, the cask's only earlier archive, keeps its name.
+const PRIVATE_NAMED_ARCHIVES = new Map([['0.1.0,231', '1f4c00dc124f4574fab2efc67e1b649d7035b73a21ba76744a86e71ef8016288']]);
+const archiveName = (record) => `Yaptake-${record.version}${PRIVATE_NAMED_ARCHIVES.get(`${record.version},${record.build}`) === record.sha256 ? '-private' : ''}.zip`;
 function archiveRecord(record) {
   need(exact(record, ['schemaVersion', 'product', 'version', 'build', 'url', 'sha256', 'length', 'architecture', 'minimumMacOS', 'edSignature']) && record.schemaVersion === 1 && record.product === TAP.product, 'Invalid cask catalog fields'); version(record.version);
   homebrewPublicationId(record.version, record.build);
-  need(/^[a-f0-9]{64}$/.test(record.sha256) && record.url === `https://yaptake.com/downloads/${record.sha256}/Yaptake-${record.version}-private.zip` && Number.isSafeInteger(record.length) && record.length > 0 && record.length <= 268435456 && record.architecture === 'arm64' && record.minimumMacOS === '26.0' && /^[A-Za-z0-9+/]{86}==$/.test(record.edSignature), 'Cask archive or platform identity differs'); return record;
+  need(/^[a-f0-9]{64}$/.test(record.sha256) && record.url === `https://yaptake.com/downloads/${record.sha256}/${archiveName(record)}` && Number.isSafeInteger(record.length) && record.length > 0 && record.length <= 268435456 && record.architecture === 'arm64' && record.minimumMacOS === '26.0' && /^[A-Za-z0-9+/]{86}==$/.test(record.edSignature), 'Cask archive or platform identity differs'); return record;
 }
 
 // This is a reader for the selected cask's small Ruby subset, not an evaluator.
