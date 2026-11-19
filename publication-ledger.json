@@ -711,6 +711,42 @@
       "contentHash": "c7cf9f72c310e86284b8b23c805d2151ad4431d81010605c74101b178dcf17b5",
       "publishedAt": "2026-11-18T12:22:01.000Z",
       "url": "https://github.com/hraness/homebrew-tap/blob/5aa7ebb2ef911e1c5e02f2259d13df2fc1e211c9/Casks/yaptake.rb"
+    },
+    {
+      "id": "sponge-mcp-registry-0-84-0",
+      "product": "sponge",
+      "channel": "mcp-registry",
+      "publishedAt": "2026-11-19T14:42:32.007Z",
+      "url": "https://registry.modelcontextprotocol.io/v0.1/servers/io.github.hraness%2Fsponge/versions/0.84.0",
+      "version": "0.84.0",
+      "contentHash": "26723fb03513dbfcfc85a1308b3df08cf1ba20b892c024261f9c170be168880b"
+    },
+    {
+      "id": "sponge-mcp-registry-0-85-0",
+      "product": "sponge",
+      "channel": "mcp-registry",
+      "publishedAt": "2026-11-19T15:41:42.758Z",
+      "url": "https://registry.modelcontextprotocol.io/v0.1/servers/io.github.hraness%2Fsponge/versions/0.85.0",
+      "version": "0.85.0",
+      "contentHash": "3a330fd5c17f45a69b82a516db401be6eb93a012b7bc7f7add3932528710567a"
+    },
+    {
+      "id": "sponge-mcp-registry-0-86-0",
+      "product": "sponge",
+      "channel": "mcp-registry",
+      "publishedAt": "2026-11-19T16:36:26.563Z",
+      "url": "https://registry.modelcontextprotocol.io/v0.1/servers/io.github.hraness%2Fsponge/versions/0.86.0",
+      "version": "0.86.0",
+      "contentHash": "d840e564794fe7593564afc214c50d4e9a8e38081a525b11015a805953f7e9fb"
+    },
+    {
+      "id": "yaptake-homebrew-0-1-0-320",
+      "product": "yaptake",
+      "channel": "homebrew",
+      "version": "0.1.0",
+      "contentHash": "3f6c7d56abacbb1c4aee344538233d55fc3785e5edd62ee9f74f6eb8f1e495b9",
+      "publishedAt": "2026-11-19T13:52:52.000Z",
+      "url": "https://github.com/hraness/homebrew-tap/blob/b545065c1f3b8abf7fde42b2b7513996d57845e8/Casks/yaptake.rb"
     }
   ]
 }
