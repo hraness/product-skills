@@ -1,19 +1,19 @@
 {
   "schemaVersion": 1,
   "repository": "hraness/.github",
-  "sourceCommit": "cd17786be0579c0241409cd84411424de4685217",
+  "sourceCommit": "2b97c12f1f593de59681c40e3aa4226b07178e8c",
   "files": {
     "DOCUMENTATION_GUIDELINES.md": {
       "bytes": 16129,
       "sha256": "c0e8df0d0f2cc170b34c731b0ff7b4a65a274165366c181bf619314b0657bab9"
     },
     "GENERATION_STYLE.md": {
-      "bytes": 12328,
-      "sha256": "f2aac42772db81d877572fa8e65d9b6f841de70387b09903bd1b3a21b28bac05"
+      "bytes": 12335,
+      "sha256": "abc7b0020c9383f487aeeb99f98c336bc4dee2fc70589e14489d6546a332ce82"
     },
     "MESSAGING.md": {
-      "bytes": 15424,
-      "sha256": "ac102b2bcf100886e38e937364fbdb7a946dd78fcb9e2d1666aa585155697a69"
+      "bytes": 15455,
+      "sha256": "b88f0b03d511b0d979565b98abd2fbb30efcff7226edd7eb2bacae886d44ef12"
     },
     "README_GUIDELINES.md": {
       "bytes": 12396,
