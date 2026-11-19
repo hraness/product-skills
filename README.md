@@ -22,9 +22,9 @@ A package available here may still be awaiting directory review or host testing.
 ## Product pages
 
 - [DAWN](https://dawnav.com): Music in code.
+- [Sponge](https://sponge.computer): Reading and notes.
 - [Yaptake](https://yaptake.com): Video editor for Mac.
 - [Textmock](https://textmock.com): iMessage mockups.
-- [Sponge](https://sponge.computer): Reading and notes.
 
 ## Check a package
 

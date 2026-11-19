@@ -9,6 +9,20 @@
       "icon": "/products/dawn/icon.png"
     },
     {
+      "id": "oh",
+      "name": "OH",
+      "url": "https://oh.computer",
+      "short": "Keeps your coding agents working.",
+      "icon": "/products/oh/icon.png"
+    },
+    {
+      "id": "sponge",
+      "name": "Sponge",
+      "url": "https://sponge.computer",
+      "short": "Reading and notes.",
+      "icon": "/products/sponge/icon.png"
+    },
+    {
       "id": "yaptake",
       "name": "Yaptake",
       "url": "https://yaptake.com",
@@ -23,18 +37,18 @@
       "icon": "/products/textmock/icon.png"
     },
     {
-      "id": "sponge",
-      "name": "Sponge",
-      "url": "https://sponge.computer",
-      "short": "Reading and notes.",
-      "icon": "/products/sponge/icon.png"
-    },
-    {
       "id": "yiii",
       "name": "yiii",
       "url": "https://yiii.io",
       "short": "Learn languages faster (ZH + ES).",
       "icon": "/products/yiii/icon.png"
+    },
+    {
+      "id": "aicharts",
+      "name": "aicharts",
+      "url": "https://aicharts.io",
+      "short": "Compare coding models by score, reasoning effort, and cost per task.",
+      "icon": "/products/aicharts/icon.png"
     }
   ]
 }
