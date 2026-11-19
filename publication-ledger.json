@@ -657,6 +657,51 @@
       "url": "https://registry.modelcontextprotocol.io/v0.1/servers/io.github.hraness%2Fsponge/versions/0.81.0",
       "version": "0.81.0",
       "contentHash": "c3369a9f92be002a5c07982687451b4554f7c385486b04f9a6a7e8d3236c0d4a"
+    },
+    {
+      "id": "sponge-mcp-registry-0-81-1",
+      "product": "sponge",
+      "channel": "mcp-registry",
+      "publishedAt": "2026-11-19T03:22:16.456Z",
+      "url": "https://registry.modelcontextprotocol.io/v0.1/servers/io.github.hraness%2Fsponge/versions/0.81.1",
+      "version": "0.81.1",
+      "contentHash": "e05a81ba15d9cb53d1c423568479c67952fdd8a7f8fe71151e3af0ea4d6583f7"
+    },
+    {
+      "id": "sponge-mcp-registry-0-82-0",
+      "product": "sponge",
+      "channel": "mcp-registry",
+      "publishedAt": "2026-11-19T03:41:19.286Z",
+      "url": "https://registry.modelcontextprotocol.io/v0.1/servers/io.github.hraness%2Fsponge/versions/0.82.0",
+      "version": "0.82.0",
+      "contentHash": "0fc1dea7af4cc395348ab8604d4189a4902ea5d03725fc962ad0edcccda6d4ee"
+    },
+    {
+      "id": "sponge-mcp-registry-0-82-1",
+      "product": "sponge",
+      "channel": "mcp-registry",
+      "publishedAt": "2026-11-19T04:27:03.914Z",
+      "url": "https://registry.modelcontextprotocol.io/v0.1/servers/io.github.hraness%2Fsponge/versions/0.82.1",
+      "version": "0.82.1",
+      "contentHash": "1938d3493e635d1c194baf1210b0b5416e68227af62301d1707d050b7b20e20e"
+    },
+    {
+      "id": "sponge-mcp-registry-0-83-0",
+      "product": "sponge",
+      "channel": "mcp-registry",
+      "publishedAt": "2026-11-19T13:11:28.294Z",
+      "url": "https://registry.modelcontextprotocol.io/v0.1/servers/io.github.hraness%2Fsponge/versions/0.83.0",
+      "version": "0.83.0",
+      "contentHash": "70156e2a8cb772b8bd7184e0e7f13c310e6ff200046ccf4c7a545f1ed9afcb2e"
+    },
+    {
+      "id": "yaptake-homebrew-0-1-0-255",
+      "product": "yaptake",
+      "channel": "homebrew",
+      "version": "0.1.0",
+      "contentHash": "858cb2f548c28e3b673e7858a29156af7bc244b5955d6e193566ea663914b6ed",
+      "publishedAt": "2026-11-17T12:38:24.000Z",
+      "url": "https://github.com/hraness/homebrew-tap/blob/7b0d053ec397818b1361c443fc4a04c1bf8be7ab/Casks/yaptake.rb"
     }
   ]
 }
