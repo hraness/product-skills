@@ -84,6 +84,17 @@ test('the public aicharts explorer is a known portfolio destination', () => {
   assert.throws(() => validatePortfolio({ ...existing, projects: [...existing.projects, { ...chart, url: 'https://other.example' }] }));
 });
 
+test('OH is a profile-only entry with its exact address, listed below DAWN', () => {
+  const oh = { id: 'oh', name: 'OH', url: 'https://oh.computer', short: 'Keeps your coding agents working.', icon: '/products/oh/icon.png' };
+  const listed = withYiii(portfolio); listed.projects.splice(1, 0, oh);
+  assert.doesNotThrow(() => validatePortfolio(listed));
+  for (const mutate of [
+    (q) => { q.projects[1].url = 'https://oh.example'; },
+    (q) => { q.projects[1].url = 'https://www.oh.computer'; },
+    (q) => { q.projects[1].icon = '/products/oh/icon.svg'; },
+    (q) => { q.projects.push(structuredClone(q.projects[1])); },
+  ]) { const q = structuredClone(listed); mutate(q); assert.throws(() => validatePortfolio(q)); }
+});
 test('a profile-only portfolio entry needs its exact identity and changes no package', async () => {
   const listed = withYiii(portfolio); assert.doesNotThrow(() => validatePortfolio(listed));
   for (const mutate of [
