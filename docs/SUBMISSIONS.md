@@ -134,6 +134,10 @@ These rows come from the existing records. The ledger keeps every earlier public
 | Sponge | MCP Registry | [0.78.0](https://registry.modelcontextprotocol.io/v0.1/servers/io.github.hraness%2Fsponge/versions/0.78.0) | Published 2026-11-18 |
 | Sponge | MCP Registry | [0.79.0](https://registry.modelcontextprotocol.io/v0.1/servers/io.github.hraness%2Fsponge/versions/0.79.0) | Published 2026-11-19 |
 | Sponge | MCP Registry | [0.80.0](https://registry.modelcontextprotocol.io/v0.1/servers/io.github.hraness%2Fsponge/versions/0.80.0) | Published 2026-11-19 |
+| Sponge | GitHub package | [0.1.6](https://github.com/hraness/product-skills/releases/tag/integrations-3687e2390bc3ad8c) | Published 2026-11-19 |
+| Sponge | GitHub package | [0.1.6](https://github.com/hraness/product-skills/releases/tag/integrations-3687e2390bc3ad8c) | Published 2026-11-19 |
+| Sponge | MCP Registry | [0.80.1](https://registry.modelcontextprotocol.io/v0.1/servers/io.github.hraness%2Fsponge/versions/0.80.1) | Published 2026-11-19 |
+| Sponge | MCP Registry | [0.81.0](https://registry.modelcontextprotocol.io/v0.1/servers/io.github.hraness%2Fsponge/versions/0.81.0) | Published 2026-11-19 |
 | DAWN | skills.sh | [Listed](https://www.skills.sh/hraness/product-skills/dawn) | First verified 2026-11-14 |
 | Sponge | skills.sh | [Listed](https://www.skills.sh/hraness/product-skills/sponge) | First verified 2026-11-14 |
 | Textmock | skills.sh | [Listed](https://www.skills.sh/hraness/product-skills/textmock) | First verified 2026-11-14 |
