@@ -143,6 +143,7 @@ These rows come from the existing records. The ledger keeps every earlier public
 | Sponge | MCP Registry | [0.82.1](https://registry.modelcontextprotocol.io/v0.1/servers/io.github.hraness%2Fsponge/versions/0.82.1) | Published 2026-11-19 |
 | Sponge | MCP Registry | [0.83.0](https://registry.modelcontextprotocol.io/v0.1/servers/io.github.hraness%2Fsponge/versions/0.83.0) | Published 2026-11-19 |
 | Yaptake | Homebrew cask | [0.1.0](https://github.com/hraness/homebrew-tap/blob/7b0d053ec397818b1361c443fc4a04c1bf8be7ab/Casks/yaptake.rb) | Published 2026-11-17 |
+| Yaptake | Homebrew cask | [0.1.0](https://github.com/hraness/homebrew-tap/blob/5aa7ebb2ef911e1c5e02f2259d13df2fc1e211c9/Casks/yaptake.rb) | Published 2026-11-18 |
 | DAWN | skills.sh | [Listed](https://www.skills.sh/hraness/product-skills/dawn) | First verified 2026-11-14 |
 | Sponge | skills.sh | [Listed](https://www.skills.sh/hraness/product-skills/sponge) | First verified 2026-11-14 |
 | Textmock | skills.sh | [Listed](https://www.skills.sh/hraness/product-skills/textmock) | First verified 2026-11-14 |

@@ -702,6 +702,15 @@
       "contentHash": "858cb2f548c28e3b673e7858a29156af7bc244b5955d6e193566ea663914b6ed",
       "publishedAt": "2026-11-17T12:38:24.000Z",
       "url": "https://github.com/hraness/homebrew-tap/blob/7b0d053ec397818b1361c443fc4a04c1bf8be7ab/Casks/yaptake.rb"
+    },
+    {
+      "id": "yaptake-homebrew-0-1-0-307",
+      "product": "yaptake",
+      "channel": "homebrew",
+      "version": "0.1.0",
+      "contentHash": "c7cf9f72c310e86284b8b23c805d2151ad4431d81010605c74101b178dcf17b5",
+      "publishedAt": "2026-11-18T12:22:01.000Z",
+      "url": "https://github.com/hraness/homebrew-tap/blob/5aa7ebb2ef911e1c5e02f2259d13df2fc1e211c9/Casks/yaptake.rb"
     }
   ]
 }
