@@ -8,7 +8,7 @@
 
 - This repository contains only public integration text and generated packages. Product application source stays in its owning repository.
 - `catalog/admitted.json` records qualified sources; `bundles/` holds those validated public bundles. Change generated files through `node scripts/distribution.mjs reconcile`.
-- Accept only exact identities in the validators: packages, listings and publications cover the four product origins in `PRODUCTS`, and the profile links add only the portfolio entries in `PROFILE_ONLY`. Preserve the last admitted package when a source, public runtime or guide fails qualification. Do not weaken a boundary to admit an unpublished release.
+- Accept only exact identities in the validators: packages, listings and publications cover the four product origins in `PRODUCTS`, and the profile links add only the portfolio entries in `PROFILE_ONLY`. An identity is an id and its origin. A product's name is the product's own: take it from the portfolio or its bundle and never pin it, so a rename needs no change here. Preserve the last admitted package when a source, public runtime or guide fails qualification. Do not weaken a boundary to admit an unpublished release.
 - Run `npm run check` with Node 24 before delivery. Tests use synthetic bundles, fake HTTP responses and deterministic archives; no signed-in browser or production user data is needed.
 - Follow DOCUMENTATION_GUIDELINES.md, README_GUIDELINES.md, STYLE.md and WRITING.md. Root review owns public prose and publication decisions.
 - Deliver task branches through protected pull requests and the required current-head check. Repository source updates and public store approvals are separate states.

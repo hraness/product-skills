@@ -22,7 +22,7 @@ export function renderProfile(readme, portfolio) {
   const newline = starts[0][0].endsWith('\r') ? '\r\n' : '\n';
   const begin = starts[0].index + START.length;
   const finish = ends[0].index;
-  const body = portfolio.projects.map((p) => `- [${p.name}](${p.url}): ${escape(p.short)}`).join(newline);
+  const body = portfolio.projects.map((p) => `- [${escape(p.name)}](${p.url}): ${escape(p.short)}`).join(newline);
   return readme.slice(0, begin) + newline + newline + body + newline + newline + readme.slice(finish);
 }
 export function assertProfileChange(before, after, portfolio) {

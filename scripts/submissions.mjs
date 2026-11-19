@@ -9,7 +9,6 @@ import { parseUnique } from './distribution.mjs';
 export const SUBMISSIONS_FILE = 'catalog/submissions.json';
 export const SUBMISSIONS_INDEX = 'docs/SUBMISSIONS.md';
 const ids = ['dawn', 'sponge', 'textmock', 'yaptake'];
-const names = { dawn: 'Dawn', sponge: 'Sponge', textmock: 'Textmock', yaptake: 'Yaptake' };
 const apiOrigin = 'https://api.github.com';
 const need = (value, message) => { if (!value) throw new Error(message); };
 const exact = (value, fields) => value !== null && typeof value === 'object' && !Array.isArray(value) && Object.keys(value).sort().join('\0') === [...fields].sort().join('\0');
@@ -161,8 +160,8 @@ export async function recordSubmissions({ root = process.cwd(), ...options } = {
   }
 }
 
-export function renderSubmissions(catalog, { ledger, directories, stores }) {
-  validateSubmissions(catalog);
+export function renderSubmissions(catalog, { ledger, directories, stores, names }) {
+  validateSubmissions(catalog); need(ids.every((id) => typeof names?.[id] === 'string'), 'Each product needs its portfolio name');
   const label = (row) => row.products.map((id) => names[id]).join(', ');
   const channel = { github: 'GitHub package', 'mcp-registry': 'MCP Registry', homebrew: 'Homebrew cask', clawhub: 'ClawHub skill', chatgpt: 'OpenAI directory', claude: 'Claude directory', cursor: 'Cursor directory' };
   const hostStatus = (value) => value === 'published' ? 'Published' : value === 'eligibility_and_review_required' ? 'Eligibility and review required' : 'Review required';

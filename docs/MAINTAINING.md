@@ -341,11 +341,13 @@ against the caller's checkout and `GITHUB_REPOSITORY` identity.
 `actions/sync-profile` is a composite action loaded from its own pinned source.
 It supports exactly `hraness/.github` → `profile/README.md` and
 `0thernet/0thernet` → `README.md`. Each target needs one ordered, own-line pair
-of `<!-- hraness-products:start -->` and `<!-- hraness-products:end -->` markers.
-The action preserves every byte outside them and reads the portfolio facts
-from `https://hraness.com/portfolio.json`: the four products and the
-profile-only entries in `PROFILE_ONLY`. Newly introduced destinations must
-answer before it proposes a README change.
+of `<!-- hraness-products:start -->` and `<!-- hraness-products:end -->`
+markers. The action preserves every byte outside them and reads the portfolio
+facts from `https://hraness.com/portfolio.json`: the four products and the
+profile-only entries in `PROFILE_ONLY`. It checks each entry's id, address and
+icon path, and shows its name and line as the portfolio states them, so a
+renamed product needs no change in this repository. Newly introduced
+destinations must answer before it proposes a README change.
 
 The caller pins the action to the source SHA of its verified immutable SemVer
 tooling release and adds the version comment, such as `# v0.1.COUNT`. Weekly

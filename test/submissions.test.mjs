@@ -118,7 +118,9 @@ test('the index projects existing provider facts and never changes selected prod
   const after = render(state, bundles, portfolio, ledger, directories, afterCatalog);
   assert.notEqual(before['docs/SUBMISSIONS.md'], after['docs/SUBMISSIONS.md']);
   for (const [name, bytes] of Object.entries(packages(state, before).artifacts)) assert(bytes.equals(packages(state, after).artifacts[name]));
-  const page = renderSubmissions(catalog, { ledger, directories, stores: JSON.parse(before['catalog/store-status.json']).products });
+  const names = Object.fromEntries(portfolio.projects.map((p) => [p.id, p.name]));
+  const page = renderSubmissions(catalog, { ledger, directories, names, stores: JSON.parse(before['catalog/store-status.json']).products });
+  assert.throws(() => renderSubmissions(catalog, { ledger, directories, stores: JSON.parse(before['catalog/store-status.json']).products }), /portfolio name/);
   for (const row of ledger.publications) assert(page.includes(row.url));
   for (const row of directories.observations) assert(page.includes(row.firstVerifiedAt.slice(0, 10)));
   assert(page.includes(catalog.submissions[1].url));

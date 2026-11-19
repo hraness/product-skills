@@ -23,6 +23,16 @@ test('profile sync preserves every byte outside unique own-line markers', () => 
   assert.throws(() => assertProfileChange(before, after.replace('An introduction, preserved.', 'An unrelated profile change.'), portfolio));
   assert.throws(() => assertProfileChange(before, after.replace('Personal notes, preserved.', 'Removed personal notes.'), portfolio));
 });
+test('the profile shows each name as the portfolio spells it', async () => {
+  const before = `${START}\n${END}\n`;
+  const today = renderProfile(before, portfolio); assert.ok(today.includes('- [Dawn](https://dawnav.com): '));
+  const renamed = structuredClone(portfolio); renamed.projects.find((p) => p.id === 'dawn').name = 'DAWN';
+  const after = renderProfile(today, renamed);
+  assert.ok(after.includes('- [DAWN](https://dawnav.com): ') && !after.includes('[Dawn]'));
+  // The address is unchanged, so the rename needs no destination read.
+  const changed = await refreshProfile(today, renamed, { fetchImpl: async () => assert.fail('An unchanged address was read') });
+  assert.deepEqual(changed, { changed: true, readme: after });
+});
 test('new profile destinations require successful reads and unchanged lists do not fetch', async () => {
   const before = `${START}\n${END}\n`; let calls = 0;
   const fetchImpl = async (url, options) => { assert.equal(options.redirect, 'error'); assert.equal(options.method, 'HEAD'); assert.ok(portfolio.projects.some((p) => p.url === url)); calls++; return new Response(null, { status: 200 }); };

@@ -38,7 +38,7 @@ function activeIdentity(record, now) {
   const official = officialRecord(record); need(official.status === 'active', 'Registry version is not active');
   const server = record.server;
   keys(server, ['$schema', 'name', 'title', 'description', 'version', 'websiteUrl', 'packages']);
-  need(server.$schema === SCHEMA && server.title === PRODUCTS.sponge.name, 'Unexpected registry schema or product name'); prose(server.description, 100);
+  need(server.$schema === SCHEMA, 'Unexpected registry schema'); prose(server.title, 80); prose(server.description, 100);
   need(Array.isArray(server.packages) && server.packages.length === 1, 'Registry entry must contain only the local npm package');
   const pkg = server.packages[0]; keys(pkg, ['registryType', 'registryBaseUrl', 'identifier', 'version', 'runtimeHint', 'transport', 'packageArguments']);
   need(pkg.registryType === 'npm' && pkg.registryBaseUrl === NPM && pkg.identifier === PACKAGE && pkg.version === server.version && pkg.runtimeHint === 'npx', 'Registry package or version differs');
@@ -66,7 +66,7 @@ function bundleIdentity(record, now) {
   const official = officialRecord(record, MCP_REGISTRY_SERVERS.yaptake); need(official.status === 'active', 'Registry version is not active');
   const server = record.server;
   keys(server, ['$schema', 'name', 'title', 'description', 'version', 'websiteUrl', 'packages']);
-  need(server.$schema === SCHEMA && server.title === PRODUCTS.yaptake.name, 'Unexpected registry schema or product name'); prose(server.description, 100);
+  need(server.$schema === SCHEMA, 'Unexpected registry schema'); prose(server.title, 80); prose(server.description, 100);
   need(server.websiteUrl === `${PRODUCTS.yaptake.url}/docs/agents`, 'Registry guide is not the public Yaptake agent guide');
   need(Array.isArray(server.packages) && server.packages.length === 1, 'Registry entry must contain only the MCP bundle');
   const pkg = server.packages[0]; keys(pkg, ['registryType', 'identifier', 'fileSha256', 'transport']);
