@@ -2148,7 +2148,7 @@
       "submittedAt": "2026-11-15T19:11:00.000Z",
       "github": {
         "state": "closed",
-        "updatedAt": "2026-11-16T06:01:45.000Z",
+        "updatedAt": "2026-11-19T06:33:05.000Z",
         "mergedAt": "2026-11-16T06:01:21.000Z"
       }
     },
@@ -2652,7 +2652,7 @@
       "submittedAt": "2026-11-16T01:40:47.000Z",
       "github": {
         "state": "open",
-        "updatedAt": "2026-11-16T02:15:05.000Z",
+        "updatedAt": "2026-11-19T04:28:52.000Z",
         "mergedAt": null
       }
     },
@@ -2694,9 +2694,9 @@
       },
       "submittedAt": "2026-11-18T12:58:25.000Z",
       "github": {
-        "state": "open",
-        "updatedAt": "2026-11-18T12:58:25.000Z",
-        "mergedAt": null
+        "state": "closed",
+        "updatedAt": "2026-11-19T10:14:52.000Z",
+        "mergedAt": "2026-11-19T10:14:34.000Z"
       }
     },
     {
@@ -2867,9 +2867,9 @@
       },
       "submittedAt": "2026-11-18T19:03:42.000Z",
       "github": {
-        "state": "open",
-        "updatedAt": "2026-11-18T19:03:42.000Z",
-        "mergedAt": null
+        "state": "closed",
+        "updatedAt": "2026-11-19T08:54:33.000Z",
+        "mergedAt": "2026-11-19T08:54:33.000Z"
       }
     },
     {
@@ -2890,9 +2890,9 @@
       },
       "submittedAt": "2026-11-18T19:03:46.000Z",
       "github": {
-        "state": "open",
-        "updatedAt": "2026-11-18T19:03:46.000Z",
-        "mergedAt": null
+        "state": "closed",
+        "updatedAt": "2026-11-19T05:03:57.000Z",
+        "mergedAt": "2026-11-19T05:03:29.000Z"
       }
     },
     {
