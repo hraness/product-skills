@@ -85,7 +85,7 @@ test('the public aicharts explorer is a known portfolio destination', () => {
 });
 
 test('OH is a profile-only entry with its exact address, listed below DAWN', () => {
-  const oh = { id: 'oh', name: 'OH', url: 'https://oh.computer', short: 'Mission control for coding agents.', icon: '/products/oh/icon.png' };
+  const oh = { id: 'oh', name: 'OH', url: 'https://oh.computer', short: 'Keeps your coding agents working.', icon: '/products/oh/icon.png' };
   const listed = withYiii(portfolio); listed.projects.splice(1, 0, oh);
   assert.doesNotThrow(() => validatePortfolio(listed));
   for (const mutate of [
