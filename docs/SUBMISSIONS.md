@@ -148,6 +148,14 @@ These rows come from the existing records. The ledger keeps every earlier public
 | Sponge | MCP Registry | [0.85.0](https://registry.modelcontextprotocol.io/v0.1/servers/io.github.hraness%2Fsponge/versions/0.85.0) | Published 2026-11-19 |
 | Sponge | MCP Registry | [0.86.0](https://registry.modelcontextprotocol.io/v0.1/servers/io.github.hraness%2Fsponge/versions/0.86.0) | Published 2026-11-19 |
 | Yaptake | Homebrew cask | [0.1.0](https://github.com/hraness/homebrew-tap/blob/b545065c1f3b8abf7fde42b2b7513996d57845e8/Casks/yaptake.rb) | Published 2026-11-19 |
+| OH | GitHub package | [0.1.0](https://github.com/hraness/product-skills/releases/tag/integrations-f5127c76cfcb1a81) | Published 2026-11-20 |
+| Sponge | MCP Registry | [0.87.0](https://registry.modelcontextprotocol.io/v0.1/servers/io.github.hraness%2Fsponge/versions/0.87.0) | Published 2026-11-19 |
+| Sponge | MCP Registry | [0.88.0](https://registry.modelcontextprotocol.io/v0.1/servers/io.github.hraness%2Fsponge/versions/0.88.0) | Published 2026-11-19 |
+| Sponge | MCP Registry | [0.88.1](https://registry.modelcontextprotocol.io/v0.1/servers/io.github.hraness%2Fsponge/versions/0.88.1) | Published 2026-11-19 |
+| Sponge | MCP Registry | [0.89.0](https://registry.modelcontextprotocol.io/v0.1/servers/io.github.hraness%2Fsponge/versions/0.89.0) | Published 2026-11-19 |
+| Sponge | MCP Registry | [0.89.1](https://registry.modelcontextprotocol.io/v0.1/servers/io.github.hraness%2Fsponge/versions/0.89.1) | Published 2026-11-19 |
+| Sponge | MCP Registry | [0.90.0](https://registry.modelcontextprotocol.io/v0.1/servers/io.github.hraness%2Fsponge/versions/0.90.0) | Published 2026-11-19 |
+| Sponge | MCP Registry | [0.91.0](https://registry.modelcontextprotocol.io/v0.1/servers/io.github.hraness%2Fsponge/versions/0.91.0) | Published 2026-11-20 |
 | DAWN | skills.sh | [Listed](https://www.skills.sh/hraness/product-skills/dawn) | First verified 2026-11-14 |
 | Sponge | skills.sh | [Listed](https://www.skills.sh/hraness/product-skills/sponge) | First verified 2026-11-14 |
 | Textmock | skills.sh | [Listed](https://www.skills.sh/hraness/product-skills/textmock) | First verified 2026-11-14 |
