@@ -11,6 +11,12 @@
       "version": "0.1.2"
     },
     {
+      "name": "oh",
+      "source": "./plugins/oh",
+      "description": "Supervise Claude Code and Codex sessions in a native Mac app, share one Vercel Board, and pair machines over Cloudflare Tunnel.",
+      "version": "0.1.0"
+    },
+    {
       "name": "sponge",
       "source": "./plugins/sponge",
       "description": "Save articles and PDFs to a reading library captured by a computer you control. Highlight passages, keep notes, and find ideas through search or your coding agent.",

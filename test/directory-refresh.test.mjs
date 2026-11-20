@@ -17,7 +17,8 @@ const json = (value) => `${JSON.stringify(value, null, 2)}\n`;
 const canonical = (value) => JSON.stringify(Array.isArray(value) ? value.map((entry) => JSON.parse(canonical(entry))) : value !== null && typeof value === 'object' ? Object.fromEntries(Object.keys(value).sort().map((key) => [key, JSON.parse(canonical(value[key]))])) : value);
 const read = async (path) => JSON.parse(await readFile(new URL(`../${path}`, import.meta.url), 'utf8'));
 const portfolio = await read('catalog/portfolio.json');
-const state = await read('catalog/admitted.json');
+const fullState = await read('catalog/admitted.json');
+const state = { ...fullState, products: Object.fromEntries(DIRECTORY_IDS.map((id) => [id, fullState.products[id]])) };
 const ledger = await read('publication-ledger.json');
 const bundles = Object.fromEntries(await Promise.all(DIRECTORY_IDS.map(async (id) => [id, await read(`bundles/${id}.json`)])));
 function identities(output) {

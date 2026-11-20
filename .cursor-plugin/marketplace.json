@@ -9,6 +9,10 @@
       "source": "./plugins/dawn"
     },
     {
+      "name": "oh",
+      "source": "./plugins/oh"
+    },
+    {
       "name": "sponge",
       "source": "./plugins/sponge"
     },

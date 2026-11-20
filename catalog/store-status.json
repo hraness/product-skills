@@ -12,6 +12,17 @@
       "claude": "review_required",
       "cursor": "review_required"
     },
+    "oh": {
+      "version": "0.1.0",
+      "contentHash": "66c8ae4cabaa5c935091ac2344360c34b8b55c9ae7979561df06fc222d2f0ee0",
+      "artifactHash": "c118726cc699e7be0ee4a9a96d26900bd5e3340d7824c4357f00f7fa57871609",
+      "github": "release_required",
+      "skillsSh": "listing_verification_required",
+      "skillsShFirstVerifiedAt": null,
+      "chatgpt": "review_required",
+      "claude": "review_required",
+      "cursor": "review_required"
+    },
     "sponge": {
       "version": "0.1.6",
       "contentHash": "328eaf4dd0d2e8a2eaeedc5c8627f1ed58b211858ca59bd2d1cf73a5f8df53c7",
