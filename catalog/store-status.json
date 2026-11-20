@@ -13,10 +13,10 @@
       "cursor": "review_required"
     },
     "oh": {
-      "version": "0.1.0",
-      "contentHash": "66c8ae4cabaa5c935091ac2344360c34b8b55c9ae7979561df06fc222d2f0ee0",
-      "artifactHash": "c118726cc699e7be0ee4a9a96d26900bd5e3340d7824c4357f00f7fa57871609",
-      "github": "published",
+      "version": "0.1.1",
+      "contentHash": "5b43438faf41b5a35dd79aa9b300ac5a6237399a06a82390c575549106d36677",
+      "artifactHash": "c779edd1aec2a38f262c35d7f360b31b5090a8be9f6fb8bee29672253413b7e5",
+      "github": "release_required",
       "skillsSh": "listing_verification_required",
       "skillsShFirstVerifiedAt": null,
       "chatgpt": "review_required",
@@ -24,10 +24,10 @@
       "cursor": "review_required"
     },
     "sponge": {
-      "version": "0.1.6",
-      "contentHash": "328eaf4dd0d2e8a2eaeedc5c8627f1ed58b211858ca59bd2d1cf73a5f8df53c7",
-      "artifactHash": "fefd129434669c6defb35940a17eb1f697317e1f2c6cade1a22a80f1e2068f5a",
-      "github": "published",
+      "version": "0.1.7",
+      "contentHash": "c92198a9af00781811e18b58325f9f9044b32463ecd53421e26c92cd59fea315",
+      "artifactHash": "8fd634f0f730f1b7856a2baeeb55f76075ce3a8432a002d83f59d25aa7367c7c",
+      "github": "release_required",
       "skillsSh": "listed",
       "skillsShFirstVerifiedAt": "2026-11-14T23:54:16.409Z",
       "chatgpt": "eligibility_and_review_required",
