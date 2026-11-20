@@ -170,7 +170,12 @@ export function renderSubmissions(catalog, { ledger, directories, stores, names 
   for (const row of [...catalog.submissions].sort((a, b) => a.submittedAt.localeCompare(b.submittedAt) || a.id.localeCompare(b.id))) body += `| ${label(row)} | [${md(row.repository)} #${row.number}](${row.url}) | ${row.submittedAt.slice(0, 10)} | ${state(row)} |\n`;
   if (!catalog.submissions.length) body += '| None recorded | | | |\n';
   body += '\n## Published packages and verified listings\n\nThese rows come from the existing records. The ledger keeps every earlier publication; a skills.sh first-verification date is not a publisher timestamp.\n\n| Product | Channel | Record | Date |\n| --- | --- | --- | --- |\n';
-  for (const row of ledger.publications) body += `| ${names[row.product]} | ${channel[row.channel]} | [${row.version}](${row.url}) | Published ${row.publishedAt.slice(0, 10)} |\n`;
+  for (const row of ledger.publications) {
+    const formula = row.channel === 'homebrew' && row.product === 'oh-router';
+    const name = formula ? row.product : names[row.product];
+    const source = formula ? 'Homebrew formula' : channel[row.channel];
+    body += `| ${name} | ${source} | [${row.version}](${row.url}) | Published ${row.publishedAt.slice(0, 10)} |\n`;
+  }
   for (const row of directories.observations) body += `| ${names[row.product]} | skills.sh | [${stores[row.product]?.skillsSh === 'listed' ? 'Listed' : 'Earlier listing; verification required'}](${row.url}) | First verified ${row.firstVerifiedAt.slice(0, 10)} |\n`;
   body += '\n## Host directories\n\n| Product | OpenAI | Claude | Cursor |\n| --- | --- | --- | --- |\n';
   for (const id of ids) { const row = stores[id]; if (!row) continue; body += `| ${names[id]} | ${hostStatus(row.chatgpt)} | ${hostStatus(row.claude)} | ${hostStatus(row.cursor)} |\n`; }

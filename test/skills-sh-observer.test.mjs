@@ -31,8 +31,22 @@ test('public first-verification evidence preserves the observed date and only pu
   assert.deepEqual(proof.source, { repository: 'https://github.com/hraness/product-skills', commit: 'd674880d223e3da7bfe5e804af990057f3aed370' });
   assert.equal(proof.installation.attempts, 1); assert(proof.installation.filesMatchSource && proof.installation.checkedUserConfigurationUnchanged && proof.installation.temporaryProjectRemoved);
   assert.equal(Object.keys(proof.installation.files).length, 6); assert(proof.installation.files['textmock/scripts/textmock-link.mjs']); assert(proof.installation.files['dawn/examples/morning-study.ts']);
-  for (const row of state.observations) { assert.equal(row.firstVerifiedAt, proof.firstVerifiedAt); const entry = proof.listings.find((entry) => entry.product === row.product); assert.equal(entry.url, row.url); assert(/^[a-f0-9]{64}$/.test(entry.responseSha256)); }
+  for (const entry of proof.listings) { const row = state.observations.find((row) => row.product === entry.product); assert.equal(row.firstVerifiedAt, proof.firstVerifiedAt); assert.equal(entry.url, row.url); assert(/^[a-f0-9]{64}$/.test(entry.responseSha256)); }
   assert(!/\/Users\/|\/private\/|file:|PRIVATE KEY|userConfig|npm-cache|config\.toml/.test(raw));
+});
+
+test('OH awaits listing evidence while earlier directory observations remain available', async () => {
+  const prior = records();
+  prior.observations = prior.observations.filter((row) => row.product !== 'oh');
+  const remote = server(sources(), (html, id) => id === 'oh' ? script({ '@type': 'WebSite' }) : html);
+  const pending = await observeDirectories(prior, sources(), { ...remote, now });
+  assert.deepEqual(pending.report.pendingProducts, ['oh']);
+  assert.equal(pending.report.status, 'pending');
+  assert.deepEqual(pending.observations, prior);
+  const verified = await observeDirectories(prior, sources(), { ...server(), now });
+  assert(verified.observations.observations.some((row) => row.product === 'oh'));
+  assert.equal(verified.report.status, 'verified');
+  await assert.rejects(observeDirectories(verified.observations, sources(), { ...remote, now }), /prior records/);
 });
 
 test('source hashes include every selected skill file and parse the owned scalar frontmatter', () => {
@@ -75,11 +89,11 @@ test('comments, inert elements and opaque JavaScript cannot supply structured li
   for (const malformed of ['<!-- unclosed', '<script type="application/ld+json">{}', '<template>', '<link href="never-closes>']) assert.throws(() => verifyDirectoryPage(canonical + malformed, source));
 });
 
-test('first observation requests exactly four canonical pages with no credentials or redirects', async () => {
+test('first observation requests the selected canonical pages with no credentials or redirects', async () => {
   const current = sources(); const remote = server(current); const result = await observeDirectories(initialDirectoryObservations(), current, { ...remote, now });
-  assert(result.changed); assert.equal(result.observations.observations.length, 4);
+  assert(result.changed); assert.equal(result.observations.observations.length, DIRECTORY_IDS.length);
   for (const call of remote.calls) { assert(DIRECTORY_IDS.some((id) => directoryUrl(id) === call.url)); assert.equal(call.options.method, 'GET'); assert.equal(call.options.redirect, 'error'); assert.equal(call.options.credentials, 'omit'); assert.deepEqual(call.options.headers, { accept: 'text/html' }); assert(call.options.signal instanceof AbortSignal); }
-  assert.equal(remote.calls.length, 4); assert.equal(result.report.scope, 'listing-presence'); assert.equal(result.report.remoteFileBytesVerified, false);
+  assert.equal(remote.calls.length, DIRECTORY_IDS.length); assert.equal(result.report.scope, 'listing-presence'); assert.equal(result.report.remoteFileBytesVerified, false);
 });
 
 test('unchanged listing presence is a stable no-op despite time and unrelated HTML changes', async () => {
@@ -111,30 +125,30 @@ test('a changed local helper hash keeps the first date without claiming remote h
   assert.equal(result.report.remoteFileBytesVerified, false); assert(!JSON.stringify(result.observations).includes('version'));
 });
 
-test('all four reads settle before a failed batch preserves the previous records', async () => {
+test('all reads settle before a failed batch preserves the previous records', async () => {
   const current = sources(); const previous = records(); const before = structuredClone(previous); const completed = [];
   await assert.rejects(observeDirectories(previous, current, { now, fetchImpl: async (url) => {
     const id = DIRECTORY_IDS.find((id) => directoryUrl(id) === url);
     if (id === 'sponge') { completed.push(id); throw new Error('offline'); }
     await new Promise((resolve) => setTimeout(resolve, 5)); completed.push(id); return response(url, page(current[id]));
-  } }), /all four/);
+  } }), /all selected/);
   assert.deepEqual(completed.sort(), [...DIRECTORY_IDS].sort()); assert.deepEqual(previous, before);
 });
 
 test('redirects, URL drift, error shells and wrong response media types preserve every record', async () => {
   const current = sources(); const previous = records(); const before = structuredClone(previous);
   for (const options of [{ status: 308 }, { redirected: true }, { url: 'https://attacker.invalid/page' }, { type: 'application/json' }]) {
-    await assert.rejects(observeDirectories(previous, current, { now, fetchImpl: async (url) => { const id = DIRECTORY_IDS.find((id) => directoryUrl(id) === url); return response(url, page(current[id]), id === 'sponge' ? options : {}); } }), /all four/);
+    await assert.rejects(observeDirectories(previous, current, { now, fetchImpl: async (url) => { const id = DIRECTORY_IDS.find((id) => directoryUrl(id) === url); return response(url, page(current[id]), id === 'sponge' ? options : {}); } }), /all selected/);
     assert.deepEqual(previous, before);
   }
   const shell = server(current, (body, id) => id === 'dawn' ? '<html>404</html>' : body);
-  await assert.rejects(observeDirectories(previous, current, { ...shell, now }), /all four/); assert.deepEqual(previous, before);
+  await assert.rejects(observeDirectories(previous, current, { ...shell, now }), /all selected/); assert.deepEqual(previous, before);
 });
 
 test('page size, UTF-8 and structured-data limits are enforced without accepting partial success', async () => {
   const current = sources(); const previous = records();
   for (const bad of [Buffer.alloc(1024 * 1024 + 1, 32), Buffer.from([255]), page(current.sponge) + script({ '@type': 'Other', data: 'x'.repeat(131072) })]) {
-    await assert.rejects(observeDirectories(previous, current, { now, fetchImpl: async (url) => { const id = DIRECTORY_IDS.find((id) => directoryUrl(id) === url); return response(url, id === 'sponge' ? bad : page(current[id])); } }), /all four/);
+    await assert.rejects(observeDirectories(previous, current, { now, fetchImpl: async (url) => { const id = DIRECTORY_IDS.find((id) => directoryUrl(id) === url); return response(url, id === 'sponge' ? bad : page(current[id])); } }), /all selected/);
   }
   assert.throws(() => verifyDirectoryPage(page(current.sponge) + Array.from({ length: 8 }, () => script({ '@type': 'Other' })).join(''), current.sponge), /limit/);
 });

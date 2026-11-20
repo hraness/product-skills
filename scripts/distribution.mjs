@@ -30,6 +30,11 @@ export const MCP_REGISTRY = Object.freeze({ origin: 'https://registry.modelconte
 // Sponge's entry is published from its npm release; Yaptake's from this repository's MCP bundle release.
 export const MCP_REGISTRY_SERVERS = Object.freeze({ sponge: MCP_REGISTRY.name, yaptake: 'io.github.hraness/yaptake' });
 export const HOMEBREW_TAP = Object.freeze({ repository: 'hraness/homebrew-tap', repositoryId: 1382935233, ownerId: 307125679, product: 'yaptake', cask: 'Casks/yaptake.rb', catalog: 'catalog/yaptake.json', cursor: 'catalog/homebrew-observation.json' });
+export const HOMEBREW_PACKAGES = Object.freeze({
+  yaptake: { file: HOMEBREW_TAP.cask, catalog: HOMEBREW_TAP.catalog, checks: ['Yaptake cask'] },
+  oh: { file: 'Casks/oh.rb', catalog: 'catalog/oh.json', checks: ['OH cask'] },
+  'oh-router': { file: 'Formula/oh-router.rb', catalog: 'catalog/oh-router.json', checks: ['brew (macos-15)', 'brew (ubuntu-latest)'] },
+});
 export const CLAWHUB = Object.freeze({ origin: 'https://clawhub.ai', owner: 'hraness' });
 export const REPOSITORY = 'https://github.com/hraness/product-skills';
 export const MAX_BUNDLE = 65536;
@@ -63,8 +68,21 @@ export function compareVersion(a, b) { const av = version(a); const bv = version
 const registryProduct = (product) => need(typeof product === 'string' && Object.hasOwn(MCP_REGISTRY_SERVERS, product), 'Unknown MCP Registry server');
 export function mcpRegistryPublicationId(value, product = MCP_REGISTRY.product) { version(value); registryProduct(product); return `${product}-mcp-registry-${value.replaceAll('.', '-')}`; }
 export function mcpRegistryPublicationUrl(value, product = MCP_REGISTRY.product) { version(value); registryProduct(product); return `${MCP_REGISTRY.origin}/v0.1/servers/${encodeURIComponent(MCP_REGISTRY_SERVERS[product])}/versions/${value}`; }
-export function homebrewPublicationId(value, build) { version(value); need(typeof build === 'string' && /^[1-9]\d{0,8}$/.test(build), 'An exact Homebrew build is required'); return `yaptake-homebrew-${value.replaceAll('.', '-')}-${build}`; }
-export function homebrewPublicationUrl(commit) { need(/^[a-f0-9]{40}$/.test(commit), 'An exact Homebrew publication commit is required'); return `https://github.com/${HOMEBREW_TAP.repository}/blob/${commit}/${HOMEBREW_TAP.cask}`; }
+export function homebrewPublicationId(value, build, product = HOMEBREW_TAP.product) {
+  version(value);
+  need(Object.hasOwn(HOMEBREW_PACKAGES, product), 'Unknown Homebrew product');
+  const id = `${product}-homebrew-${value.replaceAll('.', '-')}`;
+  if (product === 'oh-router') {
+    need(build === undefined, 'The OH Router formula uses its release version');
+    return id;
+  }
+  need(typeof build === 'string' && /^[1-9]\d{0,8}$/.test(build), 'An exact Homebrew build is required');
+  return `${id}-${build}`;
+}
+export function homebrewPublicationUrl(commit, product = HOMEBREW_TAP.product) {
+  need(/^[a-f0-9]{40}$/.test(commit) && Object.hasOwn(HOMEBREW_PACKAGES, product), 'An exact Homebrew publication commit and product are required');
+  return `https://github.com/${HOMEBREW_TAP.repository}/blob/${commit}/${HOMEBREW_PACKAGES[product].file}`;
+}
 // A ClawHub record's contentHash is the registry's skill fingerprint: SHA-256 of
 // the submitted files' sorted `path:sha256` lines. The public resolve endpoint
 // maps that fingerprint back to the exact published version.
@@ -383,7 +401,7 @@ export async function recordDirectories({ root = process.cwd(), fetchImpl = fetc
     await writeFile(join(root, DIRECTORY_FILE), json(result.observations)); await writeRendered(root, output, before);
     await writeFile(join(root, 'dist/directory-observation.json'), json(report)); return report;
   } catch (error) {
-    await writeFile(join(root, 'dist/directory-observation.json'), json({ schemaVersion: 1, scope: 'listing-presence', status: 'pending', reason: 'Not all four public skills.sh listings verified. Earlier observations and first verification dates were preserved; no publication date or remote file identity was inferred.' })); throw error;
+    await writeFile(join(root, 'dist/directory-observation.json'), json({ schemaVersion: 1, scope: 'listing-presence', status: 'pending', reason: 'Not all selected public skills.sh listings verified. Earlier observations and first verification dates were preserved; no publication date or remote file identity was inferred.' })); throw error;
   }
 }
 async function tree(root, path) {
@@ -400,13 +418,14 @@ export function validateLedger(ledger) {
   keys(ledger, ['schemaVersion', 'publications']); need(ledger.schemaVersion === 1 && Array.isArray(ledger.publications), 'Invalid publication ledger'); const seen = new Set();
   for (const p of ledger.publications) {
     keys(p, ['id', 'product', 'channel', 'publishedAt', 'url', 'version', 'contentHash']);
-    need(/^[a-z0-9][a-z0-9-]{0,63}$/.test(p.id) && !seen.has(p.id) && Object.hasOwn(PRODUCTS, p.product) && ['github', 'skills-sh', 'chatgpt', 'claude', 'cursor', 'homebrew', 'raycast', 'mcp-registry', 'clawhub'].includes(p.channel) && /^[a-f0-9]{64}$/.test(p.contentHash), 'Invalid publication identity');
+    const knownProduct = Object.hasOwn(PRODUCTS, p.product) || (p.channel === 'homebrew' && Object.hasOwn(HOMEBREW_PACKAGES, p.product));
+    need(/^[a-z0-9][a-z0-9-]{0,63}$/.test(p.id) && !seen.has(p.id) && knownProduct && ['github', 'skills-sh', 'chatgpt', 'claude', 'cursor', 'homebrew', 'raycast', 'mcp-registry', 'clawhub'].includes(p.channel) && /^[a-f0-9]{64}$/.test(p.contentHash), 'Invalid publication identity');
     need(typeof p.publishedAt === 'string' && new Date(p.publishedAt).toISOString() === p.publishedAt, 'An actual ISO publication timestamp is required'); version(p.version);
     if (p.channel === 'mcp-registry') need(Object.hasOwn(MCP_REGISTRY_SERVERS, p.product) && p.id === mcpRegistryPublicationId(p.version, p.product) && p.url === mcpRegistryPublicationUrl(p.version, p.product), 'MCP Registry publication identity or address differs');
     if (p.channel === 'homebrew') {
-      const build = /^yaptake-homebrew-\d+-\d+-\d+-([1-9]\d{0,8})$/.exec(p.id)?.[1];
-      const commit = /^https:\/\/github\.com\/hraness\/homebrew-tap\/blob\/([a-f0-9]{40})\/Casks\/yaptake\.rb$/.exec(p.url)?.[1];
-      need(p.product === HOMEBREW_TAP.product && build && p.id === homebrewPublicationId(p.version, build) && commit && p.url === homebrewPublicationUrl(commit) && Date.parse(p.publishedAt) <= Date.now(), 'Homebrew publication identity, time or address differs');
+      const build = p.product === 'oh-router' ? undefined : /-([1-9]\d{0,8})$/.exec(p.id)?.[1];
+      const commit = /^https:\/\/github\.com\/hraness\/homebrew-tap\/blob\/([a-f0-9]{40})\//.exec(p.url)?.[1];
+      need(Object.hasOwn(HOMEBREW_PACKAGES, p.product) && p.id === homebrewPublicationId(p.version, build, p.product) && commit && p.url === homebrewPublicationUrl(commit, p.product) && Date.parse(p.publishedAt) <= Date.now(), 'Homebrew publication identity, time or address differs');
     }
     if (p.channel === 'clawhub') need(p.id === clawhubPublicationId(p.product, p.version, p.contentHash) && p.url === clawhubPublicationUrl(p.product) && Date.parse(p.publishedAt) <= Date.now(), 'ClawHub publication identity, time or address differs');
     publicUrl(p.url, p.channel === 'mcp-registry' ? [MCP_REGISTRY.origin] : p.channel === 'clawhub' ? [CLAWHUB.origin] : ['https://github.com', 'https://skills.sh', 'https://www.skills.sh', 'https://chatgpt.com', 'https://claude.ai', 'https://cursor.com', 'https://formulae.brew.sh', 'https://www.raycast.com']); seen.add(p.id);

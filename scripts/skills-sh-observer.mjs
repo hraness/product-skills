@@ -4,7 +4,8 @@ import { join, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { parseUnique } from './distribution.mjs';
 
-export const DIRECTORY_IDS = Object.freeze(['dawn', 'sponge', 'textmock', 'yaptake']);
+const earlierIds = ['dawn', 'sponge', 'textmock', 'yaptake'];
+export const DIRECTORY_IDS = Object.freeze([...earlierIds, 'oh']);
 export const DIRECTORY_FILE = 'catalog/directory-observations.json';
 const origin = 'https://www.skills.sh';
 const scope = 'listing-presence';
@@ -25,13 +26,14 @@ export function directoryUrl(id) {
 export const initialDirectoryObservations = () => ({ schemaVersion: 1, scope, observations: [] });
 export function validateDirectoryObservations(value, { now = Date.now } = {}) {
   need(exact(value, ['schemaVersion', 'scope', 'observations']) && value.schemaVersion === 1 && value.scope === scope && Array.isArray(value.observations), 'Invalid directory observations');
-  need(value.observations.length === 0 || value.observations.length === DIRECTORY_IDS.length, 'Directory observations must contain all four selected skills');
+  need([0, earlierIds.length, DIRECTORY_IDS.length].includes(value.observations.length), 'Directory observations must contain the selected skills');
   const seen = new Set();
   for (const row of value.observations) {
     need(exact(row, ['product', 'url', 'firstVerifiedAt', 'sourceSkillHash']) && DIRECTORY_IDS.includes(row.product) && !seen.has(row.product), 'Invalid directory observation identity');
     need(row.url === directoryUrl(row.product) && iso(row.firstVerifiedAt) && Date.parse(row.firstVerifiedAt) <= now() && validHash(row.sourceSkillHash), 'Invalid directory address, first verification time or source hash');
     seen.add(row.product);
   }
+  if (seen.size) need(earlierIds.every((id) => seen.has(id)), 'An earlier directory observation is missing');
   return value;
 }
 async function regular(path, directory) {
@@ -193,15 +195,20 @@ async function directoryPage(id, fetchImpl) {
 }
 export async function observeDirectories(previous, sources, { fetchImpl = fetch, now = Date.now } = {}) {
   const startedAt = now();
-  validateDirectoryObservations(previous, { now: () => startedAt }); need(exact(sources, DIRECTORY_IDS), 'All four selected source skills are required');
+  validateDirectoryObservations(previous, { now: () => startedAt }); need(exact(sources, DIRECTORY_IDS), 'All selected source skills are required');
   for (const id of DIRECTORY_IDS) need(sources[id]?.name === id && exact(sources[id], ['name', 'description', 'sourceSkillHash']) && validText(sources[id].description) && validHash(sources[id].sourceSkillHash), 'Invalid expected skill identity');
   const results = await Promise.allSettled(DIRECTORY_IDS.map(async (id) => verifyDirectoryPage(await directoryPage(id, fetchImpl), sources[id])));
-  need(results.every((result) => result.status === 'fulfilled'), 'Not all four directory listings verified; prior records must be preserved');
+  const pending = DIRECTORY_IDS.filter((_, index) => results[index].status === 'rejected');
+  const alreadyObserved = new Set(previous.observations.map((row) => row.product));
+  need(pending.every((id) => id === 'oh' && !alreadyObserved.has(id)), 'Not all selected directory listings verified; prior records must be preserved');
+  const verified = DIRECTORY_IDS.filter((id) => !pending.includes(id));
   const completedAt = now(); need(Number.isFinite(startedAt) && Number.isFinite(completedAt) && completedAt >= startedAt, 'Directory check clock moved backward');
   const observedAt = new Date(completedAt).toISOString(); const clock = () => completedAt;
-  const observations = DIRECTORY_IDS.map((id) => ({ product: id, url: directoryUrl(id), firstVerifiedAt: previous.observations.find((row) => row.product === id)?.firstVerifiedAt ?? observedAt, sourceSkillHash: sources[id].sourceSkillHash }));
+  const observations = verified.map((id) => ({ product: id, url: directoryUrl(id), firstVerifiedAt: previous.observations.find((row) => row.product === id)?.firstVerifiedAt ?? observedAt, sourceSkillHash: sources[id].sourceSkillHash }));
   const next = validateDirectoryObservations({ schemaVersion: 1, scope, observations }, { now: clock });
-  return { observations: next, changed: !same(previous, next), report: { schemaVersion: 1, scope, checkedAt: observedAt, status: 'verified', remoteFileBytesVerified: false, products: DIRECTORY_IDS } };
+  const report = { schemaVersion: 1, scope, checkedAt: observedAt, status: pending.length ? 'pending' : 'verified', remoteFileBytesVerified: false, products: verified };
+  if (pending.length) report.pendingProducts = pending;
+  return { observations: next, changed: !same(previous, next), report };
 }
 export function mergePendingDirectoryObservations(pending, desired, baseline, options = {}) {
   for (const value of [pending, desired, baseline]) validateDirectoryObservations(value, options);
@@ -209,7 +216,9 @@ export function mergePendingDirectoryObservations(pending, desired, baseline, op
     for (const value of [pending, desired]) { const row = value.observations.find((entry) => entry.product === original.product); need(row && row.url === original.url && row.firstVerifiedAt === original.firstVerifiedAt, 'An existing first directory verification was changed or removed'); }
   }
   if (!desired.observations.length) { need(!pending.observations.length, 'Pending directory evidence cannot be removed'); return structuredClone(desired); }
-  const observations = desired.observations.map((row) => {
+  const observations = DIRECTORY_IDS.flatMap((id) => {
+    const row = desired.observations.find((entry) => entry.product === id);
+    if (!row) return pending.observations.filter((entry) => entry.product === id);
     const previous = pending.observations.find((entry) => entry.product === row.product);
     return { ...row, firstVerifiedAt: previous && previous.firstVerifiedAt < row.firstVerifiedAt ? previous.firstVerifiedAt : row.firstVerifiedAt };
   });

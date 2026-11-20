@@ -1,7 +1,7 @@
 import { createHash } from 'node:crypto';
 import { lstat, readFile } from 'node:fs/promises';
 import { join } from 'node:path';
-import { appendPublications, digest, HOMEBREW_TAP as TAP, homebrewPublicationId, homebrewPublicationUrl, parseUnique, validateLedger, version } from './distribution.mjs';
+import { appendPublications, digest, HOMEBREW_PACKAGES, HOMEBREW_TAP as TAP, homebrewPublicationId, homebrewPublicationUrl, parseUnique, validateLedger, version } from './distribution.mjs';
 
 const need = (value, message) => { if (!value) throw new Error(message); };
 const sha = (value) => { need(typeof value === 'string' && /^[a-f0-9]{40}$/.test(value), 'Invalid tap Git identity'); return value; };
@@ -10,7 +10,12 @@ const canonical = (value) => Array.isArray(value) ? value.map(canonical) : value
 const prefix = `repos/${TAP.repository}`;
 export const initialHomebrewCursor = () => ({ schemaVersion: 1, repository: TAP.repository, throughCommit: null });
 export function validateHomebrewCursor(value) {
-  need(exact(value, ['schemaVersion', 'repository', 'throughCommit']) && value.schemaVersion === 1 && value.repository === TAP.repository && (value.throughCommit === null || /^[a-f0-9]{40}$/.test(value.throughCommit)), 'Invalid Homebrew observation cursor'); return value;
+  const fields = ['schemaVersion', 'repository', 'throughCommit'];
+  if (value && Object.hasOwn(value, 'ohThroughCommit')) {
+    fields.push('ohThroughCommit');
+    sha(value.ohThroughCommit);
+  }
+  need(exact(value, fields) && value.schemaVersion === 1 && value.repository === TAP.repository && (value.throughCommit === null || /^[a-f0-9]{40}$/.test(value.throughCommit)), 'Invalid Homebrew observation cursor'); return value;
 }
 export async function readHomebrewCursor(root) {
   for (const [path, directory] of [[root, true], [join(root, 'catalog'), true], [join(root, TAP.cursor), false]]) {
@@ -33,9 +38,12 @@ export async function publicTapJSON(path, { fetchImpl = fetch } = {}) {
 const PRIVATE_NAMED_ARCHIVES = new Map([['0.1.0,231', '1f4c00dc124f4574fab2efc67e1b649d7035b73a21ba76744a86e71ef8016288']]);
 const archiveName = (record) => `Yaptake-${record.version}${PRIVATE_NAMED_ARCHIVES.get(`${record.version},${record.build}`) === record.sha256 ? '-private' : ''}.zip`;
 function archiveRecord(record) {
-  need(exact(record, ['schemaVersion', 'product', 'version', 'build', 'url', 'sha256', 'length', 'architecture', 'minimumMacOS', 'edSignature']) && record.schemaVersion === 1 && record.product === TAP.product, 'Invalid cask catalog fields'); version(record.version);
-  homebrewPublicationId(record.version, record.build);
-  need(/^[a-f0-9]{64}$/.test(record.sha256) && record.url === `https://yaptake.com/downloads/${record.sha256}/${archiveName(record)}` && Number.isSafeInteger(record.length) && record.length > 0 && record.length <= 268435456 && record.architecture === 'arm64' && record.minimumMacOS === '26.0' && /^[A-Za-z0-9+/]{86}==$/.test(record.edSignature), 'Cask archive or platform identity differs'); return record;
+  need(exact(record, ['schemaVersion', 'product', 'version', 'build', 'url', 'sha256', 'length', 'architecture', 'minimumMacOS', 'edSignature']) && record.schemaVersion === 1 && [TAP.product, 'oh'].includes(record.product), 'Invalid cask catalog fields'); version(record.version);
+  homebrewPublicationId(record.version, record.build, record.product);
+  const oh = record.product === 'oh';
+  const origin = oh ? 'https://oh.computer' : 'https://yaptake.com';
+  const archive = oh ? `OH-${record.version}.zip` : archiveName(record);
+  need(/^[a-f0-9]{64}$/.test(record.sha256) && record.url === `${origin}/downloads/${record.sha256}/${archive}` && Number.isSafeInteger(record.length) && record.length > 0 && record.length <= 268435456 && record.architecture === 'arm64' && record.minimumMacOS === (oh ? '15.0' : '26.0') && /^[A-Za-z0-9+/]{86}==$/.test(record.edSignature), 'Cask archive or platform identity differs'); return record;
 }
 
 // This is a reader for the selected cask's small Ruby subset, not an evaluator.
@@ -93,20 +101,23 @@ const livecheck = String.raw`livecheck do
   end
 end`;
 const livecheckIdentity = statementLines(tokens(livecheck));
+const ohLivecheckIdentity = statementLines(tokens(livecheck.replace('https://yaptake.com', 'https://oh.computer')));
 
 export function homebrewSemanticIdentity(record, cask) {
   archiveRecord(record); const input = tokens(cask); let index = 0; const fields = {};
+  const oh = record.product === 'oh';
+  const selectedLivecheck = oh ? ohLivecheckIdentity : livecheckIdentity;
   const take = (value) => { const token = input[index++]; need(token && (value === undefined || token.value === value), 'Unexpected cask statement'); return token; };
   const literal = () => { const token = take(); need(token.type === 'string', 'Cask statement requires a literal'); return token; };
   const sameLine = (first, last) => need(first.line === last.line && (!input[index] || input[index].line > first.line), 'Cask statement layout changes its meaning');
-  const start = take('cask'); const token = literal(); const block = take('do'); need(token.value === 'yaptake' && !token.interpolate, 'Unexpected cask token'); sameLine(start, block);
+  const start = take('cask'); const token = literal(); const block = take('do'); need(token.value === record.product && !token.interpolate, 'Unexpected cask token'); sameLine(start, block);
   while (input[index]?.value !== 'end') {
     const name = take(); need(name.type === 'word', 'Unexpected cask declaration');
     if (name.value === 'livecheck') {
       need(!Object.hasOwn(fields, 'livecheck'), 'Duplicate cask livecheck'); take('do'); let depth = 1;
       const selected = [name, input[index - 1]];
       while (depth && index < input.length) { const token = take(); selected.push(token); if (token.type === 'word' && token.value === 'do') depth++; if (token.type === 'word' && token.value === 'end') depth--; }
-      need(depth === 0 && JSON.stringify(statementLines(selected)) === JSON.stringify(livecheckIdentity), 'Cask update guard differs'); fields.livecheck = livecheckIdentity; continue;
+      need(depth === 0 && JSON.stringify(statementLines(selected)) === JSON.stringify(selectedLivecheck), 'Cask update guard differs'); fields.livecheck = selectedLivecheck; continue;
     }
     if (name.value === 'depends_on') {
       const property = take(); take(':'); take(':'); const value = take(); sameLine(name, value);
@@ -116,15 +127,76 @@ export function homebrewSemanticIdentity(record, cask) {
     const value = name.value === 'auto_updates' ? take() : literal(); sameLine(name, value); fields[name.value] = value;
   }
   take('end'); need(index === input.length, 'Unexpected code after the cask');
-  need(Object.keys(fields).length === 12 && fields.version?.value === `${record.version},${record.build}` && !fields.version.interpolate && fields.sha256?.value === record.sha256 && !fields.sha256.interpolate, 'Cask version/build or checksum differs');
+  const expectedFieldCount = oh && !fields.binary ? 11 : 12;
+  need(Object.keys(fields).length === expectedFieldCount && fields.version?.value === `${record.version},${record.build}` && !fields.version.interpolate && fields.sha256?.value === record.sha256 && !fields.sha256.interpolate, 'Cask version/build or checksum differs');
   const url = fields.url; need(url && (!url.interpolate || url.value.includes('#{version.csv.first}')), 'Cask URL interpolation differs');
   need(url.value.replace('#{version.csv.first}', record.version) === record.url && (!url.value.includes('#{') || url.interpolate), 'Cask URL differs from its archive');
-  need(fields.name?.value && !fields.name.interpolate && fields.desc?.value && !fields.desc.interpolate && !fields.homepage?.interpolate && ['https://yaptake.com', 'https://yaptake.com/'].includes(fields.homepage?.value), 'Invalid cask presentation metadata');
-  need(fields.auto_updates?.type === 'word' && fields.auto_updates.value === 'true' && fields.arch === 'arm64' && fields.macos === 'tahoe' && fields.app?.value === 'Yaptake.app' && !fields.app.interpolate && fields.binary?.value === '#{appdir}/Yaptake.app/Contents/Helpers/yaptake' && fields.binary.interpolate && fields.livecheck, 'Cask install or preservation guards differ');
-  return canonical({ archive: record, install: { app: fields.app.value, binary: fields.binary.value, autoUpdates: true, architecture: fields.arch, minimumMacOS: fields.macos }, livecheck: fields.livecheck });
+  const origin = oh ? 'https://oh.computer' : 'https://yaptake.com';
+  need(fields.name?.value && !fields.name.interpolate && fields.desc?.value && !fields.desc.interpolate && !fields.homepage?.interpolate && [origin, `${origin}/`].includes(fields.homepage?.value), 'Invalid cask presentation metadata');
+  const app = oh ? 'Oh.app' : 'Yaptake.app';
+  const binaryPath = `#{appdir}/${app}/Contents/Helpers/${oh ? 'oh-router' : 'yaptake'}`;
+  const binaryMatches = fields.binary?.value === binaryPath && fields.binary?.interpolate;
+  need(fields.auto_updates?.type === 'word' && fields.auto_updates.value === 'true' && fields.arch === 'arm64' && fields.macos === (oh ? 'sequoia' : 'tahoe') && fields.app?.value === app && !fields.app.interpolate && (binaryMatches || (oh && !fields.binary)) && fields.livecheck, 'Cask install or preservation guards differ');
+  // The OH app archive and release identity are identical across the cask's link migration.
+  const install = { app, ...(oh ? {} : { binary: fields.binary.value }), autoUpdates: true, architecture: fields.arch, minimumMacOS: fields.macos };
+  return canonical({ archive: record, install, livecheck: fields.livecheck });
 }
 
 export function homebrewContentHash(record, cask) { return digest(JSON.stringify(homebrewSemanticIdentity(record, cask))); }
+
+export function routerFormulaContentHash(record, formula) {
+  need(exact(record, ['schemaVersion', 'product', 'version', 'targets']) &&
+    record.schemaVersion === 1 && record.product === 'oh-router', 'Invalid OH Router formula catalog');
+  version(record.version);
+  const intelId = 'x86_64-apple-darwin';
+  const intel = Object.hasOwn(record.targets ?? {}, intelId);
+  const required = ['aarch64-apple-darwin', 'x86_64-unknown-linux-gnu', 'aarch64-unknown-linux-musl'];
+  need(exact(record.targets, intel ? [...required, intelId] : required), 'OH Router formula targets differ');
+  const source = (target) => {
+    const archive = record.targets[target];
+    need(exact(archive, ['sha256', 'url']) && /^[a-f0-9]{64}$/.test(archive.sha256) &&
+      archive.url === `https://ohrouter.com/downloads/${archive.sha256}/oh-router-v${record.version}-${target}.tar.gz`,
+    'OH Router formula archive identity differs');
+    return `url "${archive.url}"\nsha256 "${archive.sha256}"`;
+  };
+  const armMac = source(required[0]);
+  const legacyMac = `on_arm do\n${armMac}\nend`;
+  const mac = intel ? `on_intel do\n${source(intelId)}\nend` : 'depends_on arch: :arm64';
+  // Compare the tap's generated Ruby statements without executing them.
+  const normalize = (text) => text.split('\n').map((line) => line.trim())
+    .filter((line) => line && !line.startsWith('#')).join('\n');
+  const render = (mac, defaultSource) => `class OhRouter < Formula
+    desc "Session router, terminal safety guard and board worker for coding agents"
+    homepage "https://ohrouter.com"
+    ${defaultSource}
+    license any_of: ["MIT", "Apache-2.0"]
+    on_macos do
+      ${mac}
+    end
+    on_linux do
+      on_intel do
+        ${source(required[1])}
+      end
+      on_arm do
+        ${source(required[2])}
+      end
+    end
+    def install
+      %w[oh-router ohd oh-holder].each do |tool|
+        found = Dir.glob("**/#{tool}").find { |path| File.file?(path) }
+        odie "release archive did not contain #{tool}" if found.nil?
+        bin.install found => tool
+      end
+    end
+    test do
+      assert_match "oh-router #{version}", shell_output("#{bin}/oh-router --version")
+    end
+  end`;
+  const ruby = normalize(formula);
+  const legacy = !intel && normalize(render(legacyMac, '')) === ruby;
+  need(legacy || normalize(render(mac, armMac)) === ruby, 'OH Router formula differs from its catalog and install rules');
+  return digest(JSON.stringify(canonical(record)));
+}
 
 function mergedTime(value, now) {
   need(typeof value === 'string' && /^\d{4}-\d\d-\d\dT\d\d:\d\d:\d\dZ$/.test(value), 'Invalid cask publication timestamp');
@@ -149,11 +221,12 @@ async function mergedPull(commit, get) {
   return { ...pull, publicationCommit: sha(events[0].commit_id) };
 }
 
-async function treeAt(commit, get) {
+async function treeAt(commit, get, products = [TAP.product]) {
   const value = await get(`${prefix}/git/trees/${sha(commit)}?recursive=1`);
   need(value.truncated === false && Array.isArray(value.tree) && value.tree.length <= 5000, 'Tap tree inventory is incomplete');
   const paths = {};
-  for (const path of [TAP.cask, TAP.catalog]) {
+  const packages = products.map((product) => HOMEBREW_PACKAGES[product]);
+  for (const path of packages.flatMap(({ file, catalog }) => [file, catalog])) {
     const matches = value.tree.filter((entry) => entry.path === path); need(matches.length <= 1, 'Duplicate cask path'); const entry = matches[0];
     if (entry) {
       for (const directory of [path.split('/')[0]]) need(value.tree.some((entry) => entry.path === directory && entry.type === 'tree' && entry.mode === '040000'), 'Cask parent must be a regular Git directory');
@@ -161,7 +234,10 @@ async function treeAt(commit, get) {
     }
     paths[path] = entry ?? null;
   }
-  need(Boolean(paths[TAP.cask]) === Boolean(paths[TAP.catalog]), 'Cask and catalog availability differ'); return paths;
+  for (const { file, catalog } of packages) {
+    need(Boolean(paths[file]) === Boolean(paths[catalog]), 'Package and catalog availability differ');
+  }
+  return paths;
 }
 async function blobText(entry, get) {
   const blob = await get(`${prefix}/git/blobs/${entry.sha}`);
@@ -201,14 +277,14 @@ async function mainAncestry(base, main, get) {
   return chain.reverse();
 }
 
-async function checkedPublication(commit, workflow, get) {
+async function checkedPublication(commit, workflow, get, packageChecks) {
   const runs = await get(`${prefix}/actions/workflows/ci.yml/runs?head_sha=${commit}&event=push&per_page=100`);
   need(Array.isArray(runs.workflow_runs) && Number.isSafeInteger(runs.total_count) && runs.total_count === runs.workflow_runs.length && runs.total_count <= 100, 'Cask CI run inventory is incomplete');
   const run = runs.workflow_runs.filter((run) => run.head_sha === commit && run.head_branch === 'main' && run.head_repository?.id === TAP.repositoryId && run.head_repository.full_name === TAP.repository && run.workflow_id === workflow.id && run.name === workflow.name && run.event === 'push').sort((a, b) => b.id - a.id)[0];
   need(run?.status === 'completed' && run.conclusion === 'success' && Number.isSafeInteger(run.check_suite_id), 'The published cask needs successful canonical main CI');
   const checks = await get(`${prefix}/commits/${commit}/check-runs?per_page=100`);
   need(Array.isArray(checks.check_runs) && checks.total_count === checks.check_runs.length && checks.total_count <= 100, 'Cask check inventory is incomplete');
-  for (const name of ['Required', 'Yaptake cask']) {
+  for (const name of ['Required', ...packageChecks]) {
     const check = checks.check_runs.filter((check) => check.name === name && check.head_sha === commit && check.app?.id === 15368 && check.check_suite?.id === run.check_suite_id).sort((a, b) => b.id - a.id)[0];
     need(check?.status === 'completed' && check.conclusion === 'success', 'The actual cask needs Required and native cask checks from canonical CI');
   }
@@ -224,26 +300,57 @@ export async function observeHomebrew(ledger, cursor, { fetchImpl = fetch, read,
   };
   const repo = await get(prefix); need(repo.id === TAP.repositoryId && repo.full_name === TAP.repository && repo.owner?.id === TAP.ownerId && repo.owner.login === 'hraness' && repo.private === false && repo.visibility === 'public' && repo.default_branch === 'main', 'Public tap repository identity differs');
   const main = sha((await get(`${prefix}/git/ref/heads/main`)).object?.sha);
-  if (cursor.throughCommit === main) return { ledger, cursor, report: { schemaVersion: 1, source: 'homebrew-tap', status: 'unchanged', throughCommit: main, caughtUp: true, requests, outcomes: [] } };
-  const base = cursor.throughCommit ?? await bootstrap(main, get); const chain = await mainAncestry(base, main, get); const batch = chain.slice(0, batchSize);
-  const workflow = await get(`${prefix}/actions/workflows/ci.yml`); need(Number.isSafeInteger(workflow.id) && workflow.path === '.github/workflows/ci.yml' && workflow.name === 'CI', 'Canonical tap validation workflow differs');
-  let previous = await treeAt(base, get); let updated = structuredClone(ledger); const outcomes = [];
-  for (const commit of batch) {
-    const current = await treeAt(commit.sha, get);
-    if (current[TAP.cask]?.sha !== previous[TAP.cask]?.sha || current[TAP.catalog]?.sha !== previous[TAP.catalog]?.sha) {
-      if (current[TAP.cask]) {
-        const catalog = parseUnique(await blobText(current[TAP.catalog], get)); const cask = await blobText(current[TAP.cask], get); const contentHash = homebrewContentHash(catalog, cask);
-        const pull = await mergedPull(commit.sha, get); need(pull.publicationCommit === commit.sha, 'Only the actual main cask merge can establish availability'); await checkedPublication(commit.sha, workflow, get);
-        const id = homebrewPublicationId(catalog.version, catalog.build); const previousEntry = updated.publications.find((entry) => entry.id === id); const publishedAt = mergedTime(pull.merged_at, now);
-        if (previousEntry) { need(previousEntry.product === TAP.product && previousEntry.channel === 'homebrew' && previousEntry.contentHash === contentHash && previousEntry.version === catalog.version && previousEntry.publishedAt <= publishedAt, 'A published cask version/build changed its semantic identity or first date'); outcomes.push({ id, status: 'unchanged' }); }
-        else { updated = appendPublications(updated, [{ id, product: TAP.product, channel: 'homebrew', version: catalog.version, contentHash, publishedAt, url: homebrewPublicationUrl(commit.sha) }]); outcomes.push({ id, status: 'recorded' }); }
-      } else outcomes.push({ status: 'not_available' });
+  const tracks = [['throughCommit', [TAP.product]]];
+  if (Object.hasOwn(cursor, 'ohThroughCommit')) tracks.push(['ohThroughCommit', ['oh', 'oh-router']]);
+  if (tracks.every(([field]) => cursor[field] === main)) {
+    return { ledger, cursor, report: { schemaVersion: 1, source: 'homebrew-tap', status: 'unchanged', throughCommit: main, caughtUp: true, requests, outcomes: [] } };
+  }
+  const workflow = await get(`${prefix}/actions/workflows/ci.yml`);
+  need(Number.isSafeInteger(workflow.id) && workflow.path === '.github/workflows/ci.yml' && workflow.name === 'CI', 'Canonical tap validation workflow differs');
+  const nextCursor = { ...cursor };
+  let updated = structuredClone(ledger);
+  const outcomes = [];
+  for (const [field, products] of tracks) {
+    if (cursor[field] === main) continue;
+    const base = cursor[field] ?? await bootstrap(main, get);
+    const batch = (await mainAncestry(base, main, get)).slice(0, batchSize);
+    let previous = await treeAt(base, get, products);
+    for (const commit of batch) {
+      const current = await treeAt(commit.sha, get, products);
+      for (const product of products) {
+        const { file, catalog: catalogPath, checks } = HOMEBREW_PACKAGES[product];
+        if (current[file]?.sha === previous[file]?.sha && current[catalogPath]?.sha === previous[catalogPath]?.sha) continue;
+        if (!current[file]) {
+          outcomes.push({ status: 'not_available' });
+          continue;
+        }
+        const catalog = parseUnique(await blobText(current[catalogPath], get));
+        const ruby = await blobText(current[file], get);
+        need(catalog.product === product, 'Homebrew catalog product differs');
+        const contentHash = product === 'oh-router' ? routerFormulaContentHash(catalog, ruby) : homebrewContentHash(catalog, ruby);
+        const pull = await mergedPull(commit.sha, get);
+        need(pull.publicationCommit === commit.sha, 'Only the actual main package merge can establish availability');
+        await checkedPublication(commit.sha, workflow, get, checks);
+        const id = homebrewPublicationId(catalog.version, catalog.build, product);
+        const previousEntry = updated.publications.find((entry) => entry.id === id);
+        const publishedAt = mergedTime(pull.merged_at, now);
+        if (previousEntry) {
+          need(previousEntry.product === product && previousEntry.channel === 'homebrew' && previousEntry.contentHash === contentHash &&
+            previousEntry.version === catalog.version && previousEntry.publishedAt <= publishedAt, 'A published package version/build changed its semantic identity or first date');
+          outcomes.push({ id, status: 'unchanged' });
+        } else {
+          updated = appendPublications(updated, [{ id, product, channel: 'homebrew', version: catalog.version, contentHash, publishedAt, url: homebrewPublicationUrl(commit.sha, product) }]);
+          outcomes.push({ id, status: 'recorded' });
+        }
+      }
+      previous = current;
     }
-    previous = current;
+    nextCursor[field] = batch.at(-1)?.sha ?? base;
   }
   need(sha((await get(`${prefix}/git/ref/heads/main`, true)).object?.sha) === main, 'Public tap main changed during observation');
-  const throughCommit = batch.at(-1)?.sha ?? base;
-  return { ledger: updated, cursor: validateHomebrewCursor({ ...cursor, throughCommit }), report: { schemaVersion: 1, source: 'homebrew-tap', status: 'observed', throughCommit, caughtUp: throughCommit === main, requests, outcomes } };
+  const caughtUp = tracks.every(([field]) => nextCursor[field] === main);
+  const { throughCommit, ohThroughCommit } = nextCursor;
+  return { ledger: updated, cursor: validateHomebrewCursor(nextCursor), report: { schemaVersion: 1, source: 'homebrew-tap', status: 'observed', throughCommit, ohThroughCommit, caughtUp, requests, outcomes } };
 }
 
 export async function mergePendingHomebrewCursor(pending, desired, baseline, { read = publicTapJSON } = {}) {
@@ -252,7 +359,19 @@ export async function mergePendingHomebrewCursor(pending, desired, baseline, { r
     if (base === null || base === head) return true; if (head === null) return false;
     const result = await read(`${prefix}/compare/${base}...${head}?per_page=1`); return result.base_commit?.sha === base && result.merge_base_commit?.sha === base && result.behind_by === 0;
   };
-  need(await contains(baseline.throughCommit, pending.throughCommit) && await contains(baseline.throughCommit, desired.throughCommit), 'Homebrew observation cursor cannot move backward');
-  if (await contains(pending.throughCommit, desired.throughCommit)) return desired;
-  need(await contains(desired.throughCommit, pending.throughCommit), 'Homebrew observation cursors diverged'); return pending;
+  const merged = { ...desired };
+  for (const field of ['throughCommit', 'ohThroughCommit']) {
+    if (![pending, desired, baseline].some((value) => Object.hasOwn(value, field))) continue;
+    const before = baseline[field] ?? null;
+    const olderProposal = pending[field] ?? before;
+    const currentProposal = desired[field] ?? before;
+    need(await contains(before, olderProposal) && await contains(before, currentProposal), 'Homebrew observation cursor cannot move backward');
+    if (await contains(olderProposal, currentProposal)) {
+      merged[field] = currentProposal;
+    } else {
+      need(await contains(currentProposal, olderProposal), 'Homebrew observation cursors diverged');
+      merged[field] = olderProposal;
+    }
+  }
+  return validateHomebrewCursor(merged);
 }

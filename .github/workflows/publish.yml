@@ -48,7 +48,7 @@ jobs:
           GH_TOKEN: ''
           REPORT_GH_TOKEN: ''
         run: node scripts/distribution.mjs record-registry
-      - name: Observe actual checked Homebrew cask publications
+      - name: Observe checked Homebrew publications
         id: homebrew
         continue-on-error: true
         env:

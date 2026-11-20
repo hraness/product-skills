@@ -1,5 +1,6 @@
 {
   "schemaVersion": 1,
   "repository": "hraness/homebrew-tap",
-  "throughCommit": "83669c5c7387787f20b01d49eaf6ed384784e772"
+  "throughCommit": "83669c5c7387787f20b01d49eaf6ed384784e772",
+  "ohThroughCommit": "83669c5c7387787f20b01d49eaf6ed384784e772"
 }
