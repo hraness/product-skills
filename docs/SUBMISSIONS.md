@@ -161,6 +161,8 @@ These rows come from the existing records. The ledger keeps every earlier public
 | Sponge | MCP Registry | [0.92.0](https://registry.modelcontextprotocol.io/v0.1/servers/io.github.hraness%2Fsponge/versions/0.92.0) | Published 2026-11-20 |
 | Sponge | MCP Registry | [0.93.0](https://registry.modelcontextprotocol.io/v0.1/servers/io.github.hraness%2Fsponge/versions/0.93.0) | Published 2026-11-20 |
 | Sponge | MCP Registry | [0.94.1](https://registry.modelcontextprotocol.io/v0.1/servers/io.github.hraness%2Fsponge/versions/0.94.1) | Published 2026-11-20 |
+| OH | Homebrew cask | [0.1.1](https://github.com/hraness/homebrew-tap/blob/5993d6185f2fa7ce7cc098d68022a652c7143f47/Casks/oh.rb) | Published 2026-11-20 |
+| oh-router | Homebrew formula | [0.1.1](https://github.com/hraness/homebrew-tap/blob/5993d6185f2fa7ce7cc098d68022a652c7143f47/Formula/oh-router.rb) | Published 2026-11-20 |
 | DAWN | skills.sh | [Listed](https://www.skills.sh/hraness/product-skills/dawn) | First verified 2026-11-14 |
 | Sponge | skills.sh | [Listed](https://www.skills.sh/hraness/product-skills/sponge) | First verified 2026-11-14 |
 | Textmock | skills.sh | [Listed](https://www.skills.sh/hraness/product-skills/textmock) | First verified 2026-11-14 |
