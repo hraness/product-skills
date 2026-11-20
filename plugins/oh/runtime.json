@@ -1,0 +1,14 @@
+{
+  "build": "3",
+  "command": "oh-router",
+  "install": {
+    "type": "app",
+    "url": "https://oh.computer"
+  },
+  "platform": {
+    "architecture": "arm64",
+    "minimumVersion": "15.0",
+    "os": "macos"
+  },
+  "version": "0.1.0"
+}

@@ -10,18 +10,18 @@ import { CLAUDE_DIRECTORY_ROOT, claudeDirectoryFiles } from './claude-directory.
 import { renderSpongeSupport, spongeClaudeServer, spongePortableServer } from './sponge.mjs';
 import { MCPB_PRODUCTS, MCPB_ROOT, mcpbFile, mcpbPath, renderMcpb } from './mcpb.mjs';
 import { SUBMISSIONS_INDEX, checkSubmissionHistory, readGovernedSubmissions, readSubmissions, renderSubmissions } from './submissions.mjs';
-import { DIRECTORY_FILE, initialDirectoryObservations, mergePendingDirectoryObservations, observeDirectories, readDirectoryObservations, readDirectorySources, sourceSkillIdentity, validateDirectoryObservations } from './skills-sh-observer.mjs';
+import { DIRECTORY_FILE, DIRECTORY_IDS, initialDirectoryObservations, mergePendingDirectoryObservations, observeDirectories, readDirectoryObservations, readDirectorySources, sourceSkillIdentity, validateDirectoryObservations } from './skills-sh-observer.mjs';
 
 // Each product's id and origin guard where its links and packages point. Its name, like its
 // line and icon, is the product's own: read it from the portfolio (or the product's bundle),
 // never from a copy here, so a renamed product needs no change in this repository.
-export const PRODUCTS = Object.freeze({ dawn: { url: 'https://dawnav.com' }, yaptake: { url: 'https://yaptake.com' }, textmock: { url: 'https://textmock.com' }, sponge: { url: 'https://sponge.computer' } });
+export const PRODUCTS = Object.freeze({ dawn: { url: 'https://dawnav.com' }, oh: { url: 'https://oh.computer' }, yaptake: { url: 'https://yaptake.com' }, textmock: { url: 'https://textmock.com' }, sponge: { url: 'https://sponge.computer' } });
 // Portfolio entries that the profile links list without a product package. Packages, listings and publications use PRODUCTS only.
-// OH joined on 19 November 2026, listed below DAWN at the owner's request.
-export const PROFILE_ONLY = Object.freeze({ oh: { url: 'https://oh.computer' }, yiii: { url: 'https://yiii.io' }, aicharts: { url: 'https://aicharts.io' } });
+export const PROFILE_ONLY = Object.freeze({ yiii: { url: 'https://yiii.io' }, aicharts: { url: 'https://aicharts.io' } });
 // Directory listing links. Only pages the product site actually serves; a missing page stays unset rather than pointing somewhere generic.
 export const LISTING_LINKS = Object.freeze({
   dawn: { privacyPolicyUrl: 'https://dawnav.com/privacy' },
+  oh: { privacyPolicyUrl: 'https://oh.computer/privacy', supportUrl: 'https://oh.computer/support', termsOfServiceUrl: 'https://oh.computer/terms' },
   yaptake: { privacyPolicyUrl: 'https://yaptake.com/privacy', supportUrl: 'https://yaptake.com/support', termsOfServiceUrl: 'https://yaptake.com/terms' },
   textmock: { privacyPolicyUrl: 'https://textmock.com/privacy', termsOfServiceUrl: 'https://textmock.com/terms' },
   sponge: { privacyPolicyUrl: 'https://sponge.computer/privacy', supportUrl: 'https://sponge.computer/support' },
@@ -79,7 +79,7 @@ function publicUrl(value, allowedOrigins) {
 }
 function inspectText(value, id, member = null) {
   text(value, MAX_BUNDLE);
-  need(!/(?:\/Users\/|\/home\/|[A-Z]:\\|\b(?:file|ssh|javascript|data):\S|gh[pousr]_[A-Za-z0-9]{20}|sourceCommit|submissionId|PRIVATE KEY|github\.com\/hraness\/(?:yaptake|sponge|dawn|textmock)(?:[\s/).]|$))/.test(value), 'Private source or credential material is not admitted');
+  need(!/(?:\/Users\/|\/home\/|[A-Z]:\\|\b(?:file|ssh|javascript|data):\S|gh[pousr]_[A-Za-z0-9]{20}|sourceCommit|submissionId|PRIVATE KEY|github\.com\/hraness\/(?:yaptake|sponge|dawn|textmock|oh|oh-app|oh-router)(?:[\s/).]|$))/.test(value), 'Private source or credential material is not admitted');
   for (const match of value.matchAll(/https?:\/\/[^\s<>\)\]`"']+/g)) {
     const url = match[0].replace(/[.,;]$/, '');
     // The selected encoder constructs a link at runtime; it contains no share payload.
@@ -105,12 +105,12 @@ export function validateBundle(input, id) {
   text(m.product.description, 300); need(!/[\r\n]/.test(m.product.description), 'Product description must be one line'); inspectText(m.product.description, id);
   const guide = publicUrl(m.product.agentGuideUrl, [PRODUCTS[id].url]); need(guide.pathname.startsWith('/docs/') && !guide.hash, 'A public product agent guide is required');
   const r = m.runtime; keys(r, ['command', 'version', 'install'], ['node', 'bun', 'build', 'platform', 'versionScope', 'helper']);
-  need(r.command === (id === 'textmock' ? 'textmock-link' : id), 'Runtime command mismatch'); version(r.version);
+  need(r.command === (id === 'textmock' ? 'textmock-link' : id === 'oh' ? 'oh-router' : id), 'Runtime command mismatch'); version(r.version);
   if (r.install.type === 'npm') {
     keys(r.install, ['type', 'package', 'version']); need(id === 'sponge' && r.install.package === '@hraness/sponge' && r.install.version === r.version && r.build === undefined && r.platform === undefined && r.bun === undefined && r.versionScope === undefined && r.helper === undefined, 'npm runtime mismatch');
     need(typeof r.node === 'string' && /^>=\d+\.\d+\.\d+$/.test(r.node), 'Exact minimum Node version is required');
   } else if (r.install.type === 'app') {
-    keys(r.install, ['type', 'url']); need(id === 'yaptake' && r.install.url === PRODUCTS[id].url && r.node === undefined && r.bun === undefined && r.versionScope === undefined && r.helper === undefined && typeof r.build === 'string' && /^[1-9]\d{0,8}$/.test(r.build), 'App runtime mismatch');
+    keys(r.install, ['type', 'url']); need(['yaptake', 'oh'].includes(id) && r.install.url === PRODUCTS[id].url && r.node === undefined && r.bun === undefined && r.versionScope === undefined && r.helper === undefined && typeof r.build === 'string' && /^[1-9]\d{0,8}$/.test(r.build), 'App runtime mismatch');
     keys(r.platform, ['os', 'architecture', 'minimumVersion']); need(r.platform.os === 'macos' && r.platform.architecture === 'arm64' && /^\d+\.\d+(?:\.\d+)?$/.test(r.platform.minimumVersion), 'Unsupported app platform');
   } else if (r.install.type === 'web') {
     keys(r.install, ['type', 'url']); keys(r.helper, ['path', 'node']);
@@ -204,7 +204,7 @@ function stateCheck(state) {
     if (entry.listingIcon !== undefined) listingIconBytes(entry.listingIcon, id);
     version(entry.runtimeVersion); const q = entry.qualification;
     if (q?.type === 'npm') { keys(q, ['type', 'package', 'version', 'integrity']); need(q.package === `@hraness/${id}` && q.version === entry.runtimeVersion && entry.runtimeBuild === null && /^sha512-[A-Za-z0-9+/=]+$/.test(q.integrity), 'Invalid npm qualification'); }
-    else if (q?.type === 'app') { keys(q, ['type', 'sha256', 'metadataHash', 'feedHash']); need(id === 'yaptake' && entry.runtimeBuild !== null && ['sha256', 'metadataHash', 'feedHash'].every((key) => /^[a-f0-9]{64}$/.test(q[key])), 'Invalid app qualification'); }
+    else if (q?.type === 'app') { keys(q, ['type', 'sha256', 'metadataHash', 'feedHash']); need(['yaptake', 'oh'].includes(id) && entry.runtimeBuild !== null && ['sha256', 'metadataHash', 'feedHash'].every((key) => /^[a-f0-9]{64}$/.test(q[key])), 'Invalid app qualification'); }
     else if (q?.type === 'web') { keys(q, ['type', 'version', 'helperHash', 'node']); need(id === 'textmock' && entry.runtimeBuild === null && q.version === entry.runtimeVersion && /^[a-f0-9]{64}$/.test(q.helperHash) && q.node === '>=24.0.0', 'Invalid web helper qualification'); }
     else { keys(q, ['type', 'version', 'bun', 'requiresAccess', 'scope', 'guideHash', 'installPageHash']); need(id === 'dawn' && q.type === 'private-release' && q.version === entry.runtimeVersion && entry.runtimeBuild === null && /^>=\d+\.\d+\.\d+$/.test(q.bun) && q.requiresAccess === true && q.scope === 'selected-files-only' && ['guideHash', 'installPageHash'].every((key) => /^[a-f0-9]{64}$/.test(q[key])), 'Invalid private preview source qualification'); }
   }
@@ -283,8 +283,8 @@ export function render(state, bundles, portfolio, ledger = { schemaVersion: 1, p
     const artifactHash = digest(zip(Object.fromEntries(Object.entries(output).filter(([p]) => p.startsWith(prefix)).map(([p, value]) => [p.slice(prefix.length), value]))));
     const published = (channel) => ledger.publications.some((p) => p.product === id && p.channel === channel && p.version === version && p.contentHash === artifactHash);
     const skillPrefix = `skills/${id}/`; const skillFiles = Object.fromEntries(Object.entries(output).filter(([path]) => path.startsWith(skillPrefix)).map(([path, bytes]) => [path.slice(skillPrefix.length), bytes]));
-    const source = sourceSkillIdentity(id, skillFiles); const observation = directories.observations.find((row) => row.product === id);
-    return [id, { version, contentHash: state.products[id].contentHash, artifactHash, github: published('github') ? 'published' : 'release_required', skillsSh: observation?.sourceSkillHash === source.sourceSkillHash ? 'listed' : 'listing_verification_required', skillsShFirstVerifiedAt: observation?.firstVerifiedAt ?? null, chatgpt: published('chatgpt') ? 'published' : bundles[id].manifest.mcp ? 'eligibility_and_review_required' : 'review_required', claude: published('claude') ? 'published' : 'review_required', cursor: published('cursor') ? 'published' : 'review_required' }];
+    const source = DIRECTORY_IDS.includes(id) ? sourceSkillIdentity(id, skillFiles) : null; const observation = source ? directories.observations.find((row) => row.product === id) : null;
+    return [id, { version, contentHash: state.products[id].contentHash, artifactHash, github: published('github') ? 'published' : 'release_required', skillsSh: source && observation?.sourceSkillHash === source.sourceSkillHash ? 'listed' : 'listing_verification_required', skillsShFirstVerifiedAt: observation?.firstVerifiedAt ?? null, chatgpt: published('chatgpt') ? 'published' : bundles[id].manifest.mcp ? 'eligibility_and_review_required' : 'review_required', claude: published('claude') ? 'published' : 'review_required', cursor: published('cursor') ? 'published' : 'review_required' }];
   })) });
   output['README.md'] = `# Hraness product skills\n\nSkills for working with [Hraness](https://hraness.com) products from a coding agent. Each package explains its workflow, setup and first task.\n\n${ids.length ? '## Product packages\n\n' + ids.map((id) => `- [${names[id]}](plugins/${id}/README.md): ${portfolio.projects.find((p) => p.id === id).short}`).join('\n') + '\n\nRead the product package for its app, command and access requirements.\n\n```sh\nnpx skills add hraness/product-skills\n```\n\nChoose the product skill during installation, then follow its setup and first task. ' : 'Product packages are being prepared. ' }${ids.includes('sponge') ? `Use ${names.sponge}'s [Raycast commands](adapters/raycast/README.md) to queue URLs and search saved text.\n\n` : ''}A package available here may still be awaiting directory review or host testing. See [package status](catalog/store-status.json), [skills.sh listing observations](docs/DIRECTORY_OBSERVATIONS.md) and [verified publications](publication-ledger.json).\n\n## Product pages\n\n${portfolio.projects.filter((p) => Object.hasOwn(PRODUCTS, p.id)).map((p) => `- [${p.name}](${p.url}): ${p.short}`).join('\n')}\n\n## Check a package\n\nUse Node.js 24. Run \`npm run check\` to validate sources, generated copies and package metadata. \`npm run package\` writes deterministic plugin ZIPs and \`SHA256SUMS\` under \`dist/\`. The package license covers these skills and integration files; product applications have their own terms.\n\n[Maintain packages](docs/MAINTAINING.md) · [Prepare a directory submission](docs/DIRECTORY_SUBMISSIONS.md) · [Submission index](docs/SUBMISSIONS.md) · [MIT license](LICENSE)\n`;
   if (submissions) output[SUBMISSIONS_INDEX] = renderSubmissions(submissions, { ledger, directories, names, stores: JSON.parse(output['catalog/store-status.json']).products });

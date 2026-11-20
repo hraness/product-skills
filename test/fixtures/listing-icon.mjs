@@ -12,4 +12,4 @@ export function originalIcon({ size = 512, marker = 17 } = {}) {
   return Buffer.concat([Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]), chunk('IHDR', header), chunk('IDAT', deflateSync(pixels)), chunk('IEND', Buffer.alloc(0))]);
 }
 export const originalIconResponse = () => new Response(originalIcon(), { headers: { 'content-type': 'image/png', etag: '"original-icon"' } });
-export const withOriginalIcon = (fetchImpl) => (url, options) => /^https:\/\/hraness\.com\/products\/(?:dawn|yaptake|textmock|sponge)\/icon\.png$/.test(url) ? originalIconResponse() : fetchImpl(url, options);
+export const withOriginalIcon = (fetchImpl) => (url, options) => /^https:\/\/hraness\.com\/products\/(?:dawn|oh|yaptake|textmock|sponge)\/icon\.png$/.test(url) ? originalIconResponse() : fetchImpl(url, options);

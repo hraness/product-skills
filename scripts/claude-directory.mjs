@@ -7,7 +7,7 @@
 // stay unchanged for Codex, Cursor and repository installs.
 
 export const CLAUDE_DIRECTORY_ROOT = 'directory/claude';
-export const CLAUDE_DIRECTORY_PRODUCTS = Object.freeze(['dawn', 'sponge', 'textmock', 'yaptake']);
+export const CLAUDE_DIRECTORY_PRODUCTS = Object.freeze(['dawn', 'oh', 'sponge', 'textmock', 'yaptake']);
 const ALLOWED = /\.(?:md|txt|json|ya?ml|png)$|(?:^|\/)LICENSE$/;
 
 /** Every file a product's directory copy may contain, relative to its folder. */

@@ -14,7 +14,7 @@ test('profile sync preserves every byte outside unique own-line markers', () => 
   assert.ok(after.startsWith(`An introduction, preserved.\n\n${START}`));
   assert.ok(after.endsWith(`${END}\n\nPersonal notes, preserved.\n`));
   assert.equal(renderProfile(after, portfolio), after);
-  assert.equal((after.match(/^- \[/gm) ?? []).length, 4);
+  assert.equal((after.match(/^- \[/gm) ?? []).length, portfolio.projects.length);
   assert.throws(() => renderProfile(before + `\n${START}\n`, portfolio));
   assert.throws(() => renderProfile(before.replace(START, `inline ${START}`), portfolio));
   assert.throws(() => renderProfile(`${END}\n${START}`, portfolio));
@@ -36,14 +36,14 @@ test('the profile shows each name as the portfolio spells it', async () => {
 test('new profile destinations require successful reads and unchanged lists do not fetch', async () => {
   const before = `${START}\n${END}\n`; let calls = 0;
   const fetchImpl = async (url, options) => { assert.equal(options.redirect, 'error'); assert.equal(options.method, 'HEAD'); assert.ok(portfolio.projects.some((p) => p.url === url)); calls++; return new Response(null, { status: 200 }); };
-  const first = await refreshProfile(before, portfolio, { fetchImpl }); assert.equal(first.changed, true); assert.equal(calls, 4);
-  await refreshProfile(first.readme, portfolio, { fetchImpl }); assert.equal(calls, 4);
+  const first = await refreshProfile(before, portfolio, { fetchImpl }); assert.equal(first.changed, true); assert.equal(calls, portfolio.projects.length);
+  await refreshProfile(first.readme, portfolio, { fetchImpl }); assert.equal(calls, portfolio.projects.length);
   await assert.rejects(refreshProfile(before, portfolio, { fetchImpl: async () => new Response(null, { status: 404 }) }));
 });
 test('profiles link a profile-only portfolio entry after reading its new destination', async () => {
   const listed = { ...portfolio, projects: [...portfolio.projects, { id: 'yiii', name: 'yiii', url: 'https://yiii.io', short: 'Learn languages faster (ZH + EN).', icon: '/products/yiii/icon.png' }] };
   const before = renderProfile(`${START}\n${END}\n`, portfolio); const after = renderProfile(before, listed);
-  assert.equal((after.match(/^- \[/gm) ?? []).length, 5); assert.ok(after.includes('\n- [yiii](https://yiii.io): Learn languages faster (ZH + EN).\n'));
+  assert.equal((after.match(/^- \[/gm) ?? []).length, portfolio.projects.length + 1); assert.ok(after.includes('\n- [yiii](https://yiii.io): Learn languages faster (ZH + EN).\n'));
   let calls = 0; const fetchImpl = async (url, options) => { assert.equal(url, 'https://yiii.io'); assert.equal(options.method, 'HEAD'); assert.equal(options.redirect, 'error'); calls++; return new Response(null, { status: 200 }); };
   assert.deepEqual(await refreshProfile(before, listed, { fetchImpl }), { changed: true, readme: after }); assert.equal(calls, 1);
   const root = await mkdtemp(join(tmpdir(), 'product-profile-listed-')); const serve = async () => new Response(JSON.stringify(listed));
