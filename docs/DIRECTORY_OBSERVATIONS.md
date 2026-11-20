@@ -2,8 +2,8 @@
 
 The [directory observations](../catalog/directory-observations.json) record when
 Dawn, Sponge, Textmock and Yaptake were first verified on skills.sh. They describe
-listing presence. They do not record a publisher's release time or approval by
-an agent host.
+listing presence. The observer also checks OH and adds its first verification
+date once the directory supplies matching listing metadata.
 
 `firstVerifiedAt` is the time of our first complete, successful check of the four
 listings. The initial date comes from the
@@ -27,7 +27,7 @@ node scripts/skills-sh-observer.mjs observe
 node scripts/distribution.mjs record-directories
 ```
 
-`check` validates the saved records. `observe` reads the four canonical public
+`check` validates the saved records. `observe` reads the five canonical public
 URLs and prints proposed records and a check report. It does not write files,
 install skills or send install telemetry.
 
@@ -42,7 +42,9 @@ expected skill name, URL, current frontmatter description and Hraness publisher
 identity. It ignores layout, counters, badges and React data. An HTTP 200 error
 page containing only generic `WebSite` metadata cannot establish a listing.
 
-All four responses must verify before the reader returns an update. Requests
+Previously verified listings must all verify before the reader returns an
+update. Before OH has a verified listing, a missing OH record appears as pending
+in the report. Requests
 carry no credentials, follow no redirects and have time and size limits. A
 failed or changed response leaves the saved records available for the caller
 to preserve. A successful unchanged check produces identical records, so a
@@ -72,18 +74,18 @@ successful presence check without inventing a new directory publication date.
 ## Consume the records
 
 `observeDirectories(previous, sources, options)` returns a proposed record and
-a transient report after all four reads finish. `readDirectorySources(root)`
+a report after all five reads finish. `readDirectorySources(root)`
 builds the expected identities from regular UTF-8 checkout files. The selected
 frontmatter uses one-line scalar `name` and `description` fields; unsupported
 YAML forms fail the check.
 
 The daily product refresh and the scheduled or main-check publisher run the
-reader before proposing an App-owned protected update. All four listings must
-verify before the observation file changes. An unavailable listing keeps the
+reader before proposing an App-owned protected update. Previously verified
+listings must verify before the observation file changes. A failed check keeps the
 last good records, including a successful observation already waiting in an
 open proposal. Other verified product or publication updates can still be
-proposed; the final workflow step reports the pending directory check as a
-failure. Reports contain no credentials or private queries.
+proposed. The workflow report lists OH as pending until its first successful
+check. After that, a failed check for OH fails the directory step.
 
 Existing proposals use `mergePendingDirectoryObservations` to preserve committed
 first verification dates and the earlier of concurrent, uncommitted observations.

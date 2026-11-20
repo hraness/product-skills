@@ -155,12 +155,11 @@ observer uses the registry's [public API schema](https://registry.modelcontextpr
 including `include_deleted=true` when checking a version. A successful empty
 result records no publication.
 
-The publisher separately observes the checked Yaptake cask in
-[`hraness/homebrew-tap`](https://github.com/hraness/homebrew-tap). Each runtime
-version and build has one permanent Homebrew publication ID. Its link names the
-immutable cask commit that first reached main, and its date comes from the
-merged PR's server timestamp. GitHub's merged timeline event identifies that
-commit; REST API 2026-03-10 omits `merge_commit_sha` from PR responses.
+The publisher observes the Yaptake and OH casks and the OH Router formula in
+[`hraness/homebrew-tap`](https://github.com/hraness/homebrew-tap). Each cask
+version and build and each formula release version have a permanent ID. The
+link identifies the commit that first published the package on main. The
+publication time comes from the merged pull request.
 
 The observer verifies the regular cask and catalog blobs, their archive and
 platform facts, and the selected install and update guards. Each record has one
@@ -170,13 +169,16 @@ accepted archive name. Yaptake archives finalized from 2026-11-16 are named
 text and refuses unknown hooks. Comments, whitespace and presentation prose do
 not change the content hash. A changed archive or guard for an existing
 version/build stops observation; formatting changes and reverts preserve the
-first record. New entries need successful `Required` and `Yaptake cask` checks
-from the same canonical `ci.yml` main execution. Archive mirrors and their
-historical release catalogs establish no Homebrew publication.
+first record. The OH cask accepts the original command link and its removal
+for the same signed app archive. The OH Router formula must install its three
+commands from the archives in the formula catalog. New entries need
+`Required` and the matching cask or formula installation checks from the
+same `ci.yml` run on main.
 
 `node scripts/distribution.mjs record-homebrew` prepares the ledger and
-`catalog/homebrew-observation.json` together. The cursor follows first-parent
-tap main history in small oldest-first batches. A successful central publication
+`catalog/homebrew-observation.json` together. The Yaptake and OH cursors follow
+first-parent tap main history independently, in oldest-first batches. The OH
+cursor starts before the first OH cask and OH Router formula merged. A successful central publication
 PR triggers the next normal publisher run, which can drain more missed updates.
 An unchanged tap needs only two public reads. History and comparison inventories
 must be complete within the read bounds; each batch finishes its source checks

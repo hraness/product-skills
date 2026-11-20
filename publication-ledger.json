@@ -819,6 +819,24 @@
       "url": "https://registry.modelcontextprotocol.io/v0.1/servers/io.github.hraness%2Fsponge/versions/0.91.0",
       "version": "0.91.0",
       "contentHash": "ba803fad4950070344d930f08aae35d1e6293379703c2373417f8585642b3656"
+    },
+    {
+      "id": "oh-homebrew-0-1-0-3",
+      "product": "oh",
+      "channel": "homebrew",
+      "version": "0.1.0",
+      "contentHash": "1bcf44970421d8f586cb9e4d0f28a14298ec2ff9002663759135570d42ab3057",
+      "publishedAt": "2026-11-20T00:42:08.000Z",
+      "url": "https://github.com/hraness/homebrew-tap/blob/83669c5c7387787f20b01d49eaf6ed384784e772/Casks/oh.rb"
+    },
+    {
+      "id": "oh-router-homebrew-0-1-0",
+      "product": "oh-router",
+      "channel": "homebrew",
+      "version": "0.1.0",
+      "contentHash": "9eb385f8fdb7e5d0ddf7a680c3107fb9cfb89b7b16f52002a93cb09aa73f3c54",
+      "publishedAt": "2026-11-20T00:42:08.000Z",
+      "url": "https://github.com/hraness/homebrew-tap/blob/83669c5c7387787f20b01d49eaf6ed384784e772/Formula/oh-router.rb"
     }
   ]
 }

@@ -77,7 +77,7 @@ test('a complete anonymous refresh updates only directory evidence and generated
   const root = await fixture(t, initialDirectoryObservations()); const beforeLedger = await readFile(join(root, 'publication-ledger.json'), 'utf8');
   const current = await readDirectorySources(root); const network = remote(current);
   const result = await recordDirectories({ root, ...network, now });
-  assert.equal(network.calls.length, 4); assert.equal(result.status, 'verified'); assert.equal(result.observationsHash, digest(canonical(JSON.parse(await readFile(join(root, DIRECTORY_FILE), 'utf8')))));
+  assert.equal(network.calls.length, DIRECTORY_IDS.length); assert.equal(result.status, 'verified'); assert.equal(result.observationsHash, digest(canonical(JSON.parse(await readFile(join(root, DIRECTORY_FILE), 'utf8')))));
   for (const { options } of network.calls) { assert.equal(options.credentials, 'omit'); assert.equal(options.redirect, 'error'); assert(!options.headers.authorization); }
   const saved = await readFile(join(root, DIRECTORY_FILE), 'utf8'); const output = await readFile(join(root, 'catalog/store-status.json'), 'utf8');
   for (const row of JSON.parse(saved).observations) assert.equal(row.firstVerifiedAt, checkedAt);
@@ -88,10 +88,10 @@ test('a complete anonymous refresh updates only directory evidence and generated
   assert.equal(await readFile(join(root, 'publication-ledger.json'), 'utf8'), beforeLedger);
 });
 
-test('an error shell waits for all four reads and preserves prior evidence, generated status and publications', async (t) => {
+test('an error shell waits for all selected reads and preserves prior evidence, generated status and publications', async (t) => {
   const root = await fixture(t); const paths = [DIRECTORY_FILE, 'catalog/store-status.json', 'publication-ledger.json', 'README.md'];
   const before = await Promise.all(paths.map((path) => readFile(join(root, path), 'utf8'))); const network = remote(await readDirectorySources(root), 'dawn');
-  await assert.rejects(recordDirectories({ root, ...network, now }), /Not all four directory listings verified/); assert.equal(network.calls.length, 4);
+  await assert.rejects(recordDirectories({ root, ...network, now }), /Not all selected directory listings verified/); assert.equal(network.calls.length, DIRECTORY_IDS.length);
   assert.deepEqual(await Promise.all(paths.map((path) => readFile(join(root, path), 'utf8'))), before);
   const savedReport = JSON.parse(await readFile(join(root, 'dist/directory-observation.json'), 'utf8'));
   assert.equal(savedReport.status, 'pending'); assert(!Object.hasOwn(savedReport, 'publishedAt')); assert(!Object.hasOwn(savedReport, 'checkedAt'));
