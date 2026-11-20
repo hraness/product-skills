@@ -837,6 +837,33 @@
       "contentHash": "9eb385f8fdb7e5d0ddf7a680c3107fb9cfb89b7b16f52002a93cb09aa73f3c54",
       "publishedAt": "2026-11-20T00:42:08.000Z",
       "url": "https://github.com/hraness/homebrew-tap/blob/83669c5c7387787f20b01d49eaf6ed384784e772/Formula/oh-router.rb"
+    },
+    {
+      "id": "sponge-mcp-registry-0-92-0",
+      "product": "sponge",
+      "channel": "mcp-registry",
+      "publishedAt": "2026-11-20T01:19:19.470Z",
+      "url": "https://registry.modelcontextprotocol.io/v0.1/servers/io.github.hraness%2Fsponge/versions/0.92.0",
+      "version": "0.92.0",
+      "contentHash": "31e67b20c408894b1ddf719fa8fc277dd64551242973c0cbbd867dd05214b02d"
+    },
+    {
+      "id": "sponge-mcp-registry-0-93-0",
+      "product": "sponge",
+      "channel": "mcp-registry",
+      "publishedAt": "2026-11-20T01:34:21.114Z",
+      "url": "https://registry.modelcontextprotocol.io/v0.1/servers/io.github.hraness%2Fsponge/versions/0.93.0",
+      "version": "0.93.0",
+      "contentHash": "b2eeaf8901622906d4b3ed1dbebb0d2765790839db6794884da3690621c90f14"
+    },
+    {
+      "id": "sponge-mcp-registry-0-94-1",
+      "product": "sponge",
+      "channel": "mcp-registry",
+      "publishedAt": "2026-11-20T02:24:52.694Z",
+      "url": "https://registry.modelcontextprotocol.io/v0.1/servers/io.github.hraness%2Fsponge/versions/0.94.1",
+      "version": "0.94.1",
+      "contentHash": "32c944a76bc6a182d97ce524077726b699fad1898d259b1f12bce2f67aa3878c"
     }
   ]
 }
