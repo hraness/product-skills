@@ -882,6 +882,33 @@
       "contentHash": "4c691a312efe5f9d72db24d455356ee5f4b7c217172047a309f5dc6ef51182b7",
       "publishedAt": "2026-11-20T15:36:42.000Z",
       "url": "https://github.com/hraness/homebrew-tap/blob/5993d6185f2fa7ce7cc098d68022a652c7143f47/Formula/oh-router.rb"
+    },
+    {
+      "id": "oh-github-0-1-1-c779edd1",
+      "product": "oh",
+      "channel": "github",
+      "publishedAt": "2026-11-20T22:00:29.000Z",
+      "url": "https://github.com/hraness/product-skills/releases/tag/integrations-679a273bd1dfe827",
+      "version": "0.1.1",
+      "contentHash": "c779edd1aec2a38f262c35d7f360b31b5090a8be9f6fb8bee29672253413b7e5"
+    },
+    {
+      "id": "sponge-github-0-1-7-8fd634f0",
+      "product": "sponge",
+      "channel": "github",
+      "publishedAt": "2026-11-20T22:00:29.000Z",
+      "url": "https://github.com/hraness/product-skills/releases/tag/integrations-679a273bd1dfe827",
+      "version": "0.1.7",
+      "contentHash": "8fd634f0f730f1b7856a2baeeb55f76075ce3a8432a002d83f59d25aa7367c7c"
+    },
+    {
+      "id": "sponge-mcpb-0-1-7-0ade0975",
+      "product": "sponge",
+      "channel": "github",
+      "publishedAt": "2026-11-20T22:00:29.000Z",
+      "url": "https://github.com/hraness/product-skills/releases/tag/integrations-679a273bd1dfe827",
+      "version": "0.1.7",
+      "contentHash": "0ade09756952a922d2bfb6efdf1e8506e034ff7519dc6d495d16ede99352bb83"
     }
   ]
 }
