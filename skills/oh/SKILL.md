@@ -48,12 +48,13 @@ unrequested commands, changing routing credentials, or exposing tokens.
 
 ## Spawn, steer, and switch sessions safely
 
-1. Spawn a supervised Claude Code or Codex session on one of the four canonical
-   tiers (`opus`, `sol`, `fable`, `astra`) and effort levels (`low`, `medium`,
-   `high`, `max`):
+1. Spawn a supervised session on the `opus`, `sol`, `fable`, or `astra` tier.
+   OH Router uses Max effort for launches, switches and Board tasks by default.
+   An installation whose owner has explicitly disabled `max_effort_only`
+   can select a lower effort.
 
    ```sh
-   oh-router spawn --project reader --cwd "$PWD" --tier opus --effort high "Add CSV export tests"
+   oh-router spawn --project reader --cwd "$PWD" --tier opus --effort max "Add CSV export tests"
    oh-router codex --project reader --cwd "$PWD" --tier sol --effort max "Review the parser changes"
    ```
 
@@ -90,10 +91,16 @@ Use `oh-router board` to read and update tasks and threads on the connected
 oh-router board status --json
 oh-router board tasks --channel dev --state ready --json
 oh-router board create-task --channel dev "Verify Safari export formatting"
-oh-router board claim 101 --project reader --json
-oh-router board thread 101 --json
-oh-router board reply 101 "Parser tests pass locally; ready for review."
-oh-router board complete 101 --result "Merged Safari export fix"
+```
+
+Choose the intended local project checkout, then set `OH_BOARD_TASK_ID` to the
+exact task ID returned by the Board. Pass that checkout as the working folder.
+
+```sh
+oh-router board claim "$OH_BOARD_TASK_ID" --project reader --cwd "$PWD" --json
+oh-router board thread "$OH_BOARD_TASK_ID" --json
+oh-router board reply "$OH_BOARD_TASK_ID" "Parser tests pass locally."
+oh-router board complete "$OH_BOARD_TASK_ID" --result "Merged Safari export fix"
 ```
 
 When claiming a task, `ohd` acquires a lease on `@vercel/board` and routes a

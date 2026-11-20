@@ -2,7 +2,7 @@
 
 Queue a URL in Sponge or search saved text from Raycast. These Script Commands use the Sponge CLI installed on your Mac.
 
-Use Sponge 0.81.0 or later and Node.js 24.20.0 or later. Follow the [Sponge setup](../../README.md) and initialize your library before adding the commands.
+Use Sponge 0.94.1 or later and Node.js 24.20.0 or later. Follow the [Sponge setup](../../README.md) and initialize your library before adding the commands.
 
 1. Extract the Sponge integration ZIP, or keep this repository checkout. Keep this folder and its files together.
 2. In Raycast Settings, open **Extensions**, choose **+**, then **Add Script Directory**.

@@ -1,10 +1,10 @@
 {
   "command": "sponge",
-  "version": "0.81.0",
+  "version": "0.94.1",
   "install": {
     "type": "npm",
     "package": "@hraness/sponge",
-    "version": "0.81.0"
+    "version": "0.94.1"
   },
   "node": ">=24.20.0"
 }

@@ -47,7 +47,7 @@
       "id": "aicharts",
       "name": "aicharts",
       "url": "https://aicharts.io",
-      "short": "Compare coding models by score, reasoning effort, and cost per task.",
+      "short": "Compare coding models by Terminal-Bench score and cost per task.",
       "icon": "/products/aicharts/icon.png"
     }
   ]

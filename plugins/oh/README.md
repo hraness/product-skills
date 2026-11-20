@@ -11,7 +11,7 @@ recipes.
 
 [Download OH](https://oh.computer) for Apple Silicon and macOS
 15.0 or newer, or install with `brew install --cask hraness/tap/oh`.
-This package supports version 0.1.0 (build 3). In the app, choose
+This package supports version 0.1.1 (build 4). In the app, choose
 **Help → Use with Coding Agents…** to link `~/.local/bin/oh-router` and install
 the skill.
 
