@@ -927,6 +927,15 @@
       "url": "https://github.com/hraness/product-skills/releases/tag/integrations-4c35260ed02fe47d",
       "version": "0.1.2",
       "contentHash": "de9a65a3603de0215a15bb08b425d6fd87d484a45feb099723757f25950b951a"
+    },
+    {
+      "id": "yaptake-homebrew-0-1-2-369",
+      "product": "yaptake",
+      "channel": "homebrew",
+      "version": "0.1.2",
+      "contentHash": "0f3f1576f96079ca093b0939a6d20eb876861318a5434b12d2f297750f72a5a5",
+      "publishedAt": "2026-11-21T21:29:43.000Z",
+      "url": "https://github.com/hraness/homebrew-tap/blob/00741e5991fe25c5d9c65a5c8423fdf37946b7a0/Casks/yaptake.rb"
     }
   ]
 }
