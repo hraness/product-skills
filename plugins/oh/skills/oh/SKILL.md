@@ -46,6 +46,10 @@ unrequested commands, changing routing credentials, or exposing tokens.
    `OH_CONTROL_SOCKET`, and `OH_EVENT_SOCKET` so tools can inspect their own
    context without guessing session IDs.
 
+## Update the desktop app from inside OH
+
+For a local development update, run `python3 scripts/install-dev-update.py /path/to/signed/Oh.app` from the OH desktop repository. The installer accepts `--check` for preflight. It gracefully reopens the window and verifies the original terminal processes after the signed bundle exchange. Keep the session that initiated the update open.
+
 ## Spawn, steer, and switch sessions safely
 
 1. Spawn a supervised session on the `opus`, `sol`, `fable`, or `astra` tier.

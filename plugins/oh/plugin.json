@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "oh",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Supervise Claude Code and Codex sessions in a native Mac app, share one Vercel Board, and pair machines over Cloudflare Tunnel.",
   "author": {
     "name": "Hraness",
