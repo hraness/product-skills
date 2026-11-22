@@ -24,7 +24,7 @@ The [submission catalog](../catalog/submissions.json) owns saved searches, revie
 | DAWN | [davila7/claude-code-templates #1572](https://github.com/davila7/claude-code-templates/pull/1572) | 2026-11-15 | Submitted; open |
 | Textmock | [davila7/claude-code-templates #1573](https://github.com/davila7/claude-code-templates/pull/1573) | 2026-11-15 | Submitted; open |
 | Yaptake | [davila7/claude-code-templates #1574](https://github.com/davila7/claude-code-templates/pull/1574) | 2026-11-15 | Submitted; open |
-| Sponge | [raycast/extensions #33561](https://github.com/raycast/extensions/pull/33561) | 2026-11-16 | Submitted; open |
+| Sponge | [raycast/extensions #33561](https://github.com/raycast/extensions/pull/33561) | 2026-11-16 | Merged 2026-11-22 |
 | Sponge | [davepoon/buildwithclaude #743](https://github.com/davepoon/buildwithclaude/pull/743) | 2026-11-16 | Merged 2026-11-17 |
 | Yaptake | [davepoon/buildwithclaude #744](https://github.com/davepoon/buildwithclaude/pull/744) | 2026-11-16 | Merged 2026-11-17 |
 | Textmock | [davepoon/buildwithclaude #745](https://github.com/davepoon/buildwithclaude/pull/745) | 2026-11-16 | Closed; no merge |
