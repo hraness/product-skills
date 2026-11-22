@@ -2,10 +2,10 @@
   "schemaVersion": 1,
   "products": {
     "dawn": {
-      "version": "0.1.3",
-      "contentHash": "3da900836c9c99acf76d1adf143099f001658ec86f8ec39c882b51756918d303",
-      "artifactHash": "256d72a72799dc9811c3dd93082ac0fbe7a713e937f256ef84f1abe2b57505b3",
-      "github": "published",
+      "version": "0.1.4",
+      "contentHash": "e38916e17ed752d62594e6d35878bd4bf82468be584058731659b8c337e7dc63",
+      "artifactHash": "94fa210b5f700caeef2ef8cd0e87b944d82b03fae7042f5253177ab398a74dec",
+      "github": "release_required",
       "skillsSh": "listed",
       "skillsShFirstVerifiedAt": "2026-11-14T23:54:16.409Z",
       "chatgpt": "review_required",
