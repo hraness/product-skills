@@ -972,6 +972,15 @@
       "contentHash": "68413a98b1bc0ed4c4c8a9a05856c105a237750ecfaf9f0f0b675730be01432c",
       "publishedAt": "2026-11-22T20:37:53.000Z",
       "url": "https://github.com/hraness/homebrew-tap/blob/5282febb08a054cb487f8c8e63664191dc6496a1/Formula/oh-router.rb"
+    },
+    {
+      "id": "dawn-github-0-1-4-94fa210b",
+      "product": "dawn",
+      "channel": "github",
+      "publishedAt": "2026-11-22T22:59:40.000Z",
+      "url": "https://github.com/hraness/product-skills/releases/tag/integrations-a127c82263f85221",
+      "version": "0.1.4",
+      "contentHash": "94fa210b5f700caeef2ef8cd0e87b944d82b03fae7042f5253177ab398a74dec"
     }
   ]
 }
