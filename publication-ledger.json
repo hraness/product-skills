@@ -909,6 +909,24 @@
       "url": "https://github.com/hraness/product-skills/releases/tag/integrations-679a273bd1dfe827",
       "version": "0.1.7",
       "contentHash": "0ade09756952a922d2bfb6efdf1e8506e034ff7519dc6d495d16ede99352bb83"
+    },
+    {
+      "id": "dawn-github-0-1-3-256d72a7",
+      "product": "dawn",
+      "channel": "github",
+      "publishedAt": "2026-11-22T20:52:40.000Z",
+      "url": "https://github.com/hraness/product-skills/releases/tag/integrations-4c35260ed02fe47d",
+      "version": "0.1.3",
+      "contentHash": "256d72a72799dc9811c3dd93082ac0fbe7a713e937f256ef84f1abe2b57505b3"
+    },
+    {
+      "id": "oh-github-0-1-2-de9a65a3",
+      "product": "oh",
+      "channel": "github",
+      "publishedAt": "2026-11-22T20:52:40.000Z",
+      "url": "https://github.com/hraness/product-skills/releases/tag/integrations-4c35260ed02fe47d",
+      "version": "0.1.2",
+      "contentHash": "de9a65a3603de0215a15bb08b425d6fd87d484a45feb099723757f25950b951a"
     }
   ]
 }
