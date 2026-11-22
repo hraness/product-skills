@@ -168,6 +168,7 @@ These rows come from the existing records. The ledger keeps every earlier public
 | Sponge | GitHub package | [0.1.7](https://github.com/hraness/product-skills/releases/tag/integrations-679a273bd1dfe827) | Published 2026-11-20 |
 | DAWN | GitHub package | [0.1.3](https://github.com/hraness/product-skills/releases/tag/integrations-4c35260ed02fe47d) | Published 2026-11-22 |
 | OH | GitHub package | [0.1.2](https://github.com/hraness/product-skills/releases/tag/integrations-4c35260ed02fe47d) | Published 2026-11-22 |
+| Yaptake | Homebrew cask | [0.1.2](https://github.com/hraness/homebrew-tap/blob/00741e5991fe25c5d9c65a5c8423fdf37946b7a0/Casks/yaptake.rb) | Published 2026-11-21 |
 | DAWN | skills.sh | [Listed](https://www.skills.sh/hraness/product-skills/dawn) | First verified 2026-11-14 |
 | Sponge | skills.sh | [Listed](https://www.skills.sh/hraness/product-skills/sponge) | First verified 2026-11-14 |
 | Textmock | skills.sh | [Listed](https://www.skills.sh/hraness/product-skills/textmock) | First verified 2026-11-14 |
