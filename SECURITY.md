@@ -8,4 +8,4 @@ Include the affected plugin, version or commit, the steps to reproduce, and the 
 
 ## Scope
 
-In scope are the skills, MCP configurations, launchers, adapters and helpers under `plugins/` and `directory/`, the release archives published from this repository, and its GitHub Actions workflows. Report a problem in a product application (Dawn, Sponge, Textmock or Yaptake) through that product's own security policy.
+In scope are the skills, MCP configurations, launchers, adapters and helpers under `plugins/` and `directory/`, the release archives published from this repository, and its GitHub Actions workflows. Report a problem in a product application through that product's own security policy.
