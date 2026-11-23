@@ -981,6 +981,33 @@
       "url": "https://github.com/hraness/product-skills/releases/tag/integrations-a127c82263f85221",
       "version": "0.1.4",
       "contentHash": "94fa210b5f700caeef2ef8cd0e87b944d82b03fae7042f5253177ab398a74dec"
+    },
+    {
+      "id": "oh-homebrew-0-2-1-8",
+      "product": "oh",
+      "channel": "homebrew",
+      "version": "0.2.1",
+      "contentHash": "8d5912dc1f8c03b46cd4027a22659ff413ff3d5710ce92e0e3a0bd4144a16ceb",
+      "publishedAt": "2026-11-23T15:28:28.000Z",
+      "url": "https://github.com/hraness/homebrew-tap/blob/2f34ee7d12c7d303e9c6d294e182a5d54c5c7c71/Casks/oh.rb"
+    },
+    {
+      "id": "oh-homebrew-0-2-3-10",
+      "product": "oh",
+      "channel": "homebrew",
+      "version": "0.2.3",
+      "contentHash": "a9da47c053a861109245644e68cd83fea14b2893caabd433fdac4257bdd4d80e",
+      "publishedAt": "2026-11-23T16:34:56.000Z",
+      "url": "https://github.com/hraness/homebrew-tap/blob/136962ada307e40d64dfe885993aa84de4abcf56/Casks/oh.rb"
+    },
+    {
+      "id": "oh-router-homebrew-0-1-5",
+      "product": "oh-router",
+      "channel": "homebrew",
+      "version": "0.1.5",
+      "contentHash": "efa472e6892e66c3682f05cb179643cbf7528c5f24a7d773e28a74890c7989c3",
+      "publishedAt": "2026-11-23T16:34:56.000Z",
+      "url": "https://github.com/hraness/homebrew-tap/blob/136962ada307e40d64dfe885993aa84de4abcf56/Formula/oh-router.rb"
     }
   ]
 }
