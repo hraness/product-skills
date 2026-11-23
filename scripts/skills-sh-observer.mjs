@@ -4,8 +4,10 @@ import { join, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { parseUnique } from './distribution.mjs';
 
-const earlierIds = ['dawn', 'sponge', 'textmock', 'yaptake'];
-export const DIRECTORY_IDS = Object.freeze([...earlierIds, 'oh']);
+const established = ['sponge', 'textmock', 'yaptake'];
+export const DIRECTORY_IDS = Object.freeze([...established, 'oh']);
+// Preserve the original DAWN observation after withdrawing its source skill.
+const recordedIds = ['dawn', ...DIRECTORY_IDS];
 export const DIRECTORY_FILE = 'catalog/directory-observations.json';
 const origin = 'https://www.skills.sh';
 const scope = 'listing-presence';
@@ -20,20 +22,20 @@ const validHash = (value) => typeof value === 'string' && /^[a-f0-9]{64}$/.test(
 const validText = (value) => typeof value === 'string' && value.length > 0 && value.length <= 2048 && value.isWellFormed() && !/[\x00-\x1f\x7f]/.test(value);
 
 export function directoryUrl(id) {
-  need(DIRECTORY_IDS.includes(id), 'Unknown selected skill');
+  need(recordedIds.includes(id), 'Unknown selected skill');
   return `${origin}/hraness/product-skills/${id}`;
 }
 export const initialDirectoryObservations = () => ({ schemaVersion: 1, scope, observations: [] });
 export function validateDirectoryObservations(value, { now = Date.now } = {}) {
   need(exact(value, ['schemaVersion', 'scope', 'observations']) && value.schemaVersion === 1 && value.scope === scope && Array.isArray(value.observations), 'Invalid directory observations');
-  need([0, earlierIds.length, DIRECTORY_IDS.length].includes(value.observations.length), 'Directory observations must contain the selected skills');
+  need(value.observations.length <= recordedIds.length, 'Directory observations must contain the selected skills');
   const seen = new Set();
   for (const row of value.observations) {
-    need(exact(row, ['product', 'url', 'firstVerifiedAt', 'sourceSkillHash']) && DIRECTORY_IDS.includes(row.product) && !seen.has(row.product), 'Invalid directory observation identity');
+    need(exact(row, ['product', 'url', 'firstVerifiedAt', 'sourceSkillHash']) && recordedIds.includes(row.product) && !seen.has(row.product), 'Invalid directory observation identity');
     need(row.url === directoryUrl(row.product) && iso(row.firstVerifiedAt) && Date.parse(row.firstVerifiedAt) <= now() && validHash(row.sourceSkillHash), 'Invalid directory address, first verification time or source hash');
     seen.add(row.product);
   }
-  if (seen.size) need(earlierIds.every((id) => seen.has(id)), 'An earlier directory observation is missing');
+  if (seen.size) need(established.every((id) => seen.has(id)), 'An earlier directory observation is missing');
   return value;
 }
 async function regular(path, directory) {
@@ -73,7 +75,7 @@ function skillFields(source, id) {
   need(fields.name === id && validText(fields.description), 'Skill name or description differs'); return fields;
 }
 export function sourceSkillIdentity(id, files) {
-  directoryUrl(id); need(object(files), 'Missing skill files');
+  need(DIRECTORY_IDS.includes(id) && object(files), 'Missing or inactive skill files');
   const paths = Object.keys(files).sort(); need(paths.length >= 1 && paths.length <= 16 && paths.includes('SKILL.md'), 'Invalid skill file set');
   let total = 0; const hashes = [];
   for (const path of paths) {
@@ -204,7 +206,8 @@ export async function observeDirectories(previous, sources, { fetchImpl = fetch,
   const verified = DIRECTORY_IDS.filter((id) => !pending.includes(id));
   const completedAt = now(); need(Number.isFinite(startedAt) && Number.isFinite(completedAt) && completedAt >= startedAt, 'Directory check clock moved backward');
   const observedAt = new Date(completedAt).toISOString(); const clock = () => completedAt;
-  const observations = verified.map((id) => ({ product: id, url: directoryUrl(id), firstVerifiedAt: previous.observations.find((row) => row.product === id)?.firstVerifiedAt ?? observedAt, sourceSkillHash: sources[id].sourceSkillHash }));
+  const active = verified.map((id) => ({ product: id, url: directoryUrl(id), firstVerifiedAt: previous.observations.find((row) => row.product === id)?.firstVerifiedAt ?? observedAt, sourceSkillHash: sources[id].sourceSkillHash }));
+  const observations = [...previous.observations.filter((row) => row.product === 'dawn'), ...active];
   const next = validateDirectoryObservations({ schemaVersion: 1, scope, observations }, { now: clock });
   const report = { schemaVersion: 1, scope, checkedAt: observedAt, status: pending.length ? 'pending' : 'verified', remoteFileBytesVerified: false, products: verified };
   if (pending.length) report.pendingProducts = pending;
@@ -213,10 +216,10 @@ export async function observeDirectories(previous, sources, { fetchImpl = fetch,
 export function mergePendingDirectoryObservations(pending, desired, baseline, options = {}) {
   for (const value of [pending, desired, baseline]) validateDirectoryObservations(value, options);
   for (const original of baseline.observations) {
-    for (const value of [pending, desired]) { const row = value.observations.find((entry) => entry.product === original.product); need(row && row.url === original.url && row.firstVerifiedAt === original.firstVerifiedAt, 'An existing first directory verification was changed or removed'); }
+    for (const value of [pending, desired]) { const row = value.observations.find((entry) => entry.product === original.product); need(row && row.url === original.url && row.firstVerifiedAt === original.firstVerifiedAt && (row.product !== 'dawn' || row.sourceSkillHash === original.sourceSkillHash), 'An existing first directory verification was changed or removed'); }
   }
   if (!desired.observations.length) { need(!pending.observations.length, 'Pending directory evidence cannot be removed'); return structuredClone(desired); }
-  const observations = DIRECTORY_IDS.flatMap((id) => {
+  const observations = recordedIds.flatMap((id) => {
     const row = desired.observations.find((entry) => entry.product === id);
     if (!row) return pending.observations.filter((entry) => entry.product === id);
     const previous = pending.observations.find((entry) => entry.product === row.product);

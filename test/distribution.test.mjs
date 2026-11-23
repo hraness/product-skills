@@ -15,8 +15,8 @@ const empty = () => ({ schemaVersion: 1, products: {} });
 const json = (value, options) => new Response(JSON.stringify(value), options);
 function bundle(id = 'sponge', revision = 1) {
   const p = portfolio.projects.find((p) => p.id === id);
-  const runtime = id === 'dawn' ? { command: 'dawn', version: '0.1.0', bun: '>=1.3.14', install: { type: 'private-release', url: 'https://dawnav.com/install', requiresAccess: true } } : id === 'textmock' ? { command: 'textmock-link', version: '1.0.0', versionScope: 'helper', install: { type: 'web', url: 'https://textmock.com' }, helper: { path: 'scripts/textmock-link.mjs', node: '>=24.0.0' } } : null;
-  const extras = id === 'dawn' ? { 'skills/dawn/examples/morning-study.ts': '// An original synthetic score fixture.\nexport const title = \"Morning study\";\n' } : id === 'textmock' ? { 'scripts/textmock-link.mjs': '// A synthetic encoder fixture, not the product implementation.\nexport const version = \"1.0.0\";\n' } : {};
+  const runtime = id === 'textmock' ? { command: 'textmock-link', version: '1.0.0', versionScope: 'helper', install: { type: 'web', url: 'https://textmock.com' }, helper: { path: 'scripts/textmock-link.mjs', node: '>=24.0.0' } } : null;
+  const extras = id === 'textmock' ? { 'scripts/textmock-link.mjs': '// A synthetic encoder fixture, not the product implementation.\nexport const version = \"1.0.0\";\n' } : {};
   return { schemaVersion: 1, manifest: { schemaVersion: 1, product: { id, name: p.name, url: p.url, description: p.short, agentGuideUrl: `${p.url}/docs/agents` }, runtime: runtime ?? (id === 'yaptake' ? { command: id, version: '0.1.0', build: '8', install: { type: 'app', url: p.url }, platform: { os: 'macos', architecture: 'arm64', minimumVersion: '26.0' } } : { command: id, version: '0.1.0', install: { type: 'npm', package: `@hraness/${id}`, version: '0.1.0' }, node: '>=24.20.0' }), ...(['sponge', 'yaptake'].includes(id) ? { mcp: { command: id, args: ['mcp'] } } : {}), license: 'MIT' }, files: { ...extras, [`skills/${id}/SKILL.md`]: `---\nname: ${id}\ndescription: Use ${p.name} for a local product task.\n---\n\nRead the [agent guide](${p.url}/docs/agents). This synthetic fixture is revision ${revision}.\n`, LICENSE: license, 'README.md': `# ${p.name}\n\nThis is a synthetic package fixture for tests. Install the local product from [its site](${p.url}), then read the [agent guide](${p.url}/docs/agents) to choose a project, inspect its current state, complete the requested task and verify its result. The fixture does not claim a published product release.\n` } };
 }
 function app() {
@@ -65,17 +65,16 @@ test('portfolio facts require each exact product identity once', () => {
   const p = structuredClone(portfolio); p.projects[0].url = 'https://wrong.test'; assert.throws(() => validatePortfolio(p));
 });
 test('a product name is the portfolio\'s own, so a rename needs no change here', () => {
-  // hraness.com spelled it Dawn until DAWN's own manifest reached the portfolio; both are accepted.
-  for (const name of ['Dawn', 'DAWN']) {
-    const q = structuredClone(withYiii(portfolio)); q.projects.find((p) => p.id === 'dawn').name = name;
+  for (const name of ['Sponge', 'SPONGE']) {
+    const q = structuredClone(withYiii(portfolio)); q.projects.find((p) => p.id === 'sponge').name = name;
     assert.doesNotThrow(() => validatePortfolio(q), name);
   }
-  for (const name of ['', ' DAWN', 'DAWN\nnext', 'DAWN\tnext', 'x'.repeat(81), 'DAWN](https://example.test)', '<b>DAWN</b>', 'DAWN | Sponge', 'DAWN_', '/Users/person/DAWN', 'Get DAWN at https://example.test']) {
-    const q = structuredClone(portfolio); q.projects.find((p) => p.id === 'dawn').name = name;
+  for (const name of ['', ' SPONGE', 'SPONGE\nnext', 'SPONGE\tnext', 'x'.repeat(81), 'SPONGE](https://example.test)', '<b>SPONGE</b>', 'SPONGE | Sponge', 'SPONGE_', '/Users/person/SPONGE', 'Get SPONGE at https://example.test']) {
+    const q = structuredClone(portfolio); q.projects.find((p) => p.id === 'sponge').name = name;
     assert.throws(() => validatePortfolio(q), undefined, JSON.stringify(name));
   }
-  const b = bundle('dawn'); b.manifest.product.name = 'DAWN'; assert.doesNotThrow(() => validateBundle(b, 'dawn'));
-  b.manifest.product.name = 'DAWN\nnext'; assert.throws(() => validateBundle(b, 'dawn'));
+  const b = bundle('sponge'); b.manifest.product.name = 'SPONGE'; assert.doesNotThrow(() => validateBundle(b, 'sponge'));
+  b.manifest.product.name = 'SPONGE\nnext'; assert.throws(() => validateBundle(b, 'sponge'));
 });
 test('the public aicharts explorer is a known portfolio destination', () => {
   const existing = withYiii(portfolio);
@@ -84,15 +83,15 @@ test('the public aicharts explorer is a known portfolio destination', () => {
   assert.throws(() => validatePortfolio({ ...existing, projects: [...existing.projects, { ...chart, url: 'https://other.example' }] }));
 });
 
-test('OH is an admitted product entry with its exact address, listed below DAWN', () => {
+test('OH is an admitted product entry with its exact address, listed in the portfolio', () => {
   const listed = withYiii(portfolio);
-  assert.equal(listed.projects[1].id, 'oh');
+  assert.equal(listed.projects[0].id, 'oh');
   assert.doesNotThrow(() => validatePortfolio(listed));
   for (const mutate of [
-    (q) => { q.projects[1].url = 'https://oh.example'; },
-    (q) => { q.projects[1].url = 'https://www.oh.computer'; },
-    (q) => { q.projects[1].icon = '/products/oh/icon.svg'; },
-    (q) => { q.projects.push(structuredClone(q.projects[1])); },
+    (q) => { q.projects[0].url = 'https://oh.example'; },
+    (q) => { q.projects[0].url = 'https://www.oh.computer'; },
+    (q) => { q.projects[0].icon = '/products/oh/icon.svg'; },
+    (q) => { q.projects.push(structuredClone(q.projects[0])); },
   ]) { const q = structuredClone(listed); mutate(q); assert.throws(() => validatePortfolio(q)); }
 });
 test('a profile-only portfolio entry needs its exact identity and changes no package', async () => {
@@ -203,12 +202,16 @@ test('changed product presentation advances its plugin even when the source retu
 });
 test('one product description changes only that product fingerprint and integration version', async () => {
   const first = await reconcile({ portfolio, state: empty(), bundles: {}, selected: ['sponge'], ...server() });
-  const dawn = bundle('dawn');
-  const both = await reconcile({ portfolio, state: first.state, bundles: first.bundles, selected: ['dawn'], fetchImpl: async (url) => url.endsWith('/integrations/dawn.json') ? json(dawn) : new Response(`${dawn.manifest.product.name} private preview setup guide.`) });
+  const textmock = bundle('textmock');
+  const both = await reconcile({ portfolio, state: first.state, bundles: first.bundles, selected: ['textmock'], fetchImpl: async (url) => {
+    if (url.endsWith('/integrations/textmock.json')) return json(textmock);
+    if (url.endsWith('/docs/agents')) return new Response(textmock.manifest.product.name);
+    return new Response(textmock.files['scripts/textmock-link.mjs']);
+  } });
   const changed = structuredClone(portfolio); changed.projects.find((product) => product.id === 'sponge').short = 'Read saved sources and notes.';
-  const updated = await reconcile({ portfolio: changed, state: both.state, bundles: both.bundles, selected: ['dawn', 'sponge'], fetchImpl: async () => new Response(null, { status: 304 }) });
-  assert.ok(both.state.products.dawn, 'Dawn is admitted before the comparison');
-  assert.deepEqual(updated.state.products.dawn, both.state.products.dawn);
+  const updated = await reconcile({ portfolio: changed, state: both.state, bundles: both.bundles, selected: ['textmock', 'sponge'], fetchImpl: async () => new Response(null, { status: 304 }) });
+  assert.ok(both.state.products.textmock, 'Textmock is admitted before the comparison');
+  assert.deepEqual(updated.state.products.textmock, both.state.products.textmock);
   assert.equal(updated.state.products.sponge.revision, both.state.products.sponge.revision + 1);
   assert.notEqual(updated.state.products.sponge.packageFingerprint, both.state.products.sponge.packageFingerprint);
 });
@@ -250,26 +253,21 @@ test('the Textmock encoder URL template is allowed only in its exact selected sc
   const prose = structuredClone(b); prose.files['README.md'] += template; assert.throws(() => validateBundle(prose, 'textmock'));
   const skill = structuredClone(b); skill.files['skills/textmock/SKILL.md'] += template; assert.throws(() => validateBundle(skill, 'textmock'));
 });
-test('Dawn publishes only selected skill and original example with private access stated', async () => {
-  const b = bundle('dawn'); const calls = [];
-  const fetchImpl = async (url) => { calls.push(url); if (url.endsWith('/integrations/dawn.json')) return json(b); if (url.endsWith('/docs/agents')) return new Response(`${b.manifest.product.name} agent guide.`); if (url.endsWith('/install')) return new Response('<title>install dawn</title><p>Private preview access is required.</p>'); throw new Error('Private runtime access is not part of selected-file validation'); };
-  const result = await reconcile({ portfolio, state: empty(), bundles: {}, selected: ['dawn'], fetchImpl });
-  assert.equal(result.outcomes[0].status, 'updated');
-  assert.equal(result.state.products.dawn.qualification.scope, 'selected-files-only');
-  assert.equal(result.state.products.dawn.qualification.requiresAccess, true);
-  const output = render(result.state, result.bundles, portfolio);
-  assert.equal(output['skills/dawn/examples/morning-study.ts'], b.files['skills/dawn/examples/morning-study.ts']);
-  assert.equal(output['plugins/dawn/skills/dawn/examples/morning-study.ts'], b.files['skills/dawn/examples/morning-study.ts']);
-  assert.deepEqual(calls, ['https://dawnav.com/integrations/dawn.json', 'https://dawnav.com/docs/agents', 'https://dawnav.com/install']);
-  const unrelated = await reconcile({ portfolio, state: empty(), bundles: {}, selected: ['dawn'], fetchImpl: async (url) => url.endsWith('/install') ? new Response('Unrelated setup page.') : fetchImpl(url) });
-  assert.equal(unrelated.outcomes[0].status, 'pending'); assert.deepEqual(unrelated.state, empty());
-  for (const mutate of [
-    (copy) => { copy.manifest.runtime.install.requiresAccess = false; },
-    (copy) => { copy.manifest.runtime.install.url = 'https://github.com/hraness/dawn/releases/latest'; },
-    (copy) => { copy.files['skills/dawn/examples/morning-study.ts'] = 'x'.repeat(4097); },
-    (copy) => { copy.files['src/private-core.ts'] = 'private application implementation'; },
-  ]) { const copy = structuredClone(b); mutate(copy); assert.throws(() => validateBundle(copy, 'dawn')); }
+test('the withdrawn DAWN desktop skill cannot be admitted, generated or published again', async () => {
+  const id = 'dawn';
+  const facts = catalogPortfolio.projects.find((p) => p.id === id);
+  assert.doesNotThrow(() => validatePortfolio({ ...portfolio, projects: [...portfolio.projects, facts] }));
+  assert.throws(() => validateBundle({}, id), /Unknown product/);
+  let called = false;
+  await assert.rejects(reconcile({ portfolio, state: empty(), bundles: {}, selected: [id], fetchImpl: async () => { called = true; } }), /Invalid selected/);
+  assert.equal(called, false);
+  assert.throws(() => render({ schemaVersion: 1, products: { dawn: {} } }, {}, portfolio), /Unknown admitted product/);
+  const history = JSON.parse(await readFile(new URL('../publication-ledger.json', import.meta.url), 'utf8'));
+  const previous = history.publications.find((p) => p.product === id);
+  assert.deepEqual(appendPublications(history, [previous]), history);
+  assert.throws(() => appendPublications(history, [{ ...previous, id: 'dawn-future' }]), /withdrawn/);
 });
+
 test('app admission binds version, build, platform, URL, archive hash and Sparkle signature', () => {
   const { b, release, feed } = app(); assert.equal(verifyApp(b, release, feed).sha256, 'a'.repeat(64));
   for (const mutate of [
@@ -309,7 +307,7 @@ test('generated root skills and standalone copies match and client routes stay i
   assert.deepEqual(JSON.parse(output['plugins/sponge/mcp.json']).mcpServers.sponge.args, ['./scripts/mcp.mjs']);
   const next = bundle('sponge', 2); const updated = await reconcile({ portfolio, state: first.state, bundles: first.bundles, selected: ['sponge'], ...server(next) });
   assert.equal(JSON.parse(render(updated.state, updated.bundles, portfolio)['plugins/sponge/plugin.json']).version, '0.1.1');
-  const noMcp = bundle('dawn'); delete noMcp.manifest.mcp; assert.doesNotThrow(() => validateBundle(noMcp, 'dawn'));
+  const noMcp = bundle('textmock'); delete noMcp.manifest.mcp; assert.doesNotThrow(() => validateBundle(noMcp, 'textmock'));
 });
 test('ZIP artifacts are deterministic, independent of file insertion order and reject escapes', async () => {
   assert.deepEqual(zip({ 'b.txt': 'second', 'a.txt': 'first' }), zip({ 'a.txt': 'first', 'b.txt': 'second' }));

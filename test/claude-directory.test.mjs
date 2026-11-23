@@ -21,13 +21,11 @@ test('Claude directory copies ship only file types the directory accepts from an
     assert.ok(!manifest.mcpServers && !manifest.hooks, id);
   }
 });
-test('the Dawn directory copy carries its example as Markdown and links to it', () => {
-  const out = claudeDirectoryFiles('dawn', { LICENSE: 'MIT', 'README.md': 'See [x](skills/dawn/examples/morning-study.ts).', 'skills/dawn/SKILL.md': '[Morning study](examples/morning-study.ts). Copy it to `song.ts` now.', 'skills/dawn/examples/morning-study.ts': 'export default 1;\n' }, { manifest: '{}' });
-  assert.equal(out['skills/dawn/examples/morning-study.ts'], undefined);
-  assert.match(out['skills/dawn/examples/morning-study.md'], /```ts\nexport default 1;\n```/);
-  assert.ok(!out['skills/dawn/SKILL.md'].includes('.ts)') && out['skills/dawn/SKILL.md'].includes('Copy its code to `song.ts`'));
-  assert.ok(out['README.md'].includes('examples/morning-study.md'));
+test('the withdrawn DAWN skill has no Claude directory copy', () => {
+  assert(!CLAUDE_DIRECTORY_PRODUCTS.includes('dawn'));
+  assert.equal(claudeDirectoryFiles('dawn', {}, {}), null);
 });
+
 test('the Textmock directory copy makes the same links as the bundled helper', async () => {
   const skill = await readFile(new URL(`${CLAUDE_DIRECTORY_ROOT}/textmock/skills/textmock/SKILL.md`, root), 'utf8');
   const readme = await readFile(new URL(`${CLAUDE_DIRECTORY_ROOT}/textmock/README.md`, root), 'utf8');

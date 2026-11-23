@@ -90,7 +90,7 @@ test('a complete anonymous refresh updates only directory evidence and generated
 
 test('an error shell waits for all selected reads and preserves prior evidence, generated status and publications', async (t) => {
   const root = await fixture(t); const paths = [DIRECTORY_FILE, 'catalog/store-status.json', 'publication-ledger.json', 'README.md'];
-  const before = await Promise.all(paths.map((path) => readFile(join(root, path), 'utf8'))); const network = remote(await readDirectorySources(root), 'dawn');
+  const before = await Promise.all(paths.map((path) => readFile(join(root, path), 'utf8'))); const network = remote(await readDirectorySources(root), 'textmock');
   await assert.rejects(recordDirectories({ root, ...network, now }), /Not all selected directory listings verified/); assert.equal(network.calls.length, DIRECTORY_IDS.length);
   assert.deepEqual(await Promise.all(paths.map((path) => readFile(join(root, path), 'utf8'))), before);
   const savedReport = JSON.parse(await readFile(join(root, 'dist/directory-observation.json'), 'utf8'));

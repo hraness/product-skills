@@ -15,12 +15,11 @@ import { DIRECTORY_FILE, DIRECTORY_IDS, initialDirectoryObservations, mergePendi
 // Each product's id and origin guard where its links and packages point. Its name, like its
 // line and icon, is the product's own: read it from the portfolio (or the product's bundle),
 // never from a copy here, so a renamed product needs no change in this repository.
-export const PRODUCTS = Object.freeze({ dawn: { url: 'https://dawnav.com' }, oh: { url: 'https://oh.computer' }, yaptake: { url: 'https://yaptake.com' }, textmock: { url: 'https://textmock.com' }, sponge: { url: 'https://sponge.computer' } });
-// Portfolio entries that the profile links list without a product package. Packages, listings and publications use PRODUCTS only.
-export const PROFILE_ONLY = Object.freeze({ yiii: { url: 'https://yiii.io' }, aicharts: { url: 'https://aicharts.io' } });
+export const PRODUCTS = Object.freeze({ oh: { url: 'https://oh.computer' }, yaptake: { url: 'https://yaptake.com' }, textmock: { url: 'https://textmock.com' }, sponge: { url: 'https://sponge.computer' } });
+// These sites can appear in the profile without a downloadable product skill.
+export const PROFILE_ONLY = Object.freeze({ dawn: { url: 'https://dawnav.com' }, yiii: { url: 'https://yiii.io' }, aicharts: { url: 'https://aicharts.io' } });
 // Directory listing links. Only pages the product site actually serves; a missing page stays unset rather than pointing somewhere generic.
 export const LISTING_LINKS = Object.freeze({
-  dawn: { privacyPolicyUrl: 'https://dawnav.com/privacy' },
   oh: { privacyPolicyUrl: 'https://oh.computer/privacy', supportUrl: 'https://oh.computer/support', termsOfServiceUrl: 'https://oh.computer/terms' },
   yaptake: { privacyPolicyUrl: 'https://yaptake.com/privacy', supportUrl: 'https://yaptake.com/support', termsOfServiceUrl: 'https://yaptake.com/terms' },
   textmock: { privacyPolicyUrl: 'https://textmock.com/privacy', termsOfServiceUrl: 'https://textmock.com/terms' },
@@ -39,7 +38,6 @@ export const CLAWHUB = Object.freeze({ origin: 'https://clawhub.ai', owner: 'hra
 export const REPOSITORY = 'https://github.com/hraness/product-skills';
 export const MAX_BUNDLE = 65536;
 const TEXTMOCK_HELPER = 'scripts/textmock-link.mjs';
-const DAWN_EXAMPLE = 'skills/dawn/examples/morning-study.ts';
 const PLUGIN_SCHEMA = 'https://agent-plugins.org/schemas/1.0.0/plugin.schema.json';
 const MCP_SCHEMA = 'https://agent-plugins.org/schemas/1.0.0/mcp.schema.json';
 const object = (v) => v !== null && typeof v === 'object' && !Array.isArray(v);
@@ -133,15 +131,11 @@ export function validateBundle(input, id) {
   } else if (r.install.type === 'web') {
     keys(r.install, ['type', 'url']); keys(r.helper, ['path', 'node']);
     need(id === 'textmock' && r.install.url === PRODUCTS.textmock.url && r.versionScope === 'helper' && r.helper.path === TEXTMOCK_HELPER && r.helper.node === '>=24.0.0' && r.node === undefined && r.bun === undefined && r.build === undefined && r.platform === undefined, 'Web helper mismatch');
-  } else {
-    keys(r.install, ['type', 'url', 'requiresAccess']);
-    need(id === 'dawn' && r.install.type === 'private-release' && r.install.url === 'https://dawnav.com/install' && r.install.requiresAccess === true && /^>=\d+\.\d+\.\d+$/.test(r.bun) && r.node === undefined && r.build === undefined && r.platform === undefined && r.versionScope === undefined && r.helper === undefined, 'Private preview runtime mismatch');
-  }
+  } else throw new Error('Unsupported runtime install type');
   if (m.mcp !== undefined) { keys(m.mcp, ['command', 'args']); need(['sponge', 'yaptake'].includes(id) && m.mcp.command === id && Array.isArray(m.mcp.args) && m.mcp.args.length === 1 && m.mcp.args[0] === 'mcp', 'MCP command mismatch'); }
   const skillPath = `skills/${id}/SKILL.md`;
-  keys(bundle.files, [skillPath, 'LICENSE', 'README.md', ...(id === 'textmock' ? [TEXTMOCK_HELPER] : id === 'dawn' ? [DAWN_EXAMPLE] : [])]);
+  keys(bundle.files, [skillPath, 'LICENSE', 'README.md', ...(id === 'textmock' ? [TEXTMOCK_HELPER] : [])]);
   if (id === 'textmock') need(Buffer.byteLength(bundle.files[TEXTMOCK_HELPER]) <= 16384, 'Textmock helper exceeds 16 KiB');
-  if (id === 'dawn') need(Buffer.byteLength(bundle.files[DAWN_EXAMPLE]) <= 4096, 'Dawn example exceeds 4 KiB');
   for (const [member, value] of Object.entries(bundle.files)) inspectText(value, id, member);
   const skill = bundle.files[skillPath];
   need(skill.startsWith('---\n') && new RegExp(`(?:^|\\n)name: ${id}\\n`).test(skill) && /\ndescription: [^\n]+(?:\n|$)/.test(skill.split('\n---\n')[0]) && skill.includes(m.product.agentGuideUrl), 'Skill frontmatter or guide mismatch');
@@ -202,10 +196,6 @@ export async function qualify(bundle, { fetchImpl = fetch } = {}) {
     need(helper.body === bundle.files[TEXTMOCK_HELPER], 'Public Textmock helper differs from the selected file');
     return { type: 'web', version: runtime.version, helperHash: digest(helper.body), node: runtime.helper.node };
   }
-  if (runtime.install.type === 'private-release') {
-    const install = await download(runtime.install.url, { fetchImpl, limit: 512000 }); need(install.body.toLowerCase().includes(product.name.toLowerCase()), 'Private preview setup guide is unavailable');
-    return { type: 'private-release', version: runtime.version, bun: runtime.bun, requiresAccess: true, scope: 'selected-files-only', guideHash: digest(guide.body), installPageHash: digest(install.body) };
-  }
   const [release, feed] = await Promise.all([download(`${product.url}/release.json`, { fetchImpl, limit: 262144 }), download(`${product.url}/appcast.xml`, { fetchImpl, limit: 262144 })]);
   return verifyApp(bundle, JSON.parse(release.body), feed.body);
 }
@@ -224,7 +214,7 @@ function stateCheck(state) {
     if (q?.type === 'npm') { keys(q, ['type', 'package', 'version', 'integrity']); need(q.package === `@hraness/${id}` && q.version === entry.runtimeVersion && entry.runtimeBuild === null && /^sha512-[A-Za-z0-9+/=]+$/.test(q.integrity), 'Invalid npm qualification'); }
     else if (q?.type === 'app') { keys(q, ['type', 'sha256', 'metadataHash', 'feedHash']); need(['yaptake', 'oh'].includes(id) && entry.runtimeBuild !== null && ['sha256', 'metadataHash', 'feedHash'].every((key) => /^[a-f0-9]{64}$/.test(q[key])), 'Invalid app qualification'); }
     else if (q?.type === 'web') { keys(q, ['type', 'version', 'helperHash', 'node']); need(id === 'textmock' && entry.runtimeBuild === null && q.version === entry.runtimeVersion && /^[a-f0-9]{64}$/.test(q.helperHash) && q.node === '>=24.0.0', 'Invalid web helper qualification'); }
-    else { keys(q, ['type', 'version', 'bun', 'requiresAccess', 'scope', 'guideHash', 'installPageHash']); need(id === 'dawn' && q.type === 'private-release' && q.version === entry.runtimeVersion && entry.runtimeBuild === null && /^>=\d+\.\d+\.\d+$/.test(q.bun) && q.requiresAccess === true && q.scope === 'selected-files-only' && ['guideHash', 'installPageHash'].every((key) => /^[a-f0-9]{64}$/.test(q[key])), 'Invalid private preview source qualification'); }
+    else throw new Error('Unsupported runtime qualification');
   }
   return state;
 }
@@ -374,6 +364,8 @@ export function packages(state, output, { toolkitHash = null } = {}) {
 async function load(root) {
   const read = async (path) => JSON.parse(await readFile(join(root, path), 'utf8'));
   const state = stateCheck(await read('catalog/admitted.json')); const portfolio = validatePortfolio(await read('catalog/portfolio.json')); const bundles = {};
+  const admittedBundles = new Set(Object.keys(state.products).map((id) => `bundles/${id}.json`));
+  for (const path of await tree(root, 'bundles')) need(admittedBundles.has(path), `Unexpected source bundle: ${path}`);
   for (const id of Object.keys(state.products)) bundles[id] = validateBundle(await readFile(join(root, `bundles/${id}.json`), 'utf8'), id);
   const ledger = validateLedger(await read('publication-ledger.json'));
   const directories = await readDirectoryObservations(root);
@@ -418,7 +410,7 @@ export function validateLedger(ledger) {
   keys(ledger, ['schemaVersion', 'publications']); need(ledger.schemaVersion === 1 && Array.isArray(ledger.publications), 'Invalid publication ledger'); const seen = new Set();
   for (const p of ledger.publications) {
     keys(p, ['id', 'product', 'channel', 'publishedAt', 'url', 'version', 'contentHash']);
-    const knownProduct = Object.hasOwn(PRODUCTS, p.product) || (p.channel === 'homebrew' && Object.hasOwn(HOMEBREW_PACKAGES, p.product));
+    const knownProduct = Object.hasOwn(PRODUCTS, p.product) || (p.product === 'dawn' && p.channel === 'github') || (p.channel === 'homebrew' && Object.hasOwn(HOMEBREW_PACKAGES, p.product));
     need(/^[a-z0-9][a-z0-9-]{0,63}$/.test(p.id) && !seen.has(p.id) && knownProduct && ['github', 'skills-sh', 'chatgpt', 'claude', 'cursor', 'homebrew', 'raycast', 'mcp-registry', 'clawhub'].includes(p.channel) && /^[a-f0-9]{64}$/.test(p.contentHash), 'Invalid publication identity');
     need(typeof p.publishedAt === 'string' && new Date(p.publishedAt).toISOString() === p.publishedAt, 'An actual ISO publication timestamp is required'); version(p.version);
     if (p.channel === 'mcp-registry') need(Object.hasOwn(MCP_REGISTRY_SERVERS, p.product) && p.id === mcpRegistryPublicationId(p.version, p.product) && p.url === mcpRegistryPublicationUrl(p.version, p.product), 'MCP Registry publication identity or address differs');
@@ -434,11 +426,13 @@ export function validateLedger(ledger) {
 }
 export function appendPublications(ledger, entries) {
   validateLedger(ledger); const next = structuredClone(ledger);
-  for (const entry of entries) { const previous = next.publications.find((p) => p.id === entry.id); if (previous) need(canonical(previous) === canonical(entry), 'Publication identity cannot be overwritten'); else next.publications.push(entry); }
+  for (const entry of entries) { const previous = next.publications.find((p) => p.id === entry.id); if (previous) need(canonical(previous) === canonical(entry), 'Publication identity cannot be overwritten'); else { need(entry.product !== 'dawn', 'The DAWN desktop skill was withdrawn'); next.publications.push(entry); } }
   return validateLedger(next);
 }
 export function checkLedgerAppendOnly(previous, current) {
   validateLedger(previous); validateLedger(current);
+  const archived = (ledger) => ledger.publications.filter((entry) => entry.product === 'dawn').length;
+  need(archived(current) === archived(previous), 'The DAWN desktop skill was withdrawn');
   for (const entry of previous.publications) need(current.publications.some((p) => p.id === entry.id && canonical(p) === canonical(entry)), 'An existing publication was changed or removed');
 }
 export async function readGovernedLedger(root, sha) {

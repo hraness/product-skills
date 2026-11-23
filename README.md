@@ -4,7 +4,6 @@ Skills for working with [Hraness](https://hraness.com) products from a coding ag
 
 ## Product packages
 
-- [DAWN](plugins/dawn/README.md): Music in code.
 - [OH](plugins/oh/README.md): Keeps your coding agents working.
 - [Sponge](plugins/sponge/README.md): Reading and notes.
 - [Textmock](plugins/textmock/README.md): iMessage mockups.
@@ -22,7 +21,6 @@ A package available here may still be awaiting directory review or host testing.
 
 ## Product pages
 
-- [DAWN](https://dawnav.com): Music in code.
 - [OH](https://oh.computer): Keeps your coding agents working.
 - [Sponge](https://sponge.computer): Reading and notes.
 - [Yaptake](https://yaptake.com): Video editor for Mac.

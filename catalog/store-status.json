@@ -1,17 +1,6 @@
 {
   "schemaVersion": 1,
   "products": {
-    "dawn": {
-      "version": "0.1.4",
-      "contentHash": "e38916e17ed752d62594e6d35878bd4bf82468be584058731659b8c337e7dc63",
-      "artifactHash": "94fa210b5f700caeef2ef8cd0e87b944d82b03fae7042f5253177ab398a74dec",
-      "github": "published",
-      "skillsSh": "listed",
-      "skillsShFirstVerifiedAt": "2026-11-14T23:54:16.409Z",
-      "chatgpt": "review_required",
-      "claude": "review_required",
-      "cursor": "review_required"
-    },
     "oh": {
       "version": "0.1.2",
       "contentHash": "32c2d51a24c258403833e00d9a9ca6fd8cad071c603138f71f6ee15245b8a576",

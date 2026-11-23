@@ -174,7 +174,7 @@ These rows come from the existing records. The ledger keeps every earlier public
 | OH | Homebrew cask | [0.2.0](https://github.com/hraness/homebrew-tap/blob/5282febb08a054cb487f8c8e63664191dc6496a1/Casks/oh.rb) | Published 2026-11-22 |
 | oh-router | Homebrew formula | [0.1.4](https://github.com/hraness/homebrew-tap/blob/5282febb08a054cb487f8c8e63664191dc6496a1/Formula/oh-router.rb) | Published 2026-11-22 |
 | DAWN | GitHub package | [0.1.4](https://github.com/hraness/product-skills/releases/tag/integrations-a127c82263f85221) | Published 2026-11-22 |
-| DAWN | skills.sh | [Listed](https://www.skills.sh/hraness/product-skills/dawn) | First verified 2026-11-14 |
+| DAWN | skills.sh | [Historical listing](https://www.skills.sh/hraness/product-skills/dawn) | First verified 2026-11-14 |
 | Sponge | skills.sh | [Listed](https://www.skills.sh/hraness/product-skills/sponge) | First verified 2026-11-14 |
 | Textmock | skills.sh | [Listed](https://www.skills.sh/hraness/product-skills/textmock) | First verified 2026-11-14 |
 | Yaptake | skills.sh | [Listed](https://www.skills.sh/hraness/product-skills/yaptake) | First verified 2026-11-14 |
@@ -183,7 +183,6 @@ These rows come from the existing records. The ledger keeps every earlier public
 
 | Product | OpenAI | Claude | Cursor |
 | --- | --- | --- | --- |
-| DAWN | Review required | Review required | Review required |
 | Sponge | Eligibility and review required | Review required | Review required |
 | Textmock | Review required | Review required | Review required |
 | Yaptake | Eligibility and review required | Review required | Review required |
@@ -193,14 +192,6 @@ No host directory submission URL has been verified for these packages. Sponge’
 ## Repeat the collection searches
 
 Use Node.js 24 and run `node scripts/submissions.mjs search PRODUCT` for one saved strategy. Each query requests the first 20 public results, sorted by stars. `{recent}` becomes the date 180 days before the run. The report identifies limited or incomplete results; it does not infer visitors or search traffic. Stars, forks and watchers describe public activity. Check subject fit and contribution rules before proposing an entry.
-
-### DAWN
-
-Music composition tools and agent skills with explicit private-preview prerequisites. Exclude paper lists and do not present the private runtime as publicly installable.
-
-- `awesome music in:name stars:>=200 archived:false is:public fork:false pushed:>={recent}`
-- `awesome live-coding in:name stars:>=100 archived:false is:public fork:false pushed:>={recent}`
-- `awesome skills in:name stars:>=500 archived:false is:public fork:false pushed:>={recent}`
 
 ### Sponge
 

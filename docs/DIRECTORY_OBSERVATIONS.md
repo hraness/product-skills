@@ -2,8 +2,9 @@
 
 The [directory observations](../catalog/directory-observations.json) record when
 Dawn, Sponge, Textmock and Yaptake were first verified on skills.sh. They describe
-listing presence. The observer also checks OH and adds its first verification
-date once the directory supplies matching listing metadata.
+listing presence. DAWN’s historical record remains after withdrawal of its
+desktop skill on 23 November 2026. The observer checks Sponge, Textmock,
+Yaptake and OH, and adds OH’s first verification once its listing matches.
 
 `firstVerifiedAt` is the time of our first complete, successful check of the four
 listings. The initial date comes from the
@@ -27,7 +28,7 @@ node scripts/skills-sh-observer.mjs observe
 node scripts/distribution.mjs record-directories
 ```
 
-`check` validates the saved records. `observe` reads the five canonical public
+`check` validates the saved records. `observe` reads the four current public
 URLs and prints proposed records and a check report. It does not write files,
 install skills or send install telemetry.
 
@@ -74,7 +75,7 @@ successful presence check without inventing a new directory publication date.
 ## Consume the records
 
 `observeDirectories(previous, sources, options)` returns a proposed record and
-a report after all five reads finish. `readDirectorySources(root)`
+a report after all four reads finish. `readDirectorySources(root)`
 builds the expected identities from regular UTF-8 checkout files. The selected
 frontmatter uses one-line scalar `name` and `description` fields; unsupported
 YAML forms fail the check.

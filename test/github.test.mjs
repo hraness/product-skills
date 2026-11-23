@@ -21,10 +21,10 @@ test('owned update branches contain only their exact generated files', () => {
     assert.doesNotThrow(() => validateUpdateFiles(kind, ['catalog/directory-observations.json']));
     for (const path of ['catalog/directory-observations.json.bak', 'catalog/directory-verification-2026-11-14.json', 'catalog/../directory-observations.json']) assert.throws(() => validateUpdateFiles(kind, [path]));
   }
-  assert.doesNotThrow(() => validateUpdateFiles('products', ['plugins/textmock/scripts/textmock-link.mjs', 'plugins/textmock/skills/textmock/scripts/textmock-link.mjs', 'skills/textmock/scripts/textmock-link.mjs', 'plugins/dawn/skills/dawn/examples/morning-study.ts', 'skills/dawn/examples/morning-study.ts']));
+  assert.doesNotThrow(() => validateUpdateFiles('products', ['plugins/textmock/scripts/textmock-link.mjs', 'plugins/textmock/skills/textmock/scripts/textmock-link.mjs', 'skills/textmock/scripts/textmock-link.mjs']));
   for (const path of ['scripts/distribution.mjs', '.github/workflows/check.yml', 'plugins/sponge/skills/yaptake/SKILL.md', 'plugins/sponge/../README.md', 'publication-ledger.json']) assert.throws(() => validateUpdateFiles('products', [path]));
   assert.throws(() => validateUpdateFiles('publications', ['README.md']));
-  for (const path of ['plugins/sponge/scripts/textmock-link.mjs', 'skills/textmock/scripts/unreviewed.mjs', 'skills/dawn/examples/private.ts', 'plugins/dawn/skills/textmock/scripts/textmock-link.mjs']) assert.throws(() => validateUpdateFiles('products', [path]));
+  for (const path of ['plugins/sponge/scripts/textmock-link.mjs', 'skills/textmock/scripts/unreviewed.mjs', 'bundles/dawn.json', 'skills/dawn/SKILL.md', 'plugins/dawn/skills/dawn/examples/morning-study.ts', 'skills/dawn/examples/morning-study.ts', 'directory/claude/dawn/README.md', 'skills/dawn/examples/private.ts', 'plugins/dawn/skills/textmock/scripts/textmock-link.mjs']) assert.throws(() => validateUpdateFiles('products', [path]));
 });
 test('a stale branch updates conditionally and waits for the new head before dispatch can continue', async () => {
   const expected = 'a'.repeat(40); let reads = 0; let requests = 0;

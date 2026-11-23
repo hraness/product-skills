@@ -31,7 +31,7 @@ test('admitted icon bytes and conditional transport retain exact identity withou
   for (const change of [{ url: 'https://another.test/icon.png' }, { bytes: first.bytes + 1 }, { sha256: '0'.repeat(64) }, { base64: first.base64 + '===' }, { etag: 'bad\nheader' }, { private: true }]) assert.throws(() => listingIconBytes({ ...first, ...change }, 'sponge'));
 });
 test('listing asset paths are closed and runtime requirements describe actual separate prerequisites', () => {
-  for (const id of ['dawn', 'yaptake', 'textmock', 'sponge']) { assert(listingIconPath(`plugins/${id}/assets/icon.png`)); assert.equal(portfolioIconURL({ id, icon: `/products/${id}/icon.png` }), `https://hraness.com/products/${id}/icon.png`); }
+  for (const id of ['oh', 'yaptake', 'textmock', 'sponge']) { assert(listingIconPath(`plugins/${id}/assets/icon.png`)); assert.equal(portfolioIconURL({ id, icon: `/products/${id}/icon.png` }), `https://hraness.com/products/${id}/icon.png`); }
   for (const path of ['plugins/sponge/assets/private.png', 'plugins/sponge/assets/../icon.png', 'skills/sponge/assets/icon.png', 'plugins/other/assets/icon.png']) assert.equal(listingIconPath(path), false);
   const make = (runtime) => listingInterface({ product: { name: 'A product', description: 'An original product description.', url: 'https://example.test' }, runtime }, { short: 'An original subtitle.' }, true);
   const npm = make({ install: { type: 'npm', package: '@hraness/sponge' }, node: '>=24.20.0' }); assert(npm.longDescription.includes('24.20.0')); assert(npm.longDescription.includes('initialized local library')); assert.equal(npm.logo, './assets/icon.png'); assert.equal(npm.composerIcon, npm.logo); assert.deepEqual(npm.capabilities, []);
@@ -40,7 +40,7 @@ test('listing asset paths are closed and runtime requirements describe actual se
   assert(make({ install: { type: 'web' }, helper: { node: '>=24.0.0' } }).longDescription.includes('share-link helper'));
 });
 test('each generated install section names its actual product and marketplace without claiming a store listing', () => {
-  for (const id of ['dawn', 'yaptake', 'textmock', 'sponge']) {
+  for (const id of ['oh', 'yaptake', 'textmock', 'sponge']) {
     const text = agentInstallInstructions(id); assert(text.includes(`codex plugin add ${id}@hraness-products`)); assert(text.includes(`/plugin install ${id} --marketplace hraness/product-skills`)); assert(text.includes('team marketplace administrator')); assert(!text.includes('<owner>')); assert(text.includes('separate from public directory approval'));
   }
   assert.throws(() => agentInstallInstructions('unknown'));

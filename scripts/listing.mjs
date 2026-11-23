@@ -3,10 +3,10 @@ import { crc32, inflateSync } from 'node:zlib';
 
 export const MAX_ICON_BYTES = 64 * 1024;
 const need = (condition, message) => { if (!condition) throw new Error(message); };
-const productId = (id) => need(/^(?:dawn|oh|yaptake|textmock|sponge)$/.test(id), 'Unknown listing product');
+const productId = (id) => need(/^(?:oh|yaptake|textmock|sponge)$/.test(id), 'Unknown listing product');
 const hash = (bytes) => createHash('sha256').update(bytes).digest('hex');
 const iconName = 'assets/icon.png';
-export function listingIconPath(path) { return /^(?:(?:plugins|directory\/claude)\/(?:dawn|oh|yaptake|textmock|sponge)|mcpb\/(?:sponge|yaptake))\/assets\/icon\.png$/.test(path); }
+export function listingIconPath(path) { return /^(?:(?:plugins|directory\/claude)\/(?:oh|yaptake|textmock|sponge)|mcpb\/(?:sponge|yaptake))\/assets\/icon\.png$/.test(path); }
 export function portfolioIconURL(project) {
   productId(project.id); need(project.icon === `/products/${project.id}/icon.png`, 'Unexpected portfolio icon path');
   return new URL(project.icon, 'https://hraness.com/portfolio.json').href;

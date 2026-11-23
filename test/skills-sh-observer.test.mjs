@@ -54,11 +54,11 @@ test('source hashes include every selected skill file and parse the owned scalar
   const changed = sourceSkillIdentity('textmock', { 'scripts/textmock-link.mjs': 'export const version = 2;\n', 'SKILL.md': text('textmock') });
   assert.notEqual(original.sourceSkillHash, changed.sourceSkillHash); assert.equal(original.description, changed.description);
   assert.deepEqual(sourceSkillIdentity('textmock', { 'scripts/textmock-link.mjs': 'export const version = 1;\n', 'SKILL.md': text('textmock') }), original);
-  assert.equal(sourceSkillIdentity('dawn', { 'SKILL.md': text('dawn', '"Write a # section."') }).description, 'Write a # section.');
-  assert.equal(sourceSkillIdentity('dawn', { 'SKILL.md': text('dawn', "'A user''s song.'") }).description, "A user's song.");
-  for (const files of [{ '../private': 'x', 'SKILL.md': text('dawn') }, { 'SKILL.md': text('sponge') }, { 'SKILL.md': text('dawn').replace('description:', 'name: dawn\ndescription:') }, { 'SKILL.md': text('dawn', '|') }, { 'SKILL.md': text('dawn', 'true') }, { 'SKILL.md': text('dawn'), 'large.md': 'x'.repeat(65536) }, { 'SKILL.md': Buffer.from([255]) }]) assert.throws(() => sourceSkillIdentity('dawn', files));
-  for (const description of ['Current description.\n  Additional valid YAML text.', 'Current description.\n"description": Another value.', 'Current description.\n\'name\': dawn']) assert.throws(() => sourceSkillIdentity('dawn', { 'SKILL.md': text('dawn', description) }), /continuation|key form/);
-  assert.equal(sourceSkillIdentity('dawn', { 'SKILL.md': text('dawn', 'Current description.\nmetadata:\n  version: "1"') }).description, 'Current description.');
+  assert.equal(sourceSkillIdentity('sponge', { 'SKILL.md': text('sponge', '"Write a # section."') }).description, 'Write a # section.');
+  assert.equal(sourceSkillIdentity('sponge', { 'SKILL.md': text('sponge', "'A user''s song.'") }).description, "A user's song.");
+  for (const files of [{ '../private': 'x', 'SKILL.md': text('sponge') }, { 'SKILL.md': text('textmock') }, { 'SKILL.md': text('sponge').replace('description:', 'name: sponge\ndescription:') }, { 'SKILL.md': text('sponge', '|') }, { 'SKILL.md': text('sponge', 'true') }, { 'SKILL.md': text('sponge'), 'large.md': 'x'.repeat(65536) }, { 'SKILL.md': Buffer.from([255]) }]) assert.throws(() => sourceSkillIdentity('sponge', files));
+  for (const description of ['Current description.\n  Additional valid YAML text.', 'Current description.\n"description": Another value.', 'Current description.\n\'name\': dawn']) assert.throws(() => sourceSkillIdentity('sponge', { 'SKILL.md': text('sponge', description) }), /continuation|key form/);
+  assert.equal(sourceSkillIdentity('sponge', { 'SKILL.md': text('sponge', 'Current description.\nmetadata:\n  version: "1"') }).description, 'Current description.');
 });
 
 test('semantic JSON-LD and canonical identity are independent of layout and tag spelling', () => {
@@ -141,7 +141,7 @@ test('redirects, URL drift, error shells and wrong response media types preserve
     await assert.rejects(observeDirectories(previous, current, { now, fetchImpl: async (url) => { const id = DIRECTORY_IDS.find((id) => directoryUrl(id) === url); return response(url, page(current[id]), id === 'sponge' ? options : {}); } }), /all selected/);
     assert.deepEqual(previous, before);
   }
-  const shell = server(current, (body, id) => id === 'dawn' ? '<html>404</html>' : body);
+  const shell = server(current, (body, id) => id === 'textmock' ? '<html>404</html>' : body);
   await assert.rejects(observeDirectories(previous, current, { ...shell, now }), /all selected/); assert.deepEqual(previous, before);
 });
 
@@ -159,7 +159,7 @@ test('record validation refuses invented publication fields, partial sets, futur
     const bad = structuredClone(previous); Object.assign(bad.observations[0], change); assert.throws(() => validateDirectoryObservations(bad, { now }));
   }
   assert.throws(() => validateDirectoryObservations({ ...previous, observations: previous.observations.slice(1) }, { now }));
-  const remote = server(); const missing = sources(); delete missing.dawn;
+  const remote = server(); const missing = sources(); delete missing.textmock;
   await assert.rejects(observeDirectories(previous, missing, { ...remote, now })); assert.equal(remote.calls.length, 0);
 });
 
@@ -180,9 +180,18 @@ test('checkout readers refuse symlinks and keep unrelated icon or catalog fields
     await mkdir(join(root, 'catalog')); await writeFile(join(root, 'catalog/directory-observations.json'), JSON.stringify(records()));
     for (const id of DIRECTORY_IDS) { await mkdir(join(root, 'skills', id), { recursive: true }); await writeFile(join(root, 'skills', id, 'SKILL.md'), text(id)); }
     const before = await readDirectorySources(root); assert.deepEqual(before, sources()); assert.deepEqual(await readDirectoryObservations(root), records());
-    await mkdir(join(root, 'plugins/dawn/assets'), { recursive: true }); await writeFile(join(root, 'plugins/dawn/assets/icon.png'), Buffer.from([137, 80, 78, 71]));
+    await mkdir(join(root, 'plugins/textmock/assets'), { recursive: true }); await writeFile(join(root, 'plugins/textmock/assets/icon.png'), Buffer.from([137, 80, 78, 71]));
     await writeFile(join(root, 'catalog/admitted.json'), JSON.stringify({ listingIcon: { arbitraryFutureField: true } })); assert.deepEqual(await readDirectorySources(root), before);
-    await symlink('/private/tmp', join(root, 'skills/dawn/outside')); await assert.rejects(readDirectorySources(root), /symlink/); await rm(join(root, 'skills/dawn/outside'));
-    await rm(join(root, 'catalog/directory-observations.json')); await symlink(join(root, 'skills/dawn/SKILL.md'), join(root, 'catalog/directory-observations.json')); await assert.rejects(readDirectoryObservations(root), /regular/);
+    await symlink('/private/tmp', join(root, 'skills/textmock/outside')); await assert.rejects(readDirectorySources(root), /symlink/); await rm(join(root, 'skills/textmock/outside'));
+    await rm(join(root, 'catalog/directory-observations.json')); await symlink(join(root, 'skills/textmock/SKILL.md'), join(root, 'catalog/directory-observations.json')); await assert.rejects(readDirectoryObservations(root), /regular/);
   } finally { await rm(root, { recursive: true, force: true }); }
+});
+
+test('refresh keeps an archived DAWN first verification while fetching only current skills', async () => {
+  const history = { product: 'dawn', url: directoryUrl('dawn'), firstVerifiedAt: first, sourceSkillHash: 'f'.repeat(64) };
+  const previous = records(); previous.observations.unshift(history);
+  const remote = server();
+  const result = await observeDirectories(previous, sources(), { ...remote, now });
+  assert.deepEqual(result.observations.observations[0], history);
+  assert(!remote.calls.some((call) => call.url === history.url));
 });
