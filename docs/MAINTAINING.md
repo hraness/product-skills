@@ -18,11 +18,9 @@ The public helper download must match the selected bundle bytes. The renderer
 also places it inside each skill directory so standalone skill installers include
 it. Downloaded code is compared as text; these checks do not execute it.
 
-Dawn's skill and original score example require an installed private preview.
-The public bundle states that access requirement and the release version selected
-by Dawn's exporter. Its source check reads the public setup and agent guides; it
-does not fetch, publish or verify the private application release. The catalog
-records this scope as `selected-files-only`.
+The DAWN desktop skill and its sample score were withdrawn on 23 November
+2026. Earlier release versions and directory submissions are recorded in the
+[submission history](SUBMISSIONS.md).
 
 The source bundle owns the skill, product README and MIT license. The renderer
 copies them unchanged into a standalone product plugin and the root skill
