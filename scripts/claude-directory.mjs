@@ -7,13 +7,13 @@
 // stay unchanged for Codex, Cursor and repository installs.
 
 export const CLAUDE_DIRECTORY_ROOT = 'directory/claude';
-export const CLAUDE_DIRECTORY_PRODUCTS = Object.freeze(['dawn', 'oh', 'sponge', 'textmock', 'yaptake']);
+export const CLAUDE_DIRECTORY_PRODUCTS = Object.freeze(['oh', 'sponge', 'textmock', 'yaptake']);
 const ALLOWED = /\.(?:md|txt|json|ya?ml|png)$|(?:^|\/)LICENSE$/;
 
 /** Every file a product's directory copy may contain, relative to its folder. */
 export function claudeDirectoryMembers(id) {
   if (!CLAUDE_DIRECTORY_PRODUCTS.includes(id)) throw new Error('Unknown Claude directory product');
-  return ['.claude-plugin/plugin.json', 'LICENSE', 'README.md', 'assets/icon.png', `skills/${id}/SKILL.md`, ...(id === 'dawn' ? ['skills/dawn/examples/morning-study.md'] : [])];
+  return ['.claude-plugin/plugin.json', 'LICENSE', 'README.md', 'assets/icon.png', `skills/${id}/SKILL.md`];
 }
 
 /** Whether an automated product update may write this repository path. */
@@ -28,13 +28,6 @@ export function claudeDirectoryFiles(id, files, { manifest, icon = null }) {
   const skill = `skills/${id}/SKILL.md`;
   const out = { '.claude-plugin/plugin.json': manifest, LICENSE: files.LICENSE, 'README.md': files['README.md'], [skill]: files[skill] };
   if (icon) out['assets/icon.png'] = icon;
-  if (id === 'dawn') {
-    const example = files['skills/dawn/examples/morning-study.ts'];
-    out['skills/dawn/examples/morning-study.md'] = `# Morning study\n\nAn original eight-bar Dawn score with synthesized instruments. Copy the code into \`song.ts\` in a new Dawn project.\n\n\`\`\`ts\n${example.trimEnd()}\n\`\`\`\n`;
-    // Every reference to the example follows it to its Markdown copy.
-    out[skill] = out[skill].replaceAll('examples/morning-study.ts', 'examples/morning-study.md').replace('Copy it to `song.ts`', 'Copy its code to `song.ts`');
-    out['README.md'] = out['README.md'].replaceAll('examples/morning-study.ts', 'examples/morning-study.md');
-  }
   if (id === 'textmock') {
     // The bundled link helper is a script, so the copy explains the link format and lets the agent encode it.
     out[skill] = textmockSkill(files[skill]);

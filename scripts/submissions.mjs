@@ -9,6 +9,7 @@ import { parseUnique } from './distribution.mjs';
 export const SUBMISSIONS_FILE = 'catalog/submissions.json';
 export const SUBMISSIONS_INDEX = 'docs/SUBMISSIONS.md';
 const ids = ['dawn', 'sponge', 'textmock', 'yaptake'];
+const activeSearches = ids.filter((id) => id !== 'dawn');
 const apiOrigin = 'https://api.github.com';
 const need = (value, message) => { if (!value) throw new Error(message); };
 const exact = (value, fields) => value !== null && typeof value === 'object' && !Array.isArray(value) && Object.keys(value).sort().join('\0') === [...fields].sort().join('\0');
@@ -161,8 +162,8 @@ export async function recordSubmissions({ root = process.cwd(), ...options } = {
 }
 
 export function renderSubmissions(catalog, { ledger, directories, stores, names }) {
-  validateSubmissions(catalog); need(ids.every((id) => typeof names?.[id] === 'string'), 'Each product needs its portfolio name');
-  const label = (row) => row.products.map((id) => names[id]).join(', ');
+  validateSubmissions(catalog); need(activeSearches.every((id) => typeof names?.[id] === 'string'), 'Each product needs its portfolio name');
+  const label = (row) => row.products.map((id) => names[id] ?? id).join(', ');
   const channel = { github: 'GitHub package', 'mcp-registry': 'MCP Registry', homebrew: 'Homebrew cask', clawhub: 'ClawHub skill', chatgpt: 'OpenAI directory', claude: 'Claude directory', cursor: 'Cursor directory' };
   const hostStatus = (value) => value === 'published' ? 'Published' : value === 'eligibility_and_review_required' ? 'Eligibility and review required' : 'Review required';
   const state = (row) => row.github.mergedAt ? `Merged ${row.github.mergedAt.slice(0, 10)}` : row.github.state === 'open' ? 'Submitted; open' : 'Closed; no merge';
@@ -172,16 +173,16 @@ export function renderSubmissions(catalog, { ledger, directories, stores, names 
   body += '\n## Published packages and verified listings\n\nThese rows come from the existing records. The ledger keeps every earlier publication; a skills.sh first-verification date is not a publisher timestamp.\n\n| Product | Channel | Record | Date |\n| --- | --- | --- | --- |\n';
   for (const row of ledger.publications) {
     const formula = row.channel === 'homebrew' && row.product === 'oh-router';
-    const name = formula ? row.product : names[row.product];
+    const name = formula ? row.product : names[row.product] ?? row.product;
     const source = formula ? 'Homebrew formula' : channel[row.channel];
     body += `| ${name} | ${source} | [${row.version}](${row.url}) | Published ${row.publishedAt.slice(0, 10)} |\n`;
   }
-  for (const row of directories.observations) body += `| ${names[row.product]} | skills.sh | [${stores[row.product]?.skillsSh === 'listed' ? 'Listed' : 'Earlier listing; verification required'}](${row.url}) | First verified ${row.firstVerifiedAt.slice(0, 10)} |\n`;
+  for (const row of directories.observations) body += `| ${names[row.product] ?? row.product} | skills.sh | [${row.product === 'dawn' ? 'Historical listing' : stores[row.product]?.skillsSh === 'listed' ? 'Listed' : 'Earlier listing; verification required'}](${row.url}) | First verified ${row.firstVerifiedAt.slice(0, 10)} |\n`;
   body += '\n## Host directories\n\n| Product | OpenAI | Claude | Cursor |\n| --- | --- | --- | --- |\n';
   for (const id of ids) { const row = stores[id]; if (!row) continue; body += `| ${names[id]} | ${hostStatus(row.chatgpt)} | ${hostStatus(row.claude)} | ${hostStatus(row.cursor)} |\n`; }
   body += `\n${ledger.publications.some((row) => ['chatgpt', 'claude', 'cursor'].includes(row.channel)) ? 'Verified host directory publications appear in the table above.' : 'No host directory submission URL has been verified for these packages.'}`;
   body += ' Sponge’s packaged Raycast Script Commands require manual import; they are not a Raycast Store listing. Follow [directory submission instructions](DIRECTORY_SUBMISSIONS.md) for account, demonstration and product requirements. Record a real provider acknowledgement before adding a submission claim.\n\n## Repeat the collection searches\n\nUse Node.js 24 and run `node scripts/submissions.mjs search PRODUCT` for one saved strategy. Each query requests the first 20 public results, sorted by stars. `{recent}` becomes the date 180 days before the run. The report identifies limited or incomplete results; it does not infer visitors or search traffic. Stars, forks and watchers describe public activity. Check subject fit and contribution rules before proposing an entry.\n';
-  for (const search of catalog.searches) body += `\n### ${names[search.product]}\n\n${md(search.intent)}\n\n${search.queries.map((query) => `- \`${query}\``).join('\n')}\n`;
+  for (const search of catalog.searches.filter((row) => activeSearches.includes(row.product))) body += `\n### ${names[search.product]}\n\n${md(search.intent)}\n\n${search.queries.map((query) => `- \`${query}\``).join('\n')}\n`;
   body += '\n## Reviewed collections\n\nStars are dated public popularity counts, not traffic measurements. Review decisions come before those counts.\n\n| Repository | Products | Stars at review | Decision | Review source |\n| --- | --- | --- | --- | --- |\n';
   for (const target of catalog.targets) body += `| [${md(target.repository)}](https://github.com/${target.repository}) | ${label(target)} | ${target.reach.stars.toLocaleString('en-US')} | ${target.decision}: ${md(target.reason)} | [${target.rulesUrl ? 'Rules' : 'Archived repository'}; ${target.reviewedAt.slice(0, 10)}](${target.rulesUrl ?? `https://github.com/${target.repository}`}) |\n`;
   body += '\n## Maintain the records\n\nRun `node scripts/submissions.mjs refresh` to read only the saved public PRs and prepare a local status update. A failed read preserves all earlier states and first dates. The daily workflow proposes changes through the existing App-owned protected PR checks. It sends no comments, opens no external PRs and does not submit directory forms. An unchanged response creates no timestamp-only commit.\n\nBefore a new proposal, check existing rows and search the target’s issues and PRs for the product name and canonical URL. Save the exact target rules and review decision, use the maintained product skill or guide link, and record the returned PR URL once. Keep a shared PR as one record containing all affected products. Record a closed PR as closed unless the provider confirms a merge; do not infer rejection or acceptance from inactivity.\n\nDrafted by Codex, an AI agent. Independent review is recorded in the delivery change.\n';
@@ -189,7 +190,7 @@ export function renderSubmissions(catalog, { ledger, directories, stores, names 
 }
 
 export async function searchCollections(catalog, product, { now = Date.now, ...options } = {}) {
-  validateSubmissions(catalog); need(ids.includes(product), 'Choose dawn, sponge, textmock or yaptake');
+  validateSubmissions(catalog); need(activeSearches.includes(product), 'Choose sponge, textmock or yaptake');
   const recent = new Date(now() - 180 * 86400000).toISOString().slice(0, 10); const results = [];
   for (const saved of catalog.searches.find((row) => row.product === product).queries) {
     const query = saved.replaceAll('{recent}', recent);

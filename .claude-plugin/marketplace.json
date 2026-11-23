@@ -5,12 +5,6 @@
   },
   "plugins": [
     {
-      "name": "dawn",
-      "source": "./plugins/dawn",
-      "description": "Compose songs in TypeScript, arrange them on a piano roll in DAWN Desktop for Mac and Linux, and render audio or MIDI locally with the DAWN CLI.",
-      "version": "0.1.4"
-    },
-    {
       "name": "oh",
       "source": "./plugins/oh",
       "description": "Supervise Claude Code and Codex sessions in a native Mac app, share one Vercel Board, and pair machines over Cloudflare Tunnel.",

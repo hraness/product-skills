@@ -1,7 +1,8 @@
 # Submit a product integration
 
 Check the [submission index](SUBMISSIONS.md) for prior proposals, verified listings
-and saved collection searches before starting another submission.
+and saved collection searches before starting another submission. The DAWN desktop
+skill was withdrawn on 23 November 2026.
 
 Each product is a separate plugin in this repository's `hraness-products`
 marketplace. Its generated README contains install commands and product setup;
@@ -11,14 +12,12 @@ listed separately from the integration version.
 
 | Product | Source path and setup |
 | --- | --- |
-| Dawn | [`plugins/dawn`](../plugins/dawn/README.md) |
 | Yaptake | [`plugins/yaptake`](../plugins/yaptake/README.md) |
 | Textmock | [`plugins/textmock`](../plugins/textmock/README.md) |
 | Sponge | [`plugins/sponge`](../plugins/sponge/README.md) |
 
 The MIT license covers the selected skills, helpers and integration files.
-Product applications have their own licenses and access requirements. Dawn
-requires an authorized private-preview installation; its runtime is not included.
+Product applications have their own licenses and access requirements.
 Yaptake requires its Mac app. Sponge requires its installed CLI and an existing
 library. Textmock includes a local link helper; editing and export happen in the
 product. Installing a plugin does not install an application or grant an account.
@@ -42,7 +41,6 @@ Check the portable files with the official
 Claude Code installation, check each product before submission:
 
 ```sh
-claude plugin validate --strict --profile directory --json plugins/dawn
 claude plugin validate --strict --profile directory --json plugins/yaptake
 claude plugin validate --strict --profile directory --json plugins/textmock
 claude plugin validate --strict --profile directory --json plugins/sponge
@@ -61,8 +59,7 @@ needs project-owner access or Apps Management Write and a verified individual or
 business identity. Check the current console for account eligibility before
 starting a submission.
 
-These skills require a local executor. Dawn and Textmock have no configured MCP
-server; use the [desktop-only flow](https://developers.openai.com/plugins/deploy/desktop-only).
+These skills require a local executor. For Textmock, use the [desktop-only flow](https://developers.openai.com/plugins/deploy/desktop-only).
 Yaptake and Sponge configure local stdio MCP servers. Public local-MCP
 submissions currently require an approved partner organization and an allowlist
 arranged through an OpenAI representative. Confirm acceptance of their separately
@@ -90,7 +87,7 @@ plugins that run a local MCP server or ship scripts and other files that aren't
 Markdown, text, JSON, YAML or images. Submit the generated copy under
 `directory/claude/<product>` instead of `plugins/<product>`. It keeps the
 product's skill, its listing links and icon, and drops the local MCP
-configuration, launchers and adapters; Dawn's example becomes Markdown.
+configuration, launchers and adapters.
 Textmock's copy drops the link helper and describes the share-link format, which
 the agent encodes with a one-line command. A submission's
 path can't change later, so withdraw a refused `plugins/<product>` submission and
@@ -213,7 +210,6 @@ host tests.
 
 | Product | Five working cases | Three cases to decline or explain |
 | --- | --- | --- |
-| Dawn | Start an original score; change its tempo; arrange a short passage; check diagnostics; render new WAV and MIDI files. | No private-preview access; an unfamiliar executable song that has not been reviewed; a request to overwrite an earlier render without permission. |
 | Yaptake | Inspect a supplied project; cut a filler; shorten a pause; correct a caption; validate and preview an edit. | A stale revision; a different project open in the app; an export allowance or account action that requires the user. |
 | Textmock | Make a fictional conversation link; use dark appearance; set a clock; include both speakers; open a link as an editable copy. | An unknown or private-note field; an oversized conversation; importing real Messages without permission. |
 | Sponge | Find saved passages; read their context; cite a source; queue a requested public URL; add a requested note. | A different program named `sponge`; an absent library; model setup, account login or sync activation without a request. |

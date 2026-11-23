@@ -5,10 +5,6 @@
   },
   "plugins": [
     {
-      "name": "dawn",
-      "source": "./plugins/dawn"
-    },
-    {
       "name": "oh",
       "source": "./plugins/oh"
     },

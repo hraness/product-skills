@@ -108,7 +108,7 @@ test('discovery uses each saved public query, labels limited results and points 
   } });
   assert.equal(calls.length, catalog.searches.find((row) => row.product === 'sponge').queries.length);
   for (const row of result.results) { assert(row.limited); assert(!row.incomplete); assert(!row.query.includes('{recent}')); assert.deepEqual(row.items[0].priorSubmissions, catalog.submissions.filter((item) => item.repository === known.repository).map((item) => item.url)); assert(row.items[0].priorSubmissions.includes(known.url)); }
-  await assert.rejects(searchCollections(catalog, 'private', { fetchImpl: async () => assert.fail() }));
+  for (const inactive of ['private', 'dawn']) await assert.rejects(searchCollections(catalog, inactive, { fetchImpl: async () => assert.fail() }));
 });
 
 test('the index projects existing provider facts and never changes selected product archives', async () => {
