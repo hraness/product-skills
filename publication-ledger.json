@@ -1026,6 +1026,15 @@
       "contentHash": "5cb6581c065832c3ae24450a0f2ddbe3d17079685681fe960b77de1320cdc3b0",
       "publishedAt": "2026-11-23T20:23:02.000Z",
       "url": "https://github.com/hraness/homebrew-tap/blob/614de797085b166cfa5181647b6fd0de62881ee5/Casks/oh.rb"
+    },
+    {
+      "id": "oh-homebrew-0-2-8-16",
+      "product": "oh",
+      "channel": "homebrew",
+      "version": "0.2.8",
+      "contentHash": "b3861d8db75640bb5b19ab1fd4d8fcdd7ccda40111c49590509de5949a0d4eb0",
+      "publishedAt": "2026-11-23T22:11:16.000Z",
+      "url": "https://github.com/hraness/homebrew-tap/blob/001f526e91d24f5185d4fa0ee495d8e3974aa68d/Casks/oh.rb"
     }
   ]
 }
