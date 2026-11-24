@@ -11,7 +11,7 @@ concurrency:
 jobs:
   refresh:
     if: github.repository == 'hraness/product-skills' && github.repository_id == '1458031600' && github.ref == 'refs/heads/main' && github.event.repository.default_branch == 'main'
-    runs-on: hraness-cf
+    runs-on: ubuntu-24.04
     timeout-minutes: 5
     permissions:
       contents: read

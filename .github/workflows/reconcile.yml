@@ -11,7 +11,7 @@ concurrency:
 jobs:
   reconcile:
     if: github.repository == 'hraness/product-skills' && github.ref == 'refs/heads/main'
-    runs-on: hraness-cf
+    runs-on: ubuntu-24.04
     timeout-minutes: 5
     permissions:
       contents: read
