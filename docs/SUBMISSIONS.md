@@ -180,6 +180,8 @@ These rows come from the existing records. The ledger keeps every earlier public
 | OH | Homebrew cask | [0.2.5](https://github.com/hraness/homebrew-tap/blob/a9a5fc910d6cdfecaa50325f1038bda277879803/Casks/oh.rb) | Published 2026-11-23 |
 | OH | Homebrew cask | [0.2.6](https://github.com/hraness/homebrew-tap/blob/614de797085b166cfa5181647b6fd0de62881ee5/Casks/oh.rb) | Published 2026-11-23 |
 | OH | Homebrew cask | [0.2.8](https://github.com/hraness/homebrew-tap/blob/001f526e91d24f5185d4fa0ee495d8e3974aa68d/Casks/oh.rb) | Published 2026-11-23 |
+| Yaptake | Homebrew cask | [0.1.4](https://github.com/hraness/homebrew-tap/blob/c9d5efe823904e5b1fb17834ef875fca1960c8e6/Casks/yaptake.rb) | Published 2026-11-23 |
+| OH | Homebrew cask | [0.2.11](https://github.com/hraness/homebrew-tap/blob/bd6d9427c9255e652068f03c65adc485e17f42ce/Casks/oh.rb) | Published 2026-11-24 |
 | DAWN | skills.sh | [Historical listing](https://www.skills.sh/hraness/product-skills/dawn) | First verified 2026-11-14 |
 | Sponge | skills.sh | [Listed](https://www.skills.sh/hraness/product-skills/sponge) | First verified 2026-11-14 |
 | Textmock | skills.sh | [Listed](https://www.skills.sh/hraness/product-skills/textmock) | First verified 2026-11-14 |
