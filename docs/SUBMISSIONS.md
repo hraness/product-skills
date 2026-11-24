@@ -46,13 +46,13 @@ The [submission catalog](../catalog/submissions.json) owns saved searches, revie
 | Sponge | [ai-boost/awesome-harness-engineering #439](https://github.com/ai-boost/awesome-harness-engineering/pull/439) | 2026-11-17 | Closed; no merge |
 | DAWN, Textmock | [hraness/homebrew-tap #16](https://github.com/hraness/homebrew-tap/pull/16) | 2026-11-18 | Merged 2026-11-18 |
 | Textmock | [davepoon/buildwithclaude #796](https://github.com/davepoon/buildwithclaude/pull/796) | 2026-11-18 | Merged 2026-11-19 |
-| Sponge | [hridaydutta123/awesome-twitter-tools #81](https://github.com/hridaydutta123/awesome-twitter-tools/pull/81) | 2026-11-18 | Submitted; open |
+| Sponge | [hridaydutta123/awesome-twitter-tools #81](https://github.com/hridaydutta123/awesome-twitter-tools/pull/81) | 2026-11-18 | Merged 2026-11-23 |
 | Sponge | [cheeaun/awesome-hacker-news #140](https://github.com/cheeaun/awesome-hacker-news/pull/140) | 2026-11-18 | Submitted; open |
 | Sponge, Yaptake | [aviaryan/awesome-no-login-web-apps #1032](https://github.com/aviaryan/awesome-no-login-web-apps/pull/1032) | 2026-11-18 | Submitted; open |
 | Sponge, Textmock, Yaptake | [SecretiveShell/Awesome-llms-txt #481](https://github.com/SecretiveShell/Awesome-llms-txt/pull/481) | 2026-11-18 | Submitted; open |
 | Sponge | [AboutRSS/ALL-about-RSS #182](https://github.com/AboutRSS/ALL-about-RSS/pull/182) | 2026-11-18 | Submitted; open |
 | Sponge | [trungdq88/Awesome-Black-Friday-Cyber-Monday #2841](https://github.com/trungdq88/Awesome-Black-Friday-Cyber-Monday/pull/2841) | 2026-11-18 | Merged 2026-11-18 |
-| Yaptake | [FluidInference/FluidAudio #1175](https://github.com/FluidInference/FluidAudio/pull/1175) | 2026-11-18 | Submitted; open |
+| Yaptake | [FluidInference/FluidAudio #1175](https://github.com/FluidInference/FluidAudio/pull/1175) | 2026-11-18 | Merged 2026-11-23 |
 | Sponge, Textmock, Yaptake | [mRs-/Black-Friday-Deals #1331](https://github.com/mRs-/Black-Friday-Deals/pull/1331) | 2026-11-18 | Merged 2026-11-19 |
 | Sponge, Textmock, Yaptake | [twf-nikhila/Awesome-Black-Friday-Cyber-Monday-deals #679](https://github.com/twf-nikhila/Awesome-Black-Friday-Cyber-Monday-deals/pull/679) | 2026-11-18 | Merged 2026-11-19 |
 | Sponge, Textmock, Yaptake | [s1ntoneli/Awesome-Black-Friday-Cyber-Monday-for-Mac-Apps #200](https://github.com/s1ntoneli/Awesome-Black-Friday-Cyber-Monday-for-Mac-Apps/pull/200) | 2026-11-18 | Submitted; open |
