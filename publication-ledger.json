@@ -1035,6 +1035,24 @@
       "contentHash": "b3861d8db75640bb5b19ab1fd4d8fcdd7ccda40111c49590509de5949a0d4eb0",
       "publishedAt": "2026-11-23T22:11:16.000Z",
       "url": "https://github.com/hraness/homebrew-tap/blob/001f526e91d24f5185d4fa0ee495d8e3974aa68d/Casks/oh.rb"
+    },
+    {
+      "id": "yaptake-homebrew-0-1-4-387",
+      "product": "yaptake",
+      "channel": "homebrew",
+      "version": "0.1.4",
+      "contentHash": "01b3ea08308d9b744b05428eeb91fb9d4eeb4d7a0d31355d28b612eb61331504",
+      "publishedAt": "2026-11-23T22:53:23.000Z",
+      "url": "https://github.com/hraness/homebrew-tap/blob/c9d5efe823904e5b1fb17834ef875fca1960c8e6/Casks/yaptake.rb"
+    },
+    {
+      "id": "oh-homebrew-0-2-11-19",
+      "product": "oh",
+      "channel": "homebrew",
+      "version": "0.2.11",
+      "contentHash": "a25c41a5231e059bacf54e044472e92deec5e095f823df2034bb1e2a89982d93",
+      "publishedAt": "2026-11-24T01:37:36.000Z",
+      "url": "https://github.com/hraness/homebrew-tap/blob/bd6d9427c9255e652068f03c65adc485e17f42ce/Casks/oh.rb"
     }
   ]
 }
