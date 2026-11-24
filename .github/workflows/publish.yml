@@ -24,7 +24,7 @@ jobs:
         github.event.workflow_run.head_repository.id == 1458031600 &&
         github.event.workflow_run.head_repository.full_name == github.repository &&
         github.event.workflow_run.head_branch == 'main'))
-    runs-on: hraness-cf
+    runs-on: ubuntu-24.04
     timeout-minutes: 10
     permissions:
       contents: write

@@ -11,7 +11,7 @@ concurrency:
 jobs:
   deliver:
     if: github.repository == 'hraness/product-skills' && github.ref == 'refs/heads/main' && github.event.workflow_run.head_repository.full_name == github.repository && github.event.workflow_run.conclusion == 'success' && (startsWith(github.event.workflow_run.head_branch, 'automation/') || startsWith(github.event.workflow_run.head_branch, 'dependabot/github_actions/'))
-    runs-on: hraness-cf
+    runs-on: ubuntu-24.04
     timeout-minutes: 5
     permissions:
       contents: read
