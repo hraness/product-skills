@@ -183,6 +183,7 @@ These rows come from the existing records. The ledger keeps every earlier public
 | Yaptake | Homebrew cask | [0.1.4](https://github.com/hraness/homebrew-tap/blob/c9d5efe823904e5b1fb17834ef875fca1960c8e6/Casks/yaptake.rb) | Published 2026-11-23 |
 | OH | Homebrew cask | [0.2.11](https://github.com/hraness/homebrew-tap/blob/bd6d9427c9255e652068f03c65adc485e17f42ce/Casks/oh.rb) | Published 2026-11-24 |
 | oh-router | Homebrew formula | [0.1.7](https://github.com/hraness/homebrew-tap/blob/9f306eb11bb75de9da60469529b004af43f9edc4/Formula/oh-router.rb) | Published 2026-11-24 |
+| oh-router | Homebrew formula | [0.1.9](https://github.com/hraness/homebrew-tap/blob/9312cb7e7e457c06c1f6252bc4d0ca85911daf1d/Formula/oh-router.rb) | Published 2026-11-25 |
 | DAWN | skills.sh | [Historical listing](https://www.skills.sh/hraness/product-skills/dawn) | First verified 2026-11-14 |
 | Sponge | skills.sh | [Listed](https://www.skills.sh/hraness/product-skills/sponge) | First verified 2026-11-14 |
 | Textmock | skills.sh | [Listed](https://www.skills.sh/hraness/product-skills/textmock) | First verified 2026-11-14 |
