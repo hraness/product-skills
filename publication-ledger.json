@@ -1062,6 +1062,15 @@
       "contentHash": "37012154582112879b04eb51400b6bd0ce279f803c8f17d36fe479dc3b0818e8",
       "publishedAt": "2026-11-24T15:22:26.000Z",
       "url": "https://github.com/hraness/homebrew-tap/blob/9f306eb11bb75de9da60469529b004af43f9edc4/Formula/oh-router.rb"
+    },
+    {
+      "id": "oh-router-homebrew-0-1-9",
+      "product": "oh-router",
+      "channel": "homebrew",
+      "version": "0.1.9",
+      "contentHash": "ec40282f6b420e3011021f0d136d8fb30b510ce8ce00759b2ab6cb06665542d2",
+      "publishedAt": "2026-11-25T15:02:16.000Z",
+      "url": "https://github.com/hraness/homebrew-tap/blob/9312cb7e7e457c06c1f6252bc4d0ca85911daf1d/Formula/oh-router.rb"
     }
   ]
 }
